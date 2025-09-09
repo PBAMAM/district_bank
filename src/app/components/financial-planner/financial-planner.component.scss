@@ -1,0 +1,297 @@
+.financial-planner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  color: white;
+}
+
+.planner-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.planner-header h1 {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+
+.info-icon {
+  color: #ccc;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.planner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.planner-card {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.planner-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.card-header h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+  flex: 1;
+}
+
+.arrow-icon {
+  color: #ccc;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.card-subtitle {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  margin-bottom: 20px;
+}
+
+.chart-container h4 {
+  color: white;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.chart-wrapper {
+  height: 200px;
+  margin-bottom: 15px;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+}
+
+.legend-item.income .legend-color {
+  background-color: #28a745;
+}
+
+.legend-item.expenditure .legend-color {
+  background-color: #dc3545;
+}
+
+.legend-item.surplus .legend-color {
+  background-color: #6c757d;
+}
+
+.legend-text {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.forecast-points {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.forecast-point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px 15px;
+  border-radius: 6px;
+}
+
+.point-label {
+  color: #ccc;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.point-value {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.costs-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.cost-item {
+  padding: 8px 12px;
+  background-color: #333;
+  border-radius: 4px;
+}
+
+.cost-item.average {
+  background-color: #444;
+  font-weight: bold;
+}
+
+.cost-label {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.budget-content {
+  margin-bottom: 20px;
+}
+
+.budget-description {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.budget-chart {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.budget-circle {
+  width: 120px;
+  height: 120px;
+  position: relative;
+}
+
+.budget-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.budget-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legend-dot.posted {
+  background-color: #28a745;
+}
+
+.legend-dot.remaining {
+  background-color: #6c757d;
+}
+
+.keywords-content {
+  margin-bottom: 20px;
+}
+
+.keywords-description {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.keywords-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.keyword-tag {
+  background-color: #dc3545;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.keyword-tag:hover {
+  background-color: #c82333;
+}
+
+.card-action-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-action-btn:hover {
+  background-color: #c82333;
+}
+
+@media (max-width: 768px) {
+  .financial-planner {
+    padding: 15px;
+  }
+  
+  .planner-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .planner-card {
+    padding: 20px;
+  }
+  
+  .budget-chart {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .forecast-points {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .chart-legend {
+    flex-direction: column;
+  }
+}

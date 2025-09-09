@@ -1,0 +1,44 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <div class="logo">
+      <div class="logo-icon">S</div>
+      <div class="logo-text">
+        <span class="bank-name">District Bank</span>
+        <span class="bank-location">Karlsruhe</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar-center">
+    <div class="nav-links">
+      <a routerLink="/dashboard/overview" routerLinkActive="active">Account overview</a>
+      <a routerLink="/dashboard/planner" routerLinkActive="active">Financial Planner</a>
+    </div>
+  </div>
+
+  <div class="navbar-right">
+    <div class="search-section">
+      <span class="search-icon">🔍</span>
+      <span class="search-text">Search</span>
+    </div>
+    
+    <a routerLink="/dashboard" class="nav-link">Start page</a>
+    
+    <button class="transfer-btn" routerLink="/dashboard/transfer">
+      <span class="plus-icon">+</span>
+      Transfer
+    </button>
+    
+    <div class="favorites-dropdown">
+      <button class="favorites-btn">
+        Favourites
+        <span class="dropdown-arrow">▼</span>
+      </button>
+    </div>
+    
+    <button class="logout-btn" (click)="onLogout()">
+      <span class="logout-icon">🚪</span>
+      Logout
+    </button>
+  </div>
+</nav>

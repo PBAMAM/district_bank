@@ -1,0 +1,264 @@
+<div class="account-overview">
+  <div class="welcome-section">
+    <h1>Hello Max Mustermann</h1>
+    
+    <div class="notifications">
+      <div class="notification-item">
+        <span class="notification-text">Open orders</span>
+        <span class="notification-arrow">▼</span>
+      </div>
+      <div class="notification-item">
+        <span class="notification-text">1 more note</span>
+        <span class="notification-arrow">▼</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="balance-forecast">
+    <h2>Your account balance forecast</h2>
+    <p>Privatgirokonto - Lebensmittel</p>
+    
+    <div class="forecast-chart">
+      <div class="chart-container">
+        <div class="chart-area">
+          <div class="chart-line"></div>
+          <div class="chart-points">
+            <div class="chart-point today">
+              <span class="point-label">heute</span>
+              <span class="point-value">1.000 EUR</span>
+            </div>
+            <div class="chart-point future">
+              <span class="point-label">30.09.2025</span>
+              <span class="point-value">2.527 EUR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="chart-description">Expected change in account balance by month-end.</p>
+      <a href="#" class="chart-link">Check expected sales.</a>
+    </div>
+  </div>
+
+  <div class="accounts-section">
+    <div class="section-header">
+      <h2>Accounts and cards</h2>
+      <span class="expand-icon">▼</span>
+    </div>
+    
+    <div class="accounts-list" *ngIf="!isLoading; else loadingTemplate">
+      <div class="account-item" *ngFor="let account of accounts">
+        <div class="account-icon">
+          <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
+        </div>
+        
+        <div class="account-details">
+          <div class="account-type">{{ account.accountType }}</div>
+          <div class="account-iban">{{ account.iban }} • {{ account.ownerName }}</div>
+        </div>
+        
+        <div class="account-balance">
+          <div class="balance-amount" [class]="getBalanceClass(account.balance)">
+            {{ formatCurrency(account.balance, account.currency) }}
+          </div>
+          <div class="balance-info" *ngIf="account.currency === 'USD'">
+            {{ formatCurrency(account.balance * 0.85, 'EUR') }}
+          </div>
+        </div>
+        
+        <div class="account-actions">
+          <span class="info-icon">ℹ️</span>
+        </div>
+      </div>
+      
+      <div class="accounts-subtotal">
+        <span class="subtotal-label">Subtotal:</span>
+        <span class="subtotal-amount text-success">{{ formatCurrency(totalBalance, 'EUR') }}</span>
+      </div>
+    </div>
+    
+    <ng-template #loadingTemplate>
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading accounts...</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="money-investment-section">
+    <div class="section-header">
+      <h2>Money investment</h2>
+      <span class="expand-icon">▼</span>
+    </div>
+    
+    <div class="investment-list">
+      <div class="investment-item">
+        <div class="investment-icon">
+          <span class="icon">S</span>
+        </div>
+        <div class="investment-details">
+          <div class="investment-type">Sparkonto</div>
+          <div class="investment-iban">DE10 6605 0101 0040 5000 11 • Test, Tina</div>
+        </div>
+        <div class="investment-balance text-success">2.000,00 EUR</div>
+        <div class="investment-actions">
+          <span class="info-icon">ℹ️</span>
+        </div>
+      </div>
+      
+      <div class="investment-item">
+        <div class="investment-icon">
+          <span class="icon">S</span>
+        </div>
+        <div class="investment-details">
+          <div class="investment-type">Termingeld</div>
+          <div class="investment-iban">DE73 6605 0101 0223 3445 56 • Mustermann, Max</div>
+        </div>
+        <div class="investment-balance text-success">15.000,00 EUR</div>
+        <div class="investment-actions">
+          <span class="info-icon">ℹ️</span>
+        </div>
+      </div>
+      
+      <div class="investment-subtotal">
+        <span class="subtotal-label">Subtotal:</span>
+        <span class="subtotal-amount text-success">52.000,00 EUR</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="securities-section">
+    <div class="section-header">
+      <h2>Securities account</h2>
+      <span class="expand-icon">▼</span>
+    </div>
+    
+    <div class="securities-list">
+      <div class="securities-item">
+        <div class="securities-icon">
+          <span class="icon">S</span>
+        </div>
+        <div class="securities-details">
+          <div class="securities-type">Depot</div>
+          <div class="securities-iban">DE92 6605 0101 0800 1002 00 • Mustermann, Max</div>
+        </div>
+        <div class="securities-balance text-success">47.473,85 EUR</div>
+        <div class="securities-actions">
+          <span class="info-icon">ℹ️</span>
+        </div>
+      </div>
+      
+      <div class="securities-subtotal">
+        <span class="subtotal-label">Subtotal:</span>
+        <span class="subtotal-amount text-success">145.550,80 EUR</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="loans-section">
+    <div class="section-header">
+      <h2>Loans & financing</h2>
+      <span class="expand-icon">▼</span>
+    </div>
+    
+    <div class="loans-list">
+      <div class="loans-item">
+        <div class="loans-icon">
+          <span class="icon">S</span>
+        </div>
+        <div class="loans-details">
+          <div class="loans-type">Kreditkonto</div>
+          <div class="loans-iban">DE20 6605 0101 0603 0223 28 • Mustermann, Max</div>
+        </div>
+        <div class="loans-balance text-danger">-36.613,93 EUR</div>
+        <div class="loans-actions">
+          <span class="info-icon">ℹ️</span>
+        </div>
+      </div>
+      
+      <div class="loans-subtotal">
+        <span class="subtotal-label">Subtotal:</span>
+        <span class="subtotal-amount text-danger">-46.536,37 EUR</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="assets-section">
+    <div class="section-header">
+      <h2>Assets</h2>
+      <span class="expand-icon">▼</span>
+    </div>
+    
+    <div class="assets-list">
+      <div class="assets-item">
+        <div class="assets-icon">🏠</div>
+        <div class="assets-details">
+          <div class="assets-type">Private Immobilie - Villa Schmidt, Schlossallee</div>
+          <div class="assets-description">Eigentumswohnung • Max Mustermann</div>
+        </div>
+        <div class="assets-value">...</div>
+        <div class="assets-actions">
+          <span class="info-icon">ℹ️</span>
+        </div>
+      </div>
+      
+      <div class="assets-item">
+        <div class="assets-icon">🚗</div>
+        <div class="assets-details">
+          <div class="assets-type">Fahrzeuge - VW Passat</div>
+          <div class="assets-description">PKW • Max Mustermann</div>
+        </div>
+        <div class="assets-value">...</div>
+        <div class="assets-actions">
+          <span class="info-icon">ℹ️</span>
+        </div>
+      </div>
+      
+      <div class="assets-subtotal">
+        <span class="subtotal-label">Subtotal:</span>
+        <span class="subtotal-amount text-success">510.000,00 EUR</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-amount">
+    <div class="total-label">Total amount:</div>
+    <div class="total-value text-success">684.839,96 EUR</div>
+  </div>
+
+  <div class="footer-actions">
+    <div class="action-links">
+      <a href="#" class="action-link">
+        <span class="action-icon">↕️</span>
+        Change sort order
+      </a>
+      <a href="#" class="action-link">
+        <span class="action-icon">🖨️</span>
+        Print view
+      </a>
+      <a href="#" class="action-link">
+        <span class="action-icon">👁️</span>
+        Current account detail overview
+      </a>
+    </div>
+    
+    <div class="multibanking-section">
+      <div class="multibanking-content">
+        <span class="multibanking-icon">+</span>
+        <div class="multibanking-text">
+          <p>A single point of access to all of your financial information - add your assets, accounts and securities accounts with other banks or payment services.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="features-section">
+      <div class="features-progress">
+        <span class="progress-text">3/3 Active</span>
+        <div class="progress-circle"></div>
+      </div>
+      <div class="features-text">
+        <p>It's great that you have already activated all of the features. You can now customise them to suit your specific needs.</p>
+        <button class="customise-btn">Customise features</button>
+      </div>
+    </div>
+  </div>
+</div>

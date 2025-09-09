@@ -1,0 +1,395 @@
+.transfer-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.transfer-header {
+  background-color: #dc3545;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  color: #dc3545;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+}
+
+.logo-icon::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #dc3545;
+  border-radius: 50%;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.bank-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.bank-location {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.close-icon {
+  font-size: 20px;
+}
+
+.transfer-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.transfer-card {
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.transfer-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.transfer-title h1 {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.info-icon {
+  color: #ccc;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.source-account {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.account-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.account-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.account-details {
+  flex: 1;
+}
+
+.account-type {
+  color: white;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.account-iban {
+  color: #ccc;
+  font-size: 14px;
+  font-family: monospace;
+}
+
+.account-balance {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.balance-amount {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.change-account-link {
+  color: #dc3545;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.change-account-link:hover {
+  color: #c82333;
+}
+
+.transfer-form {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  color: white;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+}
+
+.form-control.error {
+  border-color: #dc3545;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.transfer-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.transfer-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.transfer-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.apply-data-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  background-color: #6c757d;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;
+}
+
+.apply-data-btn:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+.document-icon {
+  font-size: 16px;
+}
+
+.arrow-icon {
+  font-size: 16px;
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.success-message {
+  color: #28a745;
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: rgba(40, 167, 69, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.success-icon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.transfer-footer {
+  background-color: #1a1a1a;
+  padding: 20px 40px;
+  border-top: 1px solid #333;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.globe-icon {
+  font-size: 16px;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+}
+
+.legal-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.legal-links a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.3s ease;
+}
+
+.legal-links a:hover {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .transfer-header {
+    padding: 15px 20px;
+  }
+  
+  .logo-text {
+    display: none;
+  }
+  
+  .transfer-card {
+    padding: 30px 20px;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .legal-links {
+    justify-content: center;
+  }
+  
+  .account-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .account-balance {
+    align-self: flex-end;
+  }
+}

@@ -1,0 +1,14 @@
+<div class="dashboard-container">
+  <app-navbar 
+    [currentUser]="currentUser" 
+    (logout)="logout()">
+  </app-navbar>
+  
+  <div class="dashboard-content">
+    <app-sidebar></app-sidebar>
+    
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

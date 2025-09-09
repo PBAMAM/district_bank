@@ -1,0 +1,112 @@
+<div class="login-container">
+  <div class="login-header">
+    <div class="logo">
+      <div class="logo-icon">S</div>
+      <div class="logo-text">
+        <span class="bank-name">District Bank</span>
+        <span class="bank-location">Karlsruhe</span>
+      </div>
+    </div>
+    <div class="search-section">
+      <span class="search-icon">🔍</span>
+      <span class="search-text">Search</span>
+    </div>
+  </div>
+
+  <div class="login-content">
+    <div class="login-card">
+      <h1 class="login-title">Online Banking Demo</h1>
+      
+      <div class="demo-credentials">
+        <h3>Your login details</h3>
+        <p>Please make a test using the following access data:</p>
+        <div class="credentials-box">
+          <div class="credential-item">
+            <span class="label">Login name:</span>
+            <span class="value">demo@bank.com</span>
+          </div>
+          <div class="credential-item">
+            <span class="label">Password/PIN:</span>
+            <span class="value">123456</span>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+          <label for="email">Login name</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="Enter your email"
+            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password/PIN</label>
+          <div class="password-input">
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              class="form-control"
+              placeholder="Enter your password"
+              [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            >
+            <button type="button" class="show-password-btn">Show</button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn btn-primary login-btn"
+            [disabled]="loginForm.invalid || isLoading"
+          >
+            {{ isLoading ? 'Logging in...' : 'Log in' }}
+          </button>
+          
+          <button
+            type="button"
+            class="btn btn-secondary demo-btn"
+            (click)="demoLogin()"
+            [disabled]="isLoading"
+          >
+            Demo Login
+          </button>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+      </form>
+
+      <div class="safety-notes">
+        <a href="#" class="safety-link">Safety notes</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-footer">
+    <div class="footer-links">
+      <div class="language-selector">
+        <span class="globe-icon">🌐</span>
+        <span>English</span>
+        <span class="dropdown-arrow">▼</span>
+      </div>
+      <div class="legal-links">
+        <a href="#">General Terms & Conditions</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Legal Information</a>
+        <a href="#">Fees and other Information</a>
+        <a href="#">Contact</a>
+        <a href="#">Change cookie settings</a>
+        <a href="#">Accessibility (German)</a>
+        <a href="#">Report barrier (German)</a>
+      </div>
+    </div>
+  </div>
+</div>

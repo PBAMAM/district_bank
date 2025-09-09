@@ -1,0 +1,170 @@
+<div class="financial-planner">
+  <div class="planner-header">
+    <h1>Financial Planner</h1>
+    <span class="info-icon">ℹ️</span>
+  </div>
+
+  <div class="planner-grid">
+    <!-- Income and Expenditure Card -->
+    <div class="planner-card">
+      <div class="card-header">
+        <h3>Incoming and outgoing payments</h3>
+        <span class="info-icon">ℹ️</span>
+        <span class="arrow-icon">→</span>
+      </div>
+      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      
+      <div class="chart-container">
+        <h4>Evaluation of the last 3 months</h4>
+        <div class="chart-wrapper">
+          <canvas baseChart
+            [data]="incomeExpenditureData"
+            [options]="chartOptions"
+            type="bar">
+          </canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item income">
+            <span class="legend-color"></span>
+            <span class="legend-text">4.793 EUR Income</span>
+          </div>
+          <div class="legend-item expenditure">
+            <span class="legend-color"></span>
+            <span class="legend-text">- 3.813 EUR Expenditure</span>
+          </div>
+          <div class="legend-item surplus">
+            <span class="legend-color"></span>
+            <span class="legend-text">980 EUR Surplus</span>
+          </div>
+        </div>
+      </div>
+      
+      <button class="card-action-btn">Check income / outgoings</button>
+    </div>
+
+    <!-- Forecast Card -->
+    <div class="planner-card">
+      <div class="card-header">
+        <h3>Forecast</h3>
+        <span class="info-icon">ℹ️</span>
+        <span class="arrow-icon">→</span>
+      </div>
+      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      
+      <div class="chart-container">
+        <h4>Expected change in account balance by month-end</h4>
+        <div class="chart-wrapper">
+          <canvas baseChart
+            [data]="forecastData"
+            [options]="chartOptions"
+            type="line">
+          </canvas>
+        </div>
+        <div class="forecast-points">
+          <div class="forecast-point">
+            <span class="point-label">heute</span>
+            <span class="point-value">1.000 EUR</span>
+          </div>
+          <div class="forecast-point">
+            <span class="point-label">30.09.2025</span>
+            <span class="point-value">2.527 EUR</span>
+          </div>
+        </div>
+      </div>
+      
+      <button class="card-action-btn">Check expected sales</button>
+    </div>
+
+    <!-- Fixed Costs Card -->
+    <div class="planner-card">
+      <div class="card-header">
+        <h3>Fixed costs</h3>
+        <span class="info-icon">ℹ️</span>
+        <span class="arrow-icon">→</span>
+      </div>
+      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      
+      <div class="chart-container">
+        <h4>Comparison of expected fixed costs</h4>
+        <div class="chart-wrapper">
+          <canvas baseChart
+            [data]="fixedCostsData"
+            [options]="chartOptions"
+            type="bar">
+          </canvas>
+        </div>
+        <div class="costs-breakdown">
+          <div class="cost-item">
+            <span class="cost-label">- 1.401 EUR September</span>
+          </div>
+          <div class="cost-item">
+            <span class="cost-label">- 1.346 EUR October</span>
+          </div>
+          <div class="cost-item average">
+            <span class="cost-label">Ø - 1.368 EUR Expected monthly - Ø</span>
+          </div>
+        </div>
+      </div>
+      
+      <button class="card-action-btn">Check expected fixed costs</button>
+    </div>
+
+    <!-- Budgets Card -->
+    <div class="planner-card">
+      <div class="card-header">
+        <h3>Budgets</h3>
+        <span class="info-icon">ℹ️</span>
+        <span class="arrow-icon">→</span>
+      </div>
+      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      
+      <div class="budget-content">
+        <p class="budget-description">All outgoing payments 1.800 EUR/month.</p>
+        
+        <div class="budget-chart">
+          <div class="budget-circle">
+            <canvas baseChart
+              [data]="budgetData"
+              [options]="budgetOptions"
+              type="doughnut">
+            </canvas>
+          </div>
+          <div class="budget-legend">
+            <div class="budget-legend-item">
+              <span class="legend-dot posted"></span>
+              <span class="legend-text">488 EUR posted</span>
+            </div>
+            <div class="budget-legend-item">
+              <span class="legend-dot remaining"></span>
+              <span class="legend-text">1.312 EUR remaining</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="card-action-btn">Check all budgets</button>
+    </div>
+
+    <!-- Keywords Card -->
+    <div class="planner-card">
+      <div class="card-header">
+        <h3>Keywords</h3>
+        <span class="info-icon">ℹ️</span>
+        <span class="arrow-icon">→</span>
+      </div>
+      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      
+      <div class="keywords-content">
+        <p class="keywords-description">You have currently assigned #7 keywords.</p>
+        
+        <div class="keywords-list">
+          <span class="keyword-tag" *ngFor="let keyword of keywords">
+            {{ keyword }}
+          </span>
+        </div>
+      </div>
+      
+      <button class="card-action-btn">Edit or add keywords</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,152 @@
+<div class="transfer-container">
+  <div class="transfer-header">
+    <div class="header-left">
+      <div class="logo">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">
+          <span class="bank-name">District Bank</span>
+          <span class="bank-location">Karlsruhe</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <button class="close-btn" routerLink="/dashboard/overview">
+        <span class="close-icon">✕</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="transfer-content">
+    <div class="transfer-card">
+      <div class="transfer-title">
+        <h1>Transfer</h1>
+        <span class="info-icon">ℹ️</span>
+      </div>
+
+      <div class="source-account">
+        <div class="account-info">
+          <div class="account-icon">
+            <span class="icon">S</span>
+          </div>
+          <div class="account-details">
+            <div class="account-type">{{ selectedAccount?.accountType || 'Select Account' }}</div>
+            <div class="account-iban">{{ selectedAccount?.iban || 'No account selected' }}</div>
+          </div>
+          <div class="account-balance">
+            <div class="balance-amount">
+              {{ selectedAccount ? formatCurrency(selectedAccount.balance, selectedAccount.currency) : '0.00 EUR' }}
+            </div>
+            <span class="info-icon">ℹ️</span>
+          </div>
+        </div>
+        <a href="#" class="change-account-link">Change account</a>
+      </div>
+
+      <form [formGroup]="transferForm" (ngSubmit)="onSubmit()" class="transfer-form">
+        <div class="form-group">
+          <label for="recipient">Recipient</label>
+          <input
+            type="text"
+            id="recipient"
+            formControlName="recipient"
+            class="form-control"
+            placeholder="Enter recipient name or IBAN"
+            [class.error]="transferForm.get('recipient')?.invalid && transferForm.get('recipient')?.touched"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <input
+            type="number"
+            id="amount"
+            formControlName="amount"
+            class="form-control"
+            placeholder="0.00"
+            step="0.01"
+            min="0.01"
+            [class.error]="transferForm.get('amount')?.invalid && transferForm.get('amount')?.touched"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input
+            type="text"
+            id="description"
+            formControlName="description"
+            class="form-control"
+            placeholder="Enter transfer description"
+            [class.error]="transferForm.get('description')?.invalid && transferForm.get('description')?.touched"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="fromAccount">From Account</label>
+          <select
+            id="fromAccount"
+            formControlName="fromAccount"
+            class="form-control"
+            (change)="onAccountChange($any($event.target).value)"
+          >
+            <option value="">Select Account</option>
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.accountType }} - {{ formatCurrency(account.balance, account.currency) }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn btn-primary transfer-btn"
+            [disabled]="transferForm.invalid || isLoading"
+          >
+            {{ isLoading ? 'Processing...' : 'Transfer' }}
+          </button>
+          
+          <button
+            type="button"
+            class="btn btn-secondary apply-data-btn"
+            (click)="applyFormData()"
+            [disabled]="isLoading"
+          >
+            <span class="document-icon">📄</span>
+            Apply data from the form
+            <span class="arrow-icon">→</span>
+          </button>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="transferSuccess" class="success-message">
+          <span class="success-icon">✓</span>
+          Transfer completed successfully!
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="transfer-footer">
+    <div class="footer-links">
+      <div class="language-selector">
+        <span class="globe-icon">🌐</span>
+        <span>English</span>
+        <span class="dropdown-arrow">▼</span>
+      </div>
+      <div class="legal-links">
+        <a href="#">General Terms & Conditions</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Legal Information</a>
+        <a href="#">Fees and other Information</a>
+        <a href="#">Contact</a>
+        <a href="#">Change cookie settings</a>
+        <a href="#">Accessibility (German)</a>
+        <a href="#">Report barrier (German)</a>
+      </div>
+    </div>
+  </div>
+</div>
