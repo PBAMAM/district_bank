@@ -265,3 +265,25 @@
     gap: 15px;
   }
 }
+
+.setup-link {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.setup-btn {
+  color: #28a745;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 8px 16px;
+  border: 2px solid #28a745;
+  border-radius: 6px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.setup-btn:hover {
+  background-color: #28a745;
+  color: white;
+}

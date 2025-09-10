@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { AuthService } from '../../services/auth.service';
-import { Account, Transaction } from '../../models/account.model';
+import { Account, Transaction, User } from '../../models/account.model';
 
 @Component({
   selector: 'app-transfer',
@@ -13,44 +14,16 @@ export class TransferComponent implements OnInit {
   transferForm: FormGroup;
   accounts: Account[] = [];
   selectedAccount: Account | null = null;
+  currentUser: User | null = null;
   isLoading = false;
   transferSuccess = false;
   errorMessage = '';
 
-  // Mock accounts for demo
-  mockAccounts: Account[] = [
-    {
-      id: '1',
-      accountNumber: '123456',
-      iban: 'DE97 6605 0101 0000 1234 56',
-      accountType: 'Privatgirokonto - Lebensmittel',
-      accountName: 'Private Current Account - Groceries',
-      balance: 1000.00,
-      currency: 'EUR',
-      ownerName: 'Max Mustermann',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '2',
-      accountNumber: '129995',
-      iban: 'DE84 6605 0101 0000 1299 95',
-      accountType: 'Firmenkonto',
-      accountName: 'Business Account',
-      balance: 5000.00,
-      currency: 'EUR',
-      ownerName: 'Test, Tina',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-  ];
-
   constructor(
     private fb: FormBuilder,
     private firebaseService: FirebaseService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.transferForm = this.fb.group({
       recipient: ['', [Validators.required]],
@@ -61,13 +34,25 @@ export class TransferComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadAccounts();
-    this.selectDefaultAccount();
+    // Get current user and load accounts
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      if (user) {
+        this.loadAccounts();
+      }
+    });
   }
 
-  loadAccounts() {
-    // For demo purposes, use mock data
-    this.accounts = this.mockAccounts;
+  async loadAccounts() {
+    try {
+      if (this.currentUser) {
+        this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
+        this.selectDefaultAccount();
+      }
+    } catch (error) {
+      console.error('Error loading accounts:', error);
+      this.errorMessage = 'Failed to load accounts. Please try again.';
+    }
   }
 
   selectDefaultAccount() {
@@ -112,12 +97,15 @@ export class TransferComponent implements OnInit {
           processedAt: new Date()
         };
 
-        // In a real app, you would save to Firebase
-        // await this.firebaseService.createTransaction(transaction);
+        // Save transaction to Firebase
+        await this.firebaseService.createTransaction(transaction);
         
         // Update account balance
         const newBalance = this.selectedAccount.balance - formValue.amount;
-        // await this.firebaseService.updateAccountBalance(this.selectedAccount.id, newBalance);
+        await this.firebaseService.updateAccountBalance(this.selectedAccount.id, newBalance);
+        
+        // Update local account balance
+        this.selectedAccount.balance = newBalance;
         
         this.transferSuccess = true;
         this.transferForm.reset();

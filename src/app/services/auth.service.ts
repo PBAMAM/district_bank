@@ -17,14 +17,20 @@ export class AuthService {
 
   async login(credentials: LoginCredentials): Promise<boolean> {
     try {
+      console.log('AuthService: Starting login process');
       const firebaseUser = await this.firebaseService.login(credentials);
+      console.log('AuthService: Firebase user obtained:', firebaseUser.uid);
       
       // Fetch user data from Firestore
       const userDoc = await this.firebaseService.getUser(firebaseUser.uid);
+      console.log('AuthService: User document from Firestore:', userDoc);
+      
       if (userDoc) {
         this.currentUserSubject.next(userDoc);
+        console.log('AuthService: User logged in successfully:', userDoc.role);
         return true;
       } else {
+        console.log('AuthService: User not found in Firestore, creating basic user');
         // If user doesn't exist in Firestore, create a basic user
         const user: User = {
           id: firebaseUser.uid,
@@ -38,10 +44,11 @@ export class AuthService {
         };
         await this.firebaseService.createUser(user);
         this.currentUserSubject.next(user);
+        console.log('AuthService: Basic user created and logged in');
         return true;
       }
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('AuthService: Login failed:', error);
       return false;
     }
   }

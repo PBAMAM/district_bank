@@ -10,12 +10,14 @@ import { AdminLoginComponent } from './components/admin-login/admin-login.compon
 import { ClientLoginComponent } from './components/client-login/client-login.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
+import { AdminSetupComponent } from './components/admin-setup/admin-setup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/client', pathMatch: 'full' },
   
   // Admin routes
   { path: 'admin', component: AdminLoginComponent },
+  { path: 'admin/setup', component: AdminSetupComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent },
   { path: 'admin/users', component: AdminPanelComponent },
   { path: 'admin/accounts', component: AdminPanelComponent },

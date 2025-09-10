@@ -68,12 +68,19 @@ export class AdminLoginComponent implements OnInit {
       this.clearMessages();
 
       try {
+        console.log('Attempting admin login with:', this.loginForm.value);
         const success = await this.authService.login(this.loginForm.value);
+        console.log('Login success:', success);
+        
         if (success) {
           const user = this.authService.getCurrentUser();
+          console.log('Current user after login:', user);
+          
           if (user?.role === 'admin') {
+            console.log('Admin user authenticated, navigating to dashboard');
             this.router.navigate(['/admin/dashboard']);
           } else {
+            console.log('User is not admin, role:', user?.role);
             this.errorMessage = 'Access denied. Admin privileges required.';
             await this.authService.logout();
           }
@@ -102,7 +109,10 @@ export class AdminLoginComponent implements OnInit {
           role: 'admin' as const
         };
 
+        console.log('Attempting admin registration with:', { email: formValue.email, userData });
         const success = await this.authService.register(formValue.email, formValue.password, userData);
+        console.log('Registration success:', success);
+        
         if (success) {
           this.successMessage = 'Admin account created successfully! Please login.';
           this.isLoginMode = true;

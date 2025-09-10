@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { AuthService } from '../../services/auth.service';
-import { Account, Transaction } from '../../models/account.model';
+import { Account, Transaction, User } from '../../models/account.model';
 
 @Component({
   selector: 'app-account-overview',
@@ -11,77 +11,33 @@ import { Account, Transaction } from '../../models/account.model';
 export class AccountOverviewComponent implements OnInit {
   accounts: Account[] = [];
   transactions: Transaction[] = [];
+  currentUser: User | null = null;
   totalBalance = 0;
   isLoading = true;
 
-  // Mock data for demonstration
-  mockAccounts: Account[] = [
-    {
-      id: '1',
-      accountNumber: '123456',
-      iban: 'DE97 6605 0101 0000 1234 56',
-      accountType: 'Privatgirokonto - Lebensmittel',
-      accountName: 'Private Current Account - Groceries',
-      balance: 1000.00,
-      currency: 'EUR',
-      ownerName: 'Max Mustermann',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '2',
-      accountNumber: '129995',
-      iban: 'DE84 6605 0101 0000 1299 95',
-      accountType: 'Firmenkonto',
-      accountName: 'Business Account',
-      balance: -125.50,
-      currency: 'EUR',
-      ownerName: 'Test, Tina',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '3',
-      accountNumber: '200905',
-      iban: 'DE03 6605 0101 0000 2009 05',
-      accountType: 'Tagesgeld - Rücklage',
-      accountName: 'Savings Account - Reserve',
-      balance: 18235.00,
-      currency: 'EUR',
-      ownerName: 'Mustermann, Max',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '4',
-      accountNumber: '654321',
-      iban: 'DE44 6605 0101 0000 6543 21',
-      accountType: 'Girokonto (USD)',
-      accountName: 'Current Account (USD)',
-      balance: 1000.00,
-      currency: 'USD',
-      ownerName: 'Mustermann, Max',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '5',
-      accountNumber: '0072',
-      iban: '5149******0072',
-      accountType: 'Goldkarte',
-      accountName: 'Gold Credit Card',
-      balance: -880.00,
-      currency: 'EUR',
-      ownerName: 'Mustermann, Max',
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-  ];
+  // Account categories
+  checkingAccounts: Account[] = [];
+  savingsAccounts: Account[] = [];
+  investmentAccounts: Account[] = [];
+  securitiesAccounts: Account[] = [];
+  loanAccounts: Account[] = [];
+  assetAccounts: Account[] = [];
+
+  // Totals for each category
+  checkingTotal = 0;
+  savingsTotal = 0;
+  investmentTotal = 0;
+  securitiesTotal = 0;
+  loanTotal = 0;
+  assetTotal = 0;
+  grandTotal = 0;
+
+  // Forecast data
+  forecastData = {
+    currentBalance: 0,
+    futureBalance: 0,
+    futureDate: ''
+  };
 
   constructor(
     private firebaseService: FirebaseService,
@@ -89,23 +45,109 @@ export class AccountOverviewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadAccounts();
+    // Get current user and load accounts
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      if (user) {
+        this.loadAccounts();
+      }
+    });
   }
 
   async loadAccounts() {
     try {
       this.isLoading = true;
-      const currentUser = this.authService.getCurrentUser();
       
-      if (currentUser) {
-        // For demo purposes, use mock data
-        this.accounts = this.mockAccounts;
-        this.calculateTotalBalance();
+      if (this.currentUser) {
+        // Load user's accounts from Firebase
+        this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
+        
+        // Categorize accounts
+        this.categorizeAccounts();
+        
+        // Calculate totals for each category
+        this.calculateCategoryTotals();
+        
+        // Calculate grand total
+        this.calculateGrandTotal();
+        
+        // Generate forecast data
+        this.generateForecastData();
       }
     } catch (error) {
       console.error('Error loading accounts:', error);
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  categorizeAccounts() {
+    this.checkingAccounts = [];
+    this.savingsAccounts = [];
+    this.investmentAccounts = [];
+    this.securitiesAccounts = [];
+    this.loanAccounts = [];
+    this.assetAccounts = [];
+
+    this.accounts.forEach(account => {
+      const accountType = account.accountType.toLowerCase();
+      
+      if (accountType.includes('girokonto') || accountType.includes('checking') || accountType.includes('current')) {
+        this.checkingAccounts.push(account);
+      } else if (accountType.includes('sparkonto') || accountType.includes('savings') || accountType.includes('tagesgeld')) {
+        this.savingsAccounts.push(account);
+      } else if (accountType.includes('investment') || accountType.includes('termgeld') || accountType.includes('fixed deposit')) {
+        this.investmentAccounts.push(account);
+      } else if (accountType.includes('depot') || accountType.includes('securities') || accountType.includes('portfolio')) {
+        this.securitiesAccounts.push(account);
+      } else if (accountType.includes('kredit') || accountType.includes('loan') || accountType.includes('credit') || account.balance < 0) {
+        this.loanAccounts.push(account);
+      } else if (accountType.includes('asset') || accountType.includes('immobilie') || accountType.includes('fahrzeug')) {
+        this.assetAccounts.push(account);
+      } else {
+        // Default to checking account for unknown types
+        this.checkingAccounts.push(account);
+      }
+    });
+  }
+
+  calculateCategoryTotals() {
+    this.checkingTotal = this.calculateCategoryTotal(this.checkingAccounts);
+    this.savingsTotal = this.calculateCategoryTotal(this.savingsAccounts);
+    this.investmentTotal = this.calculateCategoryTotal(this.investmentAccounts);
+    this.securitiesTotal = this.calculateCategoryTotal(this.securitiesAccounts);
+    this.loanTotal = this.calculateCategoryTotal(this.loanAccounts);
+    this.assetTotal = this.calculateCategoryTotal(this.assetAccounts);
+  }
+
+  calculateCategoryTotal(accounts: Account[]): number {
+    return accounts.reduce((total, account) => {
+      // Convert to EUR if needed (simplified conversion)
+      let amount = account.balance;
+      if (account.currency === 'USD') {
+        amount = account.balance * 0.85; // Simplified USD to EUR conversion
+      }
+      return total + amount;
+    }, 0);
+  }
+
+  calculateGrandTotal() {
+    this.grandTotal = this.checkingTotal + this.savingsTotal + this.investmentTotal + 
+                     this.securitiesTotal + this.loanTotal + this.assetTotal;
+  }
+
+  generateForecastData() {
+    // Use the main checking account for forecast
+    const mainAccount = this.checkingAccounts[0] || this.accounts[0];
+    if (mainAccount) {
+      this.forecastData.currentBalance = mainAccount.balance;
+      // Simple forecast: assume 5% growth over 6 months
+      this.forecastData.futureBalance = mainAccount.balance * 1.05;
+      
+      // Set future date to 6 months from now
+      const futureDate = new Date();
+      futureDate.setMonth(futureDate.getMonth() + 6);
+      this.forecastData.futureDate = futureDate.toLocaleDateString('de-DE');
     }
   }
 
@@ -140,5 +182,20 @@ export class AccountOverviewComponent implements OnInit {
 
   getBalanceClass(balance: number): string {
     return balance >= 0 ? 'text-success' : 'text-danger';
+  }
+
+  getAssetIcon(accountType: string): string {
+    const type = accountType.toLowerCase();
+    if (type.includes('immobilie') || type.includes('property') || type.includes('real estate')) {
+      return '🏠';
+    } else if (type.includes('fahrzeug') || type.includes('vehicle') || type.includes('car')) {
+      return '🚗';
+    } else if (type.includes('gold') || type.includes('precious metal')) {
+      return '🥇';
+    } else if (type.includes('art') || type.includes('collectible')) {
+      return '🎨';
+    } else {
+      return '💼';
+    }
   }
 }

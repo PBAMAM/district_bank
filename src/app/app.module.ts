@@ -21,6 +21,7 @@ import { ClientLoginComponent } from './components/client-login/client-login.com
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
 import { ClientLayoutComponent } from './components/client-layout/client-layout.component';
+import { AdminSetupComponent } from './components/admin-setup/admin-setup.component';
 import { FirebaseTestService } from './services/firebase-test.service';
 import { FirebaseDebugService } from './services/firebase-debug.service';
 
@@ -41,7 +42,8 @@ import { environment } from '../environments/environment';
     ClientLoginComponent,
     AdminDashboardComponent,
     ClientDashboardComponent,
-    ClientLayoutComponent
+    ClientLayoutComponent,
+    AdminSetupComponent
   ],
   imports: [
     BrowserModule,

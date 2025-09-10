@@ -37,9 +37,21 @@ export class ClientDashboardComponent implements OnInit {
       this.isLoading = true;
       
       if (this.currentUser) {
-        // Load user's accounts and transactions
+        // Load user's accounts
         this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
-        this.transactions = await this.firebaseService.getTransactions(this.accounts[0]?.id || '');
+        
+        // Load transactions for all accounts
+        if (this.accounts.length > 0) {
+          const allTransactions: Transaction[] = [];
+          for (const account of this.accounts) {
+            const accountTransactions = await this.firebaseService.getTransactions(account.id);
+            allTransactions.push(...accountTransactions);
+          }
+          // Sort by creation date (newest first)
+          this.transactions = allTransactions.sort((a, b) => 
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        }
         
         // Calculate total balance
         this.totalBalance = this.accounts.reduce((total, account) => {

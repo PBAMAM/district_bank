@@ -1,7 +1,7 @@
 <app-client-layout>
   <div class="account-overview">
   <div class="welcome-section">
-    <h1>Hello Max Mustermann</h1>
+    <h1>Hello {{ currentUser?.firstName }} {{ currentUser?.lastName }}</h1>
     
     <div class="notifications">
       <div class="notification-item">
@@ -15,9 +15,9 @@
     </div>
   </div>
 
-  <div class="balance-forecast">
+  <div class="balance-forecast" *ngIf="!isLoading && forecastData.currentBalance > 0">
     <h2>Your account balance forecast</h2>
-    <p>Privatgirokonto - Lebensmittel</p>
+    <p>{{ (checkingAccounts[0] && checkingAccounts[0].accountType) || 'Main Account' }}</p>
     
     <div class="forecast-chart">
       <div class="chart-container">
@@ -26,11 +26,11 @@
           <div class="chart-points">
             <div class="chart-point today">
               <span class="point-label">heute</span>
-              <span class="point-value">1.000 EUR</span>
+              <span class="point-value">{{ formatCurrency(forecastData.currentBalance, 'EUR') }}</span>
             </div>
             <div class="chart-point future">
-              <span class="point-label">30.09.2025</span>
-              <span class="point-value">2.527 EUR</span>
+              <span class="point-label">{{ forecastData.futureDate }}</span>
+              <span class="point-value">{{ formatCurrency(forecastData.futureBalance, 'EUR') }}</span>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
     </div>
     
     <div class="accounts-list" *ngIf="!isLoading; else loadingTemplate">
-      <div class="account-item" *ngFor="let account of accounts">
+      <div class="account-item" *ngFor="let account of checkingAccounts">
         <div class="account-icon">
           <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
@@ -71,9 +71,11 @@
         </div>
       </div>
       
-      <div class="accounts-subtotal">
+      <div class="accounts-subtotal" *ngIf="checkingAccounts.length > 0">
         <span class="subtotal-label">Subtotal:</span>
-        <span class="subtotal-amount text-success">{{ formatCurrency(totalBalance, 'EUR') }}</span>
+        <span class="subtotal-amount" [class]="checkingTotal >= 0 ? 'text-success' : 'text-danger'">
+          {{ formatCurrency(checkingTotal, 'EUR') }}
+        </span>
       </div>
     </div>
     
@@ -85,145 +87,155 @@
     </ng-template>
   </div>
 
-  <div class="money-investment-section">
+  <div class="money-investment-section" *ngIf="savingsAccounts.length > 0 || investmentAccounts.length > 0">
     <div class="section-header">
       <h2>Money investment</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="investment-list">
-      <div class="investment-item">
+      <!-- Savings Accounts -->
+      <div class="investment-item" *ngFor="let account of savingsAccounts">
         <div class="investment-icon">
-          <span class="icon">S</span>
+          <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
         <div class="investment-details">
-          <div class="investment-type">Sparkonto</div>
-          <div class="investment-iban">DE10 6605 0101 0040 5000 11 • Test, Tina</div>
+          <div class="investment-type">{{ account.accountType }}</div>
+          <div class="investment-iban">{{ account.iban }} • {{ account.ownerName }}</div>
         </div>
-        <div class="investment-balance text-success">2.000,00 EUR</div>
+        <div class="investment-balance" [class]="getBalanceClass(account.balance)">
+          {{ formatCurrency(account.balance, account.currency) }}
+        </div>
         <div class="investment-actions">
           <span class="info-icon">ℹ️</span>
         </div>
       </div>
       
-      <div class="investment-item">
+      <!-- Investment Accounts -->
+      <div class="investment-item" *ngFor="let account of investmentAccounts">
         <div class="investment-icon">
-          <span class="icon">S</span>
+          <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
         <div class="investment-details">
-          <div class="investment-type">Termingeld</div>
-          <div class="investment-iban">DE73 6605 0101 0223 3445 56 • Mustermann, Max</div>
+          <div class="investment-type">{{ account.accountType }}</div>
+          <div class="investment-iban">{{ account.iban }} • {{ account.ownerName }}</div>
         </div>
-        <div class="investment-balance text-success">15.000,00 EUR</div>
+        <div class="investment-balance" [class]="getBalanceClass(account.balance)">
+          {{ formatCurrency(account.balance, account.currency) }}
+        </div>
         <div class="investment-actions">
           <span class="info-icon">ℹ️</span>
         </div>
       </div>
       
-      <div class="investment-subtotal">
+      <div class="investment-subtotal" *ngIf="savingsTotal + investmentTotal !== 0">
         <span class="subtotal-label">Subtotal:</span>
-        <span class="subtotal-amount text-success">52.000,00 EUR</span>
+        <span class="subtotal-amount" [class]="(savingsTotal + investmentTotal) >= 0 ? 'text-success' : 'text-danger'">
+          {{ formatCurrency(savingsTotal + investmentTotal, 'EUR') }}
+        </span>
       </div>
     </div>
   </div>
 
-  <div class="securities-section">
+  <div class="securities-section" *ngIf="securitiesAccounts.length > 0">
     <div class="section-header">
       <h2>Securities account</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="securities-list">
-      <div class="securities-item">
+      <div class="securities-item" *ngFor="let account of securitiesAccounts">
         <div class="securities-icon">
-          <span class="icon">S</span>
+          <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
         <div class="securities-details">
-          <div class="securities-type">Depot</div>
-          <div class="securities-iban">DE92 6605 0101 0800 1002 00 • Mustermann, Max</div>
+          <div class="securities-type">{{ account.accountType }}</div>
+          <div class="securities-iban">{{ account.iban }} • {{ account.ownerName }}</div>
         </div>
-        <div class="securities-balance text-success">47.473,85 EUR</div>
+        <div class="securities-balance" [class]="getBalanceClass(account.balance)">
+          {{ formatCurrency(account.balance, account.currency) }}
+        </div>
         <div class="securities-actions">
           <span class="info-icon">ℹ️</span>
         </div>
       </div>
       
-      <div class="securities-subtotal">
+      <div class="securities-subtotal" *ngIf="securitiesTotal !== 0">
         <span class="subtotal-label">Subtotal:</span>
-        <span class="subtotal-amount text-success">145.550,80 EUR</span>
+        <span class="subtotal-amount" [class]="securitiesTotal >= 0 ? 'text-success' : 'text-danger'">
+          {{ formatCurrency(securitiesTotal, 'EUR') }}
+        </span>
       </div>
     </div>
   </div>
 
-  <div class="loans-section">
+  <div class="loans-section" *ngIf="loanAccounts.length > 0">
     <div class="section-header">
       <h2>Loans & financing</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="loans-list">
-      <div class="loans-item">
+      <div class="loans-item" *ngFor="let account of loanAccounts">
         <div class="loans-icon">
-          <span class="icon">S</span>
+          <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
         <div class="loans-details">
-          <div class="loans-type">Kreditkonto</div>
-          <div class="loans-iban">DE20 6605 0101 0603 0223 28 • Mustermann, Max</div>
+          <div class="loans-type">{{ account.accountType }}</div>
+          <div class="loans-iban">{{ account.iban }} • {{ account.ownerName }}</div>
         </div>
-        <div class="loans-balance text-danger">-36.613,93 EUR</div>
+        <div class="loans-balance" [class]="getBalanceClass(account.balance)">
+          {{ formatCurrency(account.balance, account.currency) }}
+        </div>
         <div class="loans-actions">
           <span class="info-icon">ℹ️</span>
         </div>
       </div>
       
-      <div class="loans-subtotal">
+      <div class="loans-subtotal" *ngIf="loanTotal !== 0">
         <span class="subtotal-label">Subtotal:</span>
-        <span class="subtotal-amount text-danger">-46.536,37 EUR</span>
+        <span class="subtotal-amount" [class]="loanTotal >= 0 ? 'text-success' : 'text-danger'">
+          {{ formatCurrency(loanTotal, 'EUR') }}
+        </span>
       </div>
     </div>
   </div>
 
-  <div class="assets-section">
+  <div class="assets-section" *ngIf="assetAccounts.length > 0">
     <div class="section-header">
       <h2>Assets</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="assets-list">
-      <div class="assets-item">
-        <div class="assets-icon">🏠</div>
+      <div class="assets-item" *ngFor="let account of assetAccounts">
+        <div class="assets-icon">{{ getAssetIcon(account.accountType) }}</div>
         <div class="assets-details">
-          <div class="assets-type">Private Immobilie - Villa Schmidt, Schlossallee</div>
-          <div class="assets-description">Eigentumswohnung • Max Mustermann</div>
+          <div class="assets-type">{{ account.accountType }}</div>
+          <div class="assets-description">{{ account.accountName }} • {{ account.ownerName }}</div>
         </div>
-        <div class="assets-value">...</div>
+        <div class="assets-value" [class]="getBalanceClass(account.balance)">
+          {{ formatCurrency(account.balance, account.currency) }}
+        </div>
         <div class="assets-actions">
           <span class="info-icon">ℹ️</span>
         </div>
       </div>
       
-      <div class="assets-item">
-        <div class="assets-icon">🚗</div>
-        <div class="assets-details">
-          <div class="assets-type">Fahrzeuge - VW Passat</div>
-          <div class="assets-description">PKW • Max Mustermann</div>
-        </div>
-        <div class="assets-value">...</div>
-        <div class="assets-actions">
-          <span class="info-icon">ℹ️</span>
-        </div>
-      </div>
-      
-      <div class="assets-subtotal">
+      <div class="assets-subtotal" *ngIf="assetTotal !== 0">
         <span class="subtotal-label">Subtotal:</span>
-        <span class="subtotal-amount text-success">510.000,00 EUR</span>
+        <span class="subtotal-amount" [class]="assetTotal >= 0 ? 'text-success' : 'text-danger'">
+          {{ formatCurrency(assetTotal, 'EUR') }}
+        </span>
       </div>
     </div>
   </div>
 
-  <div class="total-amount">
+  <div class="total-amount" *ngIf="!isLoading && grandTotal !== 0">
     <div class="total-label">Total amount:</div>
-    <div class="total-value text-success">684.839,96 EUR</div>
+    <div class="total-value" [class]="grandTotal >= 0 ? 'text-success' : 'text-danger'">
+      {{ formatCurrency(grandTotal, 'EUR') }}
+    </div>
   </div>
 
   <div class="footer-actions">

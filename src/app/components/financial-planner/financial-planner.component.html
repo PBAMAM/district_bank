@@ -1,11 +1,17 @@
 <app-client-layout>
   <div class="financial-planner">
   <div class="planner-header">
-    <h1>Financial Planner</h1>
+    <h1>Transaction Analysis & Financial Planner</h1>
     <span class="info-icon">ℹ️</span>
   </div>
 
-  <div class="planner-grid">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading your financial data...</p>
+  </div>
+
+  <div class="planner-grid" *ngIf="!isLoading">
     <!-- Income and Expenditure Card -->
     <div class="planner-card">
       <div class="card-header">
@@ -13,7 +19,7 @@
         <span class="info-icon">ℹ️</span>
         <span class="arrow-icon">→</span>
       </div>
-      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
       
       <div class="chart-container">
         <h4>Evaluation of the last 3 months</h4>
@@ -27,15 +33,15 @@
         <div class="chart-legend">
           <div class="legend-item income">
             <span class="legend-color"></span>
-            <span class="legend-text">4.793 EUR Income</span>
+            <span class="legend-text">{{ formatCurrency(totalIncome) }} Income</span>
           </div>
           <div class="legend-item expenditure">
             <span class="legend-color"></span>
-            <span class="legend-text">- 3.813 EUR Expenditure</span>
+            <span class="legend-text">- {{ formatCurrency(totalExpenditure) }} Expenditure</span>
           </div>
           <div class="legend-item surplus">
             <span class="legend-color"></span>
-            <span class="legend-text">980 EUR Surplus</span>
+            <span class="legend-text">{{ formatCurrency(totalSurplus) }} Surplus</span>
           </div>
         </div>
       </div>
@@ -50,7 +56,7 @@
         <span class="info-icon">ℹ️</span>
         <span class="arrow-icon">→</span>
       </div>
-      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
       
       <div class="chart-container">
         <h4>Expected change in account balance by month-end</h4>
@@ -64,11 +70,11 @@
         <div class="forecast-points">
           <div class="forecast-point">
             <span class="point-label">heute</span>
-            <span class="point-value">1.000 EUR</span>
+            <span class="point-value">{{ formatCurrency((accounts[0] && accounts[0].balance) || 0) }}</span>
           </div>
           <div class="forecast-point">
-            <span class="point-label">30.09.2025</span>
-            <span class="point-value">2.527 EUR</span>
+            <span class="point-label">6 months</span>
+            <span class="point-value">{{ formatCurrency(forecastData.datasets[0].data[6]) }}</span>
           </div>
         </div>
       </div>
@@ -83,7 +89,7 @@
         <span class="info-icon">ℹ️</span>
         <span class="arrow-icon">→</span>
       </div>
-      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
       
       <div class="chart-container">
         <h4>Comparison of expected fixed costs</h4>
@@ -96,13 +102,13 @@
         </div>
         <div class="costs-breakdown">
           <div class="cost-item">
-            <span class="cost-label">- 1.401 EUR September</span>
+            <span class="cost-label">- {{ formatCurrency(monthlyExpenditure[0] || 0) }} {{ getLast3Months()[0] }}</span>
           </div>
           <div class="cost-item">
-            <span class="cost-label">- 1.346 EUR October</span>
+            <span class="cost-label">- {{ formatCurrency(monthlyExpenditure[1] || 0) }} {{ getLast3Months()[1] }}</span>
           </div>
           <div class="cost-item average">
-            <span class="cost-label">Ø - 1.368 EUR Expected monthly - Ø</span>
+            <span class="cost-label">Ø - {{ formatCurrency(averageMonthlyExpenditure) }} Expected monthly - Ø</span>
           </div>
         </div>
       </div>
@@ -117,10 +123,10 @@
         <span class="info-icon">ℹ️</span>
         <span class="arrow-icon">→</span>
       </div>
-      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
       
       <div class="budget-content">
-        <p class="budget-description">All outgoing payments 1.800 EUR/month.</p>
+        <p class="budget-description">All outgoing payments {{ formatCurrency(monthlyBudget) }}/month.</p>
         
         <div class="budget-chart">
           <div class="budget-circle">
@@ -133,11 +139,11 @@
           <div class="budget-legend">
             <div class="budget-legend-item">
               <span class="legend-dot posted"></span>
-              <span class="legend-text">488 EUR posted</span>
+              <span class="legend-text">{{ formatCurrency(postedAmount) }} posted</span>
             </div>
             <div class="budget-legend-item">
               <span class="legend-dot remaining"></span>
-              <span class="legend-text">1.312 EUR remaining</span>
+              <span class="legend-text">{{ formatCurrency(remainingAmount) }} remaining</span>
             </div>
           </div>
         </div>
@@ -153,10 +159,10 @@
         <span class="info-icon">ℹ️</span>
         <span class="arrow-icon">→</span>
       </div>
-      <div class="card-subtitle">Privatgirokonto - Lebensmittel</div>
+      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
       
       <div class="keywords-content">
-        <p class="keywords-description">You have currently assigned #7 keywords.</p>
+        <p class="keywords-description">You have currently assigned #{{ keywords.length }} keywords.</p>
         
         <div class="keywords-list">
           <span class="keyword-tag" *ngFor="let keyword of keywords">
@@ -166,6 +172,53 @@
       </div>
       
       <button class="card-action-btn">Edit or add keywords</button>
+    </div>
+
+    <!-- Recent Transactions Card -->
+    <div class="planner-card" *ngIf="recentTransactions.length > 0">
+      <div class="card-header">
+        <h3>Recent Transactions</h3>
+        <span class="info-icon">ℹ️</span>
+        <span class="arrow-icon">→</span>
+      </div>
+      <div class="card-subtitle">Latest {{ recentTransactions.length }} transactions</div>
+      
+      <div class="transactions-content">
+        <div class="transaction-item" *ngFor="let transaction of recentTransactions">
+          <div class="transaction-icon">
+            <span class="icon">{{ transaction.amount > 0 ? '📈' : '📉' }}</span>
+          </div>
+          <div class="transaction-details">
+            <div class="transaction-description">{{ transaction.description }}</div>
+            <div class="transaction-date">{{ transaction.createdAt | date:'short' }}</div>
+          </div>
+          <div class="transaction-amount" [class]="transaction.amount > 0 ? 'positive' : 'negative'">
+            {{ formatCurrency(transaction.amount) }}
+          </div>
+        </div>
+      </div>
+      
+      <button class="card-action-btn">View all transactions</button>
+    </div>
+
+    <!-- Top Categories Card -->
+    <div class="planner-card" *ngIf="topCategories.length > 0">
+      <div class="card-header">
+        <h3>Spending Categories</h3>
+        <span class="info-icon">ℹ️</span>
+        <span class="arrow-icon">→</span>
+      </div>
+      <div class="card-subtitle">Your top spending categories</div>
+      
+      <div class="categories-content">
+        <div class="category-item" *ngFor="let category of topCategories">
+          <div class="category-name">{{ category.category }}</div>
+          <div class="category-amount">{{ formatCurrency(category.amount) }}</div>
+          <div class="category-count">{{ category.count }} transactions</div>
+        </div>
+      </div>
+      
+      <button class="card-action-btn">View detailed breakdown</button>
     </div>
   </div>
   </div>
