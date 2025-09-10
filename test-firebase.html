@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase Connection Test</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js"></script>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <div id="status">Testing...</div>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyVyPv3T3hP52c9rCykYxhy9CX_SaHQkE",
+            authDomain: "bank-42b9b.firebaseapp.com",
+            projectId: "bank-42b9b",
+            storageBucket: "bank-42b9b.firebasestorage.app",
+            messagingSenderId: "479649049829",
+            appId: "1:479649049829:web:9e4d27598371d7b11ff80c",
+            measurementId: "G-BYXNFST17B"
+        };
+
+        try {
+            // Initialize Firebase
+            const app = firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            
+            document.getElementById('status').innerHTML = `
+                <p>✅ Firebase initialized successfully!</p>
+                <p>Project ID: ${app.options.projectId}</p>
+                <p>Auth Domain: ${app.options.authDomain}</p>
+                <p>API Key: ${app.options.apiKey.substring(0, 10)}...</p>
+            `;
+            
+            // Test auth configuration
+            console.log('Auth instance:', auth);
+            console.log('Auth app:', auth.app);
+            
+        } catch (error) {
+            document.getElementById('status').innerHTML = `
+                <p>❌ Firebase initialization failed:</p>
+                <p>${error.message}</p>
+            `;
+            console.error('Firebase error:', error);
+        }
+    </script>
+</body>
+</html>

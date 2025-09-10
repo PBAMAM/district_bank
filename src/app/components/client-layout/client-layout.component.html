@@ -1,0 +1,29 @@
+<div class="client-layout">
+  <div class="client-header">
+    <div class="header-left">
+      <div class="logo">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">
+          <span class="bank-name">District Bank</span>
+          <span class="bank-location">Client Portal</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <span class="welcome-text">Welcome, {{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+      <button class="logout-btn" (click)="logout()">
+        <span class="logout-icon">🚪</span>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <app-sidebar></app-sidebar>
+    
+    <main class="main-content">
+      <ng-content></ng-content>
+    </main>
+  </div>
+</div>

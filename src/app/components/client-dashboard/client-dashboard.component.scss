@@ -1,0 +1,412 @@
+.client-dashboard {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: white;
+}
+
+.client-header {
+  background-color: #dc3545;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  color: #dc3545;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+}
+
+.logo-icon::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  background-color: #dc3545;
+  border-radius: 50%;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.bank-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.bank-location {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.welcome-text {
+  color: white;
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.logout-icon {
+  font-size: 16px;
+}
+
+.dashboard-content {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 70px);
+}
+
+.main-content {
+  flex: 1;
+  padding: 30px;
+  background-color: #1a1a1a;
+  overflow-y: auto;
+}
+
+.balance-overview {
+  margin-bottom: 30px;
+}
+
+.balance-card {
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #444;
+}
+
+.balance-header h2 {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.balance-amount {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.balance-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.account-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.account-item:hover {
+  background-color: #3a3a3a;
+}
+
+.account-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.account-info {
+  flex: 1;
+}
+
+.account-name {
+  color: white;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.account-number {
+  color: #ccc;
+  font-size: 14px;
+  font-family: monospace;
+}
+
+.account-balance {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.quick-actions {
+  margin-bottom: 30px;
+}
+
+.quick-actions h3 {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.action-btn {
+  background-color: #2a2a2a;
+  border: none;
+  color: white;
+  padding: 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover {
+  background-color: #dc3545;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-icon {
+  font-size: 28px;
+}
+
+.btn-text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.recent-transactions {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #444;
+}
+
+.section-header h3 {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.view-all {
+  color: #dc3545;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.view-all:hover {
+  text-decoration: underline;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #333;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.transaction-item:hover {
+  background-color: #3a3a3a;
+}
+
+.transaction-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.transaction-info {
+  flex: 1;
+}
+
+.transaction-description {
+  color: white;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.transaction-date {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.transaction-amount {
+  font-weight: bold;
+  font-size: 16px;
+  color: #dc3545;
+}
+
+.transaction-amount.positive {
+  color: #28a745;
+}
+
+.no-transactions {
+  text-align: center;
+  padding: 40px;
+  color: #ccc;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  color: #ccc;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #444;
+  border-top: 4px solid #dc3545;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .client-header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .header-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .dashboard-content {
+    padding: 20px;
+  }
+  
+  .balance-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .action-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .account-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .account-balance {
+    align-self: flex-end;
+  }
+}

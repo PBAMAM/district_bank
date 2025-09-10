@@ -11,29 +11,60 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private firebaseService: FirebaseService) {
-    // Listen for auth state changes
-    this.firebaseService.getCurrentUser();
+    // Initialize with null user
+    this.currentUserSubject.next(null);
   }
 
   async login(credentials: LoginCredentials): Promise<boolean> {
     try {
       const firebaseUser = await this.firebaseService.login(credentials);
-      // Here you would typically fetch user data from Firestore
-      // For now, we'll create a mock user
-      const user: User = {
-        id: firebaseUser.uid,
-        email: firebaseUser.email || '',
-        firstName: 'Max',
-        lastName: 'Mustermann',
-        role: 'customer',
-        accounts: [],
-        isActive: true,
-        createdAt: new Date()
-      };
-      this.currentUserSubject.next(user);
-      return true;
+      
+      // Fetch user data from Firestore
+      const userDoc = await this.firebaseService.getUser(firebaseUser.uid);
+      if (userDoc) {
+        this.currentUserSubject.next(userDoc);
+        return true;
+      } else {
+        // If user doesn't exist in Firestore, create a basic user
+        const user: User = {
+          id: firebaseUser.uid,
+          email: firebaseUser.email || '',
+          firstName: 'User',
+          lastName: 'Name',
+          role: 'customer',
+          accounts: [],
+          isActive: true,
+          createdAt: new Date()
+        };
+        await this.firebaseService.createUser(user);
+        this.currentUserSubject.next(user);
+        return true;
+      }
     } catch (error) {
       console.error('Login failed:', error);
+      return false;
+    }
+  }
+
+  async register(email: string, password: string, userData: Partial<User>): Promise<boolean> {
+    try {
+      console.log('Starting registration for:', email);
+      const firebaseUser = await this.firebaseService.register(email, password, userData);
+      console.log('Firebase user created:', firebaseUser.uid);
+      
+      // Fetch the created user data
+      const user = await this.firebaseService.getUser(firebaseUser.uid);
+      console.log('User data fetched:', user);
+      
+      if (user) {
+        this.currentUserSubject.next(user);
+        console.log('User registered successfully');
+        return true;
+      }
+      console.log('User data not found after creation');
+      return false;
+    } catch (error) {
+      console.error('Registration failed:', error);
       return false;
     }
   }

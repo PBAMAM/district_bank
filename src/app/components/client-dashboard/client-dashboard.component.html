@@ -1,0 +1,83 @@
+<app-client-layout>
+  <div class="client-dashboard">
+    <!-- Balance Overview -->
+    <div class="balance-overview" *ngIf="!isLoading">
+      <div class="balance-card">
+        <div class="balance-header">
+          <h2>Total Balance</h2>
+          <span class="balance-amount" [class]="getBalanceClass(totalBalance)">
+            {{ formatCurrency(totalBalance) }}
+          </span>
+        </div>
+        <div class="balance-accounts">
+          <div class="account-item" *ngFor="let account of accounts">
+            <div class="account-icon">
+              <span class="icon">S</span>
+            </div>
+            <div class="account-info">
+              <div class="account-name">{{ account.accountName }}</div>
+              <div class="account-number">{{ account.iban }}</div>
+            </div>
+            <div class="account-balance" [class]="getBalanceClass(account.balance)">
+              {{ formatCurrency(account.balance, account.currency) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions" *ngIf="!isLoading">
+      <h3>Quick Actions</h3>
+      <div class="action-buttons">
+        <button class="action-btn transfer" routerLink="/client/transfer">
+          <span class="btn-icon">💸</span>
+          <span class="btn-text">Transfer Money</span>
+        </button>
+        <button class="action-btn accounts" routerLink="/client/accounts">
+          <span class="btn-icon">🏦</span>
+          <span class="btn-text">View Accounts</span>
+        </button>
+        <button class="action-btn transactions" routerLink="/client/transactions">
+          <span class="btn-icon">📊</span>
+          <span class="btn-text">Transaction History</span>
+        </button>
+        <button class="action-btn profile" routerLink="/client/profile">
+          <span class="btn-icon">👤</span>
+          <span class="btn-text">Profile Settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="recent-transactions" *ngIf="!isLoading">
+      <div class="section-header">
+        <h3>Recent Transactions</h3>
+        <a routerLink="/client/transactions" class="view-all">View All</a>
+      </div>
+      <div class="transaction-list">
+        <div class="transaction-item" *ngFor="let transaction of getRecentTransactions()">
+          <div class="transaction-icon">
+            <span class="icon">💳</span>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-description">{{ transaction.description }}</div>
+            <div class="transaction-date">{{ transaction.createdAt | date:'short' }}</div>
+          </div>
+          <div class="transaction-amount" [class.positive]="transaction.amount > 0">
+            {{ formatCurrency(transaction.amount, transaction.currency) }}
+          </div>
+        </div>
+        <div *ngIf="transactions.length === 0" class="no-transactions">
+          <p>No transactions found</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your account information...</p>
+    </div>
+  </div>
+</app-client-layout>

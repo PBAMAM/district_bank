@@ -16,6 +16,13 @@ import { FinancialPlannerComponent } from './components/financial-planner/financ
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { AdminLoginComponent } from './components/admin-login/admin-login.component';
+import { ClientLoginComponent } from './components/client-login/client-login.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
+import { ClientLayoutComponent } from './components/client-layout/client-layout.component';
+import { FirebaseTestService } from './services/firebase-test.service';
+import { FirebaseDebugService } from './services/firebase-debug.service';
 
 import { environment } from '../environments/environment';
 
@@ -29,7 +36,12 @@ import { environment } from '../environments/environment';
     FinancialPlannerComponent,
     AdminPanelComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    AdminLoginComponent,
+    ClientLoginComponent,
+    AdminDashboardComponent,
+    ClientDashboardComponent,
+    ClientLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +53,7 @@ import { environment } from '../environments/environment';
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore())
   ],
-  providers: [],
+  providers: [FirebaseTestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,19 +1,47 @@
-import { Injectable } from '@angular/core';
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, User as FirebaseUser } from 'firebase/auth';
-import { getFirestore, collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore';
-import { environment } from '../../environments/environment';
+import { Injectable, inject } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
+import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, User as FirebaseUser } from 'firebase/auth';
+import { collection, doc, getDocs, getDoc, addDoc, updateDoc, setDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore';
 import { Account, Transaction, User, LoginCredentials } from '../models/account.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
-  private app = initializeApp(environment.firebase);
-  private auth = getAuth(this.app);
-  private db = getFirestore(this.app);
+  private auth = inject(Auth);
+  private db = inject(Firestore);
 
-  constructor() { }
+  constructor() {
+    this.testFirestoreConnection();
+  }
+
+  async testFirestoreConnection() {
+    try {
+      console.log('=== Testing Firestore Connection ===');
+      console.log('Firestore instance:', this.db);
+      console.log('Firestore app:', this.db.app);
+      console.log('Firestore app options:', this.db.app.options);
+      
+      // Try to create a test document
+      const testDoc = doc(this.db, 'test', 'connection-test');
+      await setDoc(testDoc, {
+        message: 'Firestore connection test',
+        timestamp: new Date()
+      });
+      console.log('✅ Firestore write test successful');
+      
+      // Clean up test document
+      await deleteDoc(testDoc);
+      console.log('✅ Firestore delete test successful');
+      
+    } catch (error: any) {
+      console.error('❌ Firestore connection test failed:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+    }
+    console.log('=== End Firestore Connection Test ===');
+  }
 
   // Authentication methods
   async login(credentials: LoginCredentials): Promise<FirebaseUser> {
@@ -27,16 +55,60 @@ export class FirebaseService {
 
   async register(email: string, password: string, userData: Partial<User>): Promise<FirebaseUser> {
     try {
+      console.log('Attempting to register user:', email);
+      console.log('Auth instance:', this.auth);
+      console.log('Auth app:', this.auth?.app);
+      
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      console.log('User created successfully:', userCredential.user.uid);
+      
+      // Test Firestore connection first
+      console.log('Testing Firestore connection...');
+      console.log('Firestore instance:', this.db);
+      console.log('Firestore app:', this.db.app);
+      
       const userDoc = doc(this.db, 'users', userCredential.user.uid);
-      await updateDoc(userDoc, {
+      console.log('User document reference created:', userDoc.path);
+      
+      const userDocData = {
         ...userData,
+        email: userCredential.user.email,
         createdAt: new Date(),
         isActive: true
-      });
+      };
+      console.log('User document data to write:', userDocData);
+      
+      await setDoc(userDoc, userDocData);
+      console.log('User document created in Firestore successfully');
+      
       return userCredential.user;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      console.error('Registration error details:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      
+      // Check if it's a Firestore error
+      if (error.code && error.code.startsWith('firestore/')) {
+        throw new Error(`Firestore error: ${error.message} (Code: ${error.code})`);
+      }
+      
+      // Provide more specific error messages
+      if (error.code === 'auth/configuration-not-found') {
+        throw new Error('Firebase Authentication is not properly configured. Please enable Authentication in Firebase Console.');
+      } else if (error.code === 'auth/email-already-in-use') {
+        throw new Error('An account with this email already exists.');
+      } else if (error.code === 'auth/weak-password') {
+        throw new Error('Password should be at least 6 characters.');
+      } else if (error.code === 'auth/invalid-email') {
+        throw new Error('Invalid email address.');
+      } else if (error.code === 'permission-denied') {
+        throw new Error('Permission denied. Please check Firestore security rules.');
+      } else if (error.code === 'unavailable') {
+        throw new Error('Firestore service is unavailable. Please try again later.');
+      } else {
+        throw new Error(`Registration failed: ${error.message} (Code: ${error.code || 'unknown'})`);
+      }
     }
   }
 
@@ -46,6 +118,33 @@ export class FirebaseService {
 
   getCurrentUser(): FirebaseUser | null {
     return this.auth.currentUser;
+  }
+
+  // User methods
+  async getUser(userId: string): Promise<User | null> {
+    try {
+      const userDoc = await getDoc(doc(this.db, 'users', userId));
+      if (userDoc.exists()) {
+        return { id: userDoc.id, ...userDoc.data() } as User;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting user:', error);
+      return null;
+    }
+  }
+
+  async createUser(user: User): Promise<void> {
+    try {
+      await setDoc(doc(this.db, 'users', user.id), {
+        ...user,
+        createdAt: new Date(),
+        isActive: true
+      });
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
   }
 
   // Account methods
