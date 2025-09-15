@@ -26,11 +26,6 @@ export class AppComponent implements OnInit {
       
       // Check if current route is a public route
       const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
-      
-      // Only redirect to client if not on a public route and not authenticated
-      if (!this.isAuthenticated && !isPublicRoute) {
-        this.router.navigate(['/client']);
-      }
     });
   }
 }

@@ -27,7 +27,7 @@ export class TransferComponent implements OnInit {
   ) {
     this.transferForm = this.fb.group({
       recipient: ['', [Validators.required]],
-      amount: ['', [Validators.required, Validators.min(0.01)]],
+      amount: [0, [Validators.required, Validators.min(0.01)]],
       description: ['', [Validators.required]],
       fromAccount: ['', [Validators.required]]
     });
@@ -84,11 +84,26 @@ export class TransferComponent implements OnInit {
       try {
         const formValue = this.transferForm.value;
         
+        // Convert amount to number to prevent NaN issues
+        const amount = parseFloat(formValue.amount);
+        
+        // Validate amount conversion
+        if (isNaN(amount) || amount <= 0) {
+          this.errorMessage = 'Please enter a valid amount';
+          return;
+        }
+        
+        // Check if sufficient funds
+        if (this.selectedAccount.balance < amount) {
+          this.errorMessage = 'Insufficient funds for this transfer';
+          return;
+        }
+        
         // Create transaction record
         const transaction: Omit<Transaction, 'id'> = {
           fromAccountId: formValue.fromAccount,
           toAccountId: 'external', // For external transfers
-          amount: formValue.amount,
+          amount: amount,
           currency: this.selectedAccount.currency,
           description: formValue.description,
           type: 'transfer',
@@ -101,7 +116,7 @@ export class TransferComponent implements OnInit {
         await this.firebaseService.createTransaction(transaction);
         
         // Update account balance
-        const newBalance = this.selectedAccount.balance - formValue.amount;
+        const newBalance = this.selectedAccount.balance - amount;
         await this.firebaseService.updateAccountBalance(this.selectedAccount.id, newBalance);
         
         // Update local account balance

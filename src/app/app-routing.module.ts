@@ -5,23 +5,17 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AccountOverviewComponent } from './components/account-overview/account-overview.component';
 import { TransferComponent } from './components/transfer/transfer.component';
 import { FinancialPlannerComponent } from './components/financial-planner/financial-planner.component';
-import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
-import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 import { ClientLoginComponent } from './components/client-login/client-login.component';
-import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
-import { AdminSetupComponent } from './components/admin-setup/admin-setup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/client', pathMatch: 'full' },
   
-  // Admin routes
-  { path: 'admin', component: AdminLoginComponent },
-  { path: 'admin/setup', component: AdminSetupComponent },
-  { path: 'admin/dashboard', component: AdminDashboardComponent },
-  { path: 'admin/users', component: AdminPanelComponent },
-  { path: 'admin/accounts', component: AdminPanelComponent },
-  { path: 'admin/transactions', component: AdminPanelComponent },
+  // Admin routes - using lazy loading
+  { 
+    path: 'admin', 
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  },
   
   // Client routes
   { path: 'client', component: ClientLoginComponent },
@@ -39,8 +33,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: AccountOverviewComponent },
       { path: 'transfer', component: TransferComponent },
-      { path: 'planner', component: FinancialPlannerComponent },
-      { path: 'admin', component: AdminPanelComponent }
+      { path: 'planner', component: FinancialPlannerComponent }
     ]
   }
 ];

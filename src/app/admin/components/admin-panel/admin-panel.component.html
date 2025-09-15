@@ -1,0 +1,331 @@
+<div class="admin-panel">
+  <div class="admin-header">
+    <h1>Admin Panel</h1>
+    <p>Manage customers, accounts, and transactions</p>
+    <div class="quick-actions">
+      <button class="btn btn-secondary" (click)="createSampleData()" [disabled]="isLoading">
+        {{ isLoading ? 'Creating...' : 'Create Sample Data' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="admin-tabs">
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'users'"
+      (click)="setActiveTab('users')">
+      Users
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'accounts'"
+      (click)="setActiveTab('accounts')">
+      Accounts
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab === 'transfers'"
+      (click)="setActiveTab('transfers')">
+      Transfers
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="successMessage" class="success-message">
+    <span class="success-icon">✓</span>
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    <span class="error-icon">✕</span>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Users Tab -->
+  <div *ngIf="activeTab === 'users'" class="tab-content">
+    <div class="section-header">
+      <h2>Create New User</h2>
+    </div>
+    
+    <form [formGroup]="createUserForm" (ngSubmit)="createUser()" class="admin-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" formControlName="firstName" class="form-control">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" formControlName="lastName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select id="role" formControlName="role" class="form-control">
+            <option value="customer">Customer</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary" [disabled]="createUserForm.invalid || isLoading">
+        {{ isLoading ? 'Creating...' : 'Create User' }}
+      </button>
+    </form>
+
+    <div class="section-header">
+      <h2>All Users</h2>
+    </div>
+    
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Accounts</th>
+            <th>Status</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="role-badge" [class.admin]="user.role === 'admin'">
+                {{ user.role }}
+              </span>
+            </td>
+            <td>{{ user.accounts.length }}</td>
+            <td>
+              <span class="status-badge" [class.active]="user.isActive">
+                {{ user.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>{{ user.createdAt | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Accounts Tab -->
+  <div *ngIf="activeTab === 'accounts'" class="tab-content">
+    <div class="section-header">
+      <h2>Create New Account</h2>
+    </div>
+    
+    <form [formGroup]="createAccountForm" (ngSubmit)="createAccount()" class="admin-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="accountNumber">Account Number</label>
+          <input type="text" id="accountNumber" formControlName="accountNumber" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="iban">IBAN</label>
+          <input type="text" id="iban" formControlName="iban" class="form-control">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="accountType">Account Type</label>
+          <input type="text" id="accountType" formControlName="accountType" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="accountName">Account Name</label>
+          <input type="text" id="accountName" formControlName="accountName" class="form-control">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="initialBalance">Initial Balance</label>
+          <input type="number" id="initialBalance" formControlName="initialBalance" class="form-control" step="0.01">
+        </div>
+        <div class="form-group">
+          <label for="currency">Currency</label>
+          <select id="currency" formControlName="currency" class="form-control">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="ownerId">Owner</label>
+        <select id="ownerId" formControlName="ownerId" class="form-control">
+          <option value="">Select Owner</option>
+          <option *ngFor="let user of users" [value]="user.id">
+            {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+          </option>
+        </select>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="createAccountForm.invalid || isLoading">
+          {{ isLoading ? 'Creating...' : 'Create Account' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="fillSampleAccountData()">
+          Fill Sample Data
+        </button>
+      </div>
+    </form>
+
+    <div class="section-header">
+      <h2>All Accounts</h2>
+    </div>
+    
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Account Number</th>
+            <th>IBAN</th>
+            <th>Type</th>
+            <th>Owner</th>
+            <th>Balance</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of accounts">
+            <td>{{ account.accountNumber }}</td>
+            <td>{{ account.iban }}</td>
+            <td>{{ account.accountType }}</td>
+            <td>{{ account.ownerName }}</td>
+            <td [class]="account.balance >= 0 ? 'text-success' : 'text-danger'">
+              {{ formatCurrency(account.balance, account.currency) }}
+            </td>
+            <td>
+              <span class="status-badge" [class.active]="account.isActive">
+                {{ account.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Transfers Tab -->
+  <div *ngIf="activeTab === 'transfers'" class="tab-content">
+    <div class="section-header">
+      <h2>Admin Deposit</h2>
+      <p>Add money to any client account</p>
+    </div>
+    
+    <form [formGroup]="adminDepositForm" (ngSubmit)="processAdminDeposit()" class="admin-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="depositToAccountId">To Account</label>
+          <select id="depositToAccountId" formControlName="toAccountId" class="form-control">
+            <option value="">Select Account</option>
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.ownerName }} - {{ account.accountType }} ({{ account.iban }}) - {{ formatCurrency(account.balance, account.currency) }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="depositAmount">Amount</label>
+          <input type="number" id="depositAmount" formControlName="amount" class="form-control" step="0.01" min="0.01">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="depositDescription">Description</label>
+        <input type="text" id="depositDescription" formControlName="description" class="form-control" placeholder="e.g., Bank deposit, Refund, etc.">
+      </div>
+      
+      <button type="submit" class="btn btn-success" [disabled]="adminDepositForm.invalid || isLoading">
+        {{ isLoading ? 'Processing...' : 'Add Money to Account' }}
+      </button>
+    </form>
+
+    <div class="section-header">
+      <h2>Process Transfer</h2>
+      <p>Transfer money between accounts</p>
+    </div>
+    
+    <form [formGroup]="transferForm" (ngSubmit)="processTransfer()" class="admin-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fromAccountId">From Account</label>
+          <select id="fromAccountId" formControlName="fromAccountId" class="form-control">
+            <option value="">Select From Account</option>
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.accountType }} - {{ account.iban }} ({{ formatCurrency(account.balance, account.currency) }})
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="toAccountId">To Account</label>
+          <select id="toAccountId" formControlName="toAccountId" class="form-control">
+            <option value="">Select To Account</option>
+            <option *ngFor="let account of accounts" [value]="account.id">
+              {{ account.accountType }} - {{ account.iban }} ({{ formatCurrency(account.balance, account.currency) }})
+            </option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" formControlName="amount" class="form-control" step="0.01" min="0.01">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" id="description" formControlName="description" class="form-control">
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary" [disabled]="transferForm.invalid || isLoading">
+        {{ isLoading ? 'Processing...' : 'Process Transfer' }}
+      </button>
+    </form>
+
+    <div class="section-header">
+      <h2>Recent Transactions</h2>
+    </div>
+    
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td>{{ getAccountOwner(transaction.fromAccountId) }}</td>
+            <td>{{ getAccountOwner(transaction.toAccountId) }}</td>
+            <td [class]="transaction.amount >= 0 ? 'text-success' : 'text-danger'">
+              {{ formatCurrency(transaction.amount, transaction.currency) }}
+            </td>
+            <td>{{ transaction.description }}</td>
+            <td>
+              <span class="status-badge" [class.completed]="transaction.status === 'completed'">
+                {{ transaction.status }}
+              </span>
+            </td>
+            <td>{{ transaction.createdAt | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

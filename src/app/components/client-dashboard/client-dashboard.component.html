@@ -18,9 +18,17 @@
               <div class="account-name">{{ account.accountName }}</div>
               <div class="account-number">{{ account.iban }}</div>
             </div>
-            <div class="account-balance" [class]="getBalanceClass(account.balance)">
-              {{ formatCurrency(account.balance, account.currency) }}
+            <div class="account-balance" [class]="getBalanceClass(getAccountBalance(account))">
+              {{ formatCurrency(totalBalance) }}
             </div>
+          </div>
+          
+          <!-- No accounts message -->
+          <div *ngIf="accounts.length === 0" class="no-accounts">
+            <p>No accounts found. Create a sample account to get started.</p>
+            <button class="btn btn-primary" (click)="createSampleAccount()">
+              Create Sample Account
+            </button>
           </div>
         </div>
       </div>

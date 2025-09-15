@@ -152,7 +152,14 @@ export class FirebaseService {
     const accountsRef = collection(this.db, 'accounts');
     const q = query(accountsRef, where('ownerId', '==', userId), where('isActive', '==', true));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Account));
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Ensure balance is a number
+      if (data['balance'] !== undefined) {
+        data['balance'] = typeof data['balance'] === 'number' ? data['balance'] : parseFloat(data['balance']) || 0;
+      }
+      return { id: doc.id, ...data } as Account;
+    });
   }
 
   async createAccount(account: Omit<Account, 'id'>): Promise<string> {
@@ -189,7 +196,14 @@ export class FirebaseService {
       orderBy('createdAt', 'desc')
     );
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Transaction));
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Ensure amount is a number
+      if (data['amount'] !== undefined) {
+        data['amount'] = typeof data['amount'] === 'number' ? data['amount'] : parseFloat(data['amount']) || 0;
+      }
+      return { id: doc.id, ...data } as Transaction;
+    });
   }
 
   // Admin methods
@@ -202,13 +216,27 @@ export class FirebaseService {
   async getAllAccounts(): Promise<Account[]> {
     const accountsRef = collection(this.db, 'accounts');
     const querySnapshot = await getDocs(accountsRef);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Account));
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Ensure balance is a number
+      if (data['balance'] !== undefined) {
+        data['balance'] = typeof data['balance'] === 'number' ? data['balance'] : parseFloat(data['balance']) || 0;
+      }
+      return { id: doc.id, ...data } as Account;
+    });
   }
 
   async getAllTransactions(): Promise<Transaction[]> {
     const transactionsRef = collection(this.db, 'transactions');
     const q = query(transactionsRef, orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Transaction));
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Ensure amount is a number
+      if (data['amount'] !== undefined) {
+        data['amount'] = typeof data['amount'] === 'number' ? data['amount'] : parseFloat(data['amount']) || 0;
+      }
+      return { id: doc.id, ...data } as Transaction;
+    });
   }
 }

@@ -1,0 +1,136 @@
+<div class="admin-dashboard">
+  <div class="admin-header">
+    <div class="header-left">
+      <div class="logo">
+        <div class="logo-icon">A</div>
+        <div class="logo-text">
+          <span class="admin-name">Admin Dashboard</span>
+          <span class="admin-subtitle">District Bank</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <span class="welcome-text">Welcome, {{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+      <button class="logout-btn" (click)="logout()">
+        <span class="logout-icon">🚪</span>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="stats-grid" *ngIf="!isLoading">
+      <div class="stat-card">
+        <div class="stat-icon users">👥</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.totalUsers }}</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon accounts">🏦</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.totalAccounts }}</div>
+          <div class="stat-label">Total Accounts</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon transactions">💳</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stats.totalTransactions }}</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon balance">💰</div>
+        <div class="stat-content">
+          <div class="stat-number">{{ formatCurrency(stats.totalBalance) }}</div>
+          <div class="stat-label">Total Balance</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid" *ngIf="!isLoading">
+      <!-- Recent Users -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Recent Users</h3>
+          <a routerLink="/admin/users" class="view-all">View All</a>
+        </div>
+        <div class="card-content">
+          <div class="user-list">
+            <div class="user-item" *ngFor="let user of getRecentUsers()">
+              <div class="user-info">
+                <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+                <div class="user-email">{{ user.email }}</div>
+              </div>
+              <div class="user-role">
+                <span class="role-badge" [class.admin]="user.role === 'admin'">
+                  {{ user.role }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Recent Transactions</h3>
+          <a routerLink="/admin/transactions" class="view-all">View All</a>
+        </div>
+        <div class="card-content">
+          <div class="transaction-list">
+            <div class="transaction-item" *ngFor="let transaction of getRecentTransactions()">
+              <div class="transaction-info">
+                <div class="transaction-description">{{ transaction.description }}</div>
+                <div class="transaction-date">{{ transaction.createdAt | date:'short' }}</div>
+              </div>
+              <div class="transaction-amount" [class.positive]="transaction.amount > 0">
+                {{ formatCurrency(transaction.amount, transaction.currency) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>Quick Actions</h3>
+        </div>
+        <div class="card-content">
+          <div class="action-buttons">
+            <button class="action-btn" routerLink="/admin/users">
+              <span class="btn-icon">👥</span>
+              Manage Users
+            </button>
+            <button class="action-btn" routerLink="/admin/accounts">
+              <span class="btn-icon">🏦</span>
+              Manage Accounts
+            </button>
+            <button class="action-btn" routerLink="/admin/transactions">
+              <span class="btn-icon">💳</span>
+              View Transactions
+            </button>
+            <button class="action-btn" routerLink="/admin/reports">
+              <span class="btn-icon">📊</span>
+              Generate Reports
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading dashboard data...</p>
+    </div>
+  </div>
+</div>

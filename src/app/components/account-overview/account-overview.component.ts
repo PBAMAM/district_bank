@@ -122,10 +122,13 @@ export class AccountOverviewComponent implements OnInit {
 
   calculateCategoryTotal(accounts: Account[]): number {
     return accounts.reduce((total, account) => {
+      // Ensure balance is a valid number
+      const balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance) || 0;
+      
       // Convert to EUR if needed (simplified conversion)
-      let amount = account.balance;
+      let amount = balance;
       if (account.currency === 'USD') {
-        amount = account.balance * 0.85; // Simplified USD to EUR conversion
+        amount = balance * 0.85; // Simplified USD to EUR conversion
       }
       return total + amount;
     }, 0);
@@ -140,9 +143,10 @@ export class AccountOverviewComponent implements OnInit {
     // Use the main checking account for forecast
     const mainAccount = this.checkingAccounts[0] || this.accounts[0];
     if (mainAccount) {
-      this.forecastData.currentBalance = mainAccount.balance;
+      const balance = typeof mainAccount.balance === 'number' ? mainAccount.balance : parseFloat(mainAccount.balance) || 0;
+      this.forecastData.currentBalance = balance;
       // Simple forecast: assume 5% growth over 6 months
-      this.forecastData.futureBalance = mainAccount.balance * 1.05;
+      this.forecastData.futureBalance = balance * 1.05;
       
       // Set future date to 6 months from now
       const futureDate = new Date();
@@ -154,17 +158,20 @@ export class AccountOverviewComponent implements OnInit {
   calculateTotalBalance() {
     this.totalBalance = this.accounts.reduce((total, account) => {
       if (account.currency === 'EUR') {
-        return total + account.balance;
+        const balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance) || 0;
+        return total + balance;
       }
       return total;
     }, 0);
   }
 
   formatCurrency(amount: number, currency: string): string {
+    // Ensure amount is a valid number
+    const numericAmount = typeof amount === 'number' ? amount : parseFloat(amount) || 0;
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: currency
-    }).format(amount);
+    }).format(numericAmount);
   }
 
   getAccountIcon(accountType: string): string {

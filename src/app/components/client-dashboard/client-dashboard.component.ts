@@ -37,8 +37,11 @@ export class ClientDashboardComponent implements OnInit {
       this.isLoading = true;
       
       if (this.currentUser) {
+        console.log('Loading data for user:', this.currentUser.id);
+        
         // Load user's accounts
         this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
+        console.log('Loaded accounts:', this.accounts);
         
         // Load transactions for all accounts
         if (this.accounts.length > 0) {
@@ -53,10 +56,22 @@ export class ClientDashboardComponent implements OnInit {
           );
         }
         
-        // Calculate total balance
-        this.totalBalance = this.accounts.reduce((total, account) => {
-          return total + (account.balance || 0);
-        }, 0);
+        // Calculate total balance - ensure balance is a number
+        if (this.accounts.length > 0) {
+          this.totalBalance = this.accounts.reduce((total, account) => {
+            console.log('Processing account:', account.accountName, 'Balance:', account.balance, 'Type:', typeof account.balance);
+            const balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance) || 0;
+            console.log('Converted balance:', balance);
+            return total + balance;
+          }, 0);
+        } else {
+          this.totalBalance = 0;
+          console.log('No accounts found, setting total balance to 0');
+        }
+        
+        console.log('Total balance calculated:', this.totalBalance);
+      } else {
+        console.log('No current user found');
       }
       
     } catch (error) {
@@ -68,10 +83,12 @@ export class ClientDashboardComponent implements OnInit {
 
 
   formatCurrency(amount: number, currency: string = 'EUR'): string {
+    // Ensure amount is a valid number
+    const numericAmount = typeof amount === 'number' ? amount : parseFloat(amount) || 0;
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: currency
-    }).format(amount);
+    }).format(numericAmount);
   }
 
   getRecentTransactions(): Transaction[] {
@@ -80,5 +97,40 @@ export class ClientDashboardComponent implements OnInit {
 
   getBalanceClass(balance: number): string {
     return balance >= 0 ? 'text-success' : 'text-danger';
+  }
+
+  getAccountBalance(account: Account): number {
+    // Ensure balance is always a valid number
+    const balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance) || 0;
+    console.log('getAccountBalance for', account.accountName, ':', balance, 'from', account.balance);
+    return balance;
+  }
+
+  // Method to create sample account for testing
+  async createSampleAccount() {
+    if (this.currentUser) {
+      try {
+        const sampleAccount: Omit<Account, 'id'> = {
+          accountNumber: '123456',
+          iban: 'DE97 6605 0101 0000 1234 56',
+          accountType: 'Privatgirokonto',
+          accountName: 'Private Current Account',
+          balance: 1000.00,
+          currency: 'EUR',
+          ownerName: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+
+        const accountId = await this.firebaseService.createAccount(sampleAccount);
+        console.log('Sample account created with ID:', accountId);
+        
+        // Reload data
+        await this.loadClientData();
+      } catch (error) {
+        console.error('Error creating sample account:', error);
+      }
+    }
   }
 }

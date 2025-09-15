@@ -13,15 +13,13 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AccountOverviewComponent } from './components/account-overview/account-overview.component';
 import { TransferComponent } from './components/transfer/transfer.component';
 import { FinancialPlannerComponent } from './components/financial-planner/financial-planner.component';
-import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { AdminLoginComponent } from './components/admin-login/admin-login.component';
 import { ClientLoginComponent } from './components/client-login/client-login.component';
-import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
 import { ClientLayoutComponent } from './components/client-layout/client-layout.component';
-import { AdminSetupComponent } from './components/admin-setup/admin-setup.component';
+// import { TestAdminComponent } from './components/test-admin/test-admin.component';
+import { AdminModule } from './admin/admin.module';
 import { FirebaseTestService } from './services/firebase-test.service';
 import { FirebaseDebugService } from './services/firebase-debug.service';
 
@@ -35,15 +33,11 @@ import { environment } from '../environments/environment';
     AccountOverviewComponent,
     TransferComponent,
     FinancialPlannerComponent,
-    AdminPanelComponent,
     NavbarComponent,
     SidebarComponent,
-    AdminLoginComponent,
     ClientLoginComponent,
-    AdminDashboardComponent,
     ClientDashboardComponent,
-    ClientLayoutComponent,
-    AdminSetupComponent
+    ClientLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +45,7 @@ import { environment } from '../environments/environment';
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
+    AdminModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore())
