@@ -31,4 +31,13 @@ export class ClientLayoutComponent implements OnInit {
     await this.authService.logout();
     this.router.navigate(['/client']);
   }
+
+  getInitials(): string {
+    if (this.currentUser) {
+      const first = this.currentUser.firstName?.charAt(0) || '';
+      const last = this.currentUser.lastName?.charAt(0) || '';
+      return (first + last).toUpperCase();
+    }
+    return 'U';
+  }
 }

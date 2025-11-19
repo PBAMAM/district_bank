@@ -1,225 +1,131 @@
 <app-client-layout>
   <div class="financial-planner">
-  <div class="planner-header">
-    <h1>Transaction Analysis & Financial Planner</h1>
-    <span class="info-icon">ℹ️</span>
-  </div>
-
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-state">
-    <div class="spinner"></div>
-    <p>Loading your financial data...</p>
-  </div>
-
-  <div class="planner-grid" *ngIf="!isLoading">
-    <!-- Income and Expenditure Card -->
-    <div class="planner-card">
-      <div class="card-header">
-        <h3>Incoming and outgoing payments</h3>
-        <span class="info-icon">ℹ️</span>
-        <span class="arrow-icon">→</span>
-      </div>
-      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
-      
-      <div class="chart-container">
-        <h4>Evaluation of the last 3 months</h4>
-        <div class="chart-wrapper">
-          <canvas baseChart
-            [data]="incomeExpenditureData"
-            [options]="chartOptions"
-            type="bar">
-          </canvas>
-        </div>
-        <div class="chart-legend">
-          <div class="legend-item income">
-            <span class="legend-color"></span>
-            <span class="legend-text">{{ formatCurrency(totalIncome) }} Income</span>
-          </div>
-          <div class="legend-item expenditure">
-            <span class="legend-color"></span>
-            <span class="legend-text">- {{ formatCurrency(totalExpenditure) }} Expenditure</span>
-          </div>
-          <div class="legend-item surplus">
-            <span class="legend-color"></span>
-            <span class="legend-text">{{ formatCurrency(totalSurplus) }} Surplus</span>
-          </div>
-        </div>
-      </div>
-      
-      <button class="card-action-btn">Check income / outgoings</button>
+    <div class="planner-header" *ngIf="!isLoading" [@fadeInUp]>
+      <h1>Transaction History</h1>
+      <span class="info-icon">ℹ️</span>
     </div>
 
-    <!-- Forecast Card -->
-    <div class="planner-card">
-      <div class="card-header">
-        <h3>Forecast</h3>
-        <span class="info-icon">ℹ️</span>
-        <span class="arrow-icon">→</span>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state" [@fadeIn]>
+      <div class="spinner-wrapper">
+        <div class="spinner"></div>
+        <div class="spinner-ring"></div>
       </div>
-      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
-      
-      <div class="chart-container">
-        <h4>Expected change in account balance by month-end</h4>
-        <div class="chart-wrapper">
-          <canvas baseChart
-            [data]="forecastData"
-            [options]="chartOptions"
-            type="line">
-          </canvas>
-        </div>
-        <div class="forecast-points">
-          <div class="forecast-point">
-            <span class="point-label">heute</span>
-            <span class="point-value">{{ formatCurrency((accounts[0] && accounts[0].balance) || 0) }}</span>
-          </div>
-          <div class="forecast-point">
-            <span class="point-label">6 months</span>
-            <span class="point-value">{{ formatCurrency(forecastData.datasets[0].data[6]) }}</span>
-          </div>
-        </div>
-      </div>
-      
-      <button class="card-action-btn">Check expected sales</button>
+      <p>Loading your transaction data...</p>
     </div>
 
-    <!-- Fixed Costs Card -->
-    <div class="planner-card">
-      <div class="card-header">
-        <h3>Fixed costs</h3>
-        <span class="info-icon">ℹ️</span>
-        <span class="arrow-icon">→</span>
-      </div>
-      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
-      
-      <div class="chart-container">
-        <h4>Comparison of expected fixed costs</h4>
-        <div class="chart-wrapper">
-          <canvas baseChart
-            [data]="fixedCostsData"
-            [options]="chartOptions"
-            type="bar">
-          </canvas>
-        </div>
-        <div class="costs-breakdown">
-          <div class="cost-item">
-            <span class="cost-label">- {{ formatCurrency(monthlyExpenditure[0] || 0) }} {{ getLast3Months()[0] }}</span>
+    <div class="planner-content" *ngIf="!isLoading">
+      <!-- Recent Transactions - Highlighted Main Card -->
+      <div class="recent-transactions-card" *ngIf="recentTransactions.length > 0" [@fadeInUp]>
+        <div class="card-header-main">
+          <div class="header-content">
+            <h2>Recent Transactions</h2>
+            <p class="card-subtitle-main">Your complete transaction history</p>
           </div>
-          <div class="cost-item">
-            <span class="cost-label">- {{ formatCurrency(monthlyExpenditure[1] || 0) }} {{ getLast3Months()[1] }}</span>
-          </div>
-          <div class="cost-item average">
-            <span class="cost-label">Ø - {{ formatCurrency(averageMonthlyExpenditure) }} Expected monthly - Ø</span>
+          <div class="transaction-count-badge">
+            <span class="count-number">{{ recentTransactions.length }}</span>
+            <span class="count-label">Transactions</span>
           </div>
         </div>
-      </div>
-      
-      <button class="card-action-btn">Check expected fixed costs</button>
-    </div>
-
-    <!-- Budgets Card -->
-    <div class="planner-card">
-      <div class="card-header">
-        <h3>Budgets</h3>
-        <span class="info-icon">ℹ️</span>
-        <span class="arrow-icon">→</span>
-      </div>
-      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
-      
-      <div class="budget-content">
-        <p class="budget-description">All outgoing payments {{ formatCurrency(monthlyBudget) }}/month.</p>
         
-        <div class="budget-chart">
-          <div class="budget-circle">
-            <canvas baseChart
-              [data]="budgetData"
-              [options]="budgetOptions"
-              type="doughnut">
-            </canvas>
-          </div>
-          <div class="budget-legend">
-            <div class="budget-legend-item">
-              <span class="legend-dot posted"></span>
-              <span class="legend-text">{{ formatCurrency(postedAmount) }} posted</span>
+        <div class="transactions-list">
+          <div class="transaction-item" *ngFor="let transaction of recentTransactions; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
+            <div class="transaction-icon" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+              <span class="icon">{{ transaction.amount > 0 ? '↑' : '↓' }}</span>
             </div>
-            <div class="budget-legend-item">
-              <span class="legend-dot remaining"></span>
-              <span class="legend-text">{{ formatCurrency(remainingAmount) }} remaining</span>
+            <div class="transaction-details">
+              <div class="transaction-description">{{ transaction.description || 'Transaction' }}</div>
+              <div class="transaction-meta">
+                <span class="transaction-date">{{ transaction.createdAt | date:'medium' }}</span>
+                <span class="transaction-type">{{ transaction.type || 'Transfer' }}</span>
+                <span class="transaction-status" [class.completed]="transaction.status === 'completed'">
+                  {{ transaction.status || 'Completed' }}
+                </span>
+              </div>
+            </div>
+            <div class="transaction-amount-wrapper">
+              <div class="transaction-amount" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+                {{ transaction.amount > 0 ? '+' : '' }}{{ formatCurrency(transaction.amount) }}
+              </div>
+              <div class="transaction-currency">{{ transaction.currency || 'EUR' }}</div>
             </div>
           </div>
         </div>
       </div>
-      
-      <button class="card-action-btn">Check all budgets</button>
-    </div>
 
-    <!-- Keywords Card -->
-    <div class="planner-card">
-      <div class="card-header">
-        <h3>Keywords</h3>
-        <span class="info-icon">ℹ️</span>
-        <span class="arrow-icon">→</span>
+      <!-- Empty State -->
+      <div class="empty-transactions" *ngIf="recentTransactions.length === 0" [@fadeIn]>
+        <div class="empty-icon">📋</div>
+        <h3>No Transactions Yet</h3>
+        <p>Your transaction history will appear here once you make your first transfer.</p>
       </div>
-      <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
-      
-      <div class="keywords-content">
-        <p class="keywords-description">You have currently assigned #{{ keywords.length }} keywords.</p>
-        
-        <div class="keywords-list">
-          <span class="keyword-tag" *ngFor="let keyword of keywords">
-            {{ keyword }}
-          </span>
-        </div>
-      </div>
-      
-      <button class="card-action-btn">Edit or add keywords</button>
-    </div>
 
-    <!-- Recent Transactions Card -->
-    <div class="planner-card" *ngIf="recentTransactions.length > 0">
-      <div class="card-header">
-        <h3>Recent Transactions</h3>
-        <span class="info-icon">ℹ️</span>
-        <span class="arrow-icon">→</span>
-      </div>
-      <div class="card-subtitle">Latest {{ recentTransactions.length }} transactions</div>
-      
-      <div class="transactions-content">
-        <div class="transaction-item" *ngFor="let transaction of recentTransactions">
-          <div class="transaction-icon">
-            <span class="icon">{{ transaction.amount > 0 ? '📈' : '📉' }}</span>
+      <!-- Secondary Cards Grid -->
+      <div class="secondary-cards-grid" *ngIf="recentTransactions.length > 0">
+        <!-- Income and Expenditure Card -->
+        <div class="planner-card" [@scaleIn]>
+          <div class="card-header">
+            <h3>Income & Expenditure</h3>
+            <span class="info-icon">ℹ️</span>
           </div>
-          <div class="transaction-details">
-            <div class="transaction-description">{{ transaction.description }}</div>
-            <div class="transaction-date">{{ transaction.createdAt | date:'short' }}</div>
-          </div>
-          <div class="transaction-amount" [class]="transaction.amount > 0 ? 'positive' : 'negative'">
-            {{ formatCurrency(transaction.amount) }}
+          <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
+          
+          <div class="chart-container">
+            <h4>Last 3 months</h4>
+            <div class="chart-wrapper">
+              <canvas baseChart
+                [data]="incomeExpenditureData"
+                [options]="chartOptions"
+                type="bar">
+              </canvas>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item income">
+                <span class="legend-color"></span>
+                <span class="legend-text">{{ formatCurrency(totalIncome) }} Income</span>
+              </div>
+              <div class="legend-item expenditure">
+                <span class="legend-color"></span>
+                <span class="legend-text">- {{ formatCurrency(totalExpenditure) }} Expenditure</span>
+              </div>
+              <div class="legend-item surplus">
+                <span class="legend-color"></span>
+                <span class="legend-text">{{ formatCurrency(totalSurplus) }} Surplus</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <button class="card-action-btn">View all transactions</button>
-    </div>
 
-    <!-- Top Categories Card -->
-    <div class="planner-card" *ngIf="topCategories.length > 0">
-      <div class="card-header">
-        <h3>Spending Categories</h3>
-        <span class="info-icon">ℹ️</span>
-        <span class="arrow-icon">→</span>
-      </div>
-      <div class="card-subtitle">Your top spending categories</div>
-      
-      <div class="categories-content">
-        <div class="category-item" *ngFor="let category of topCategories">
-          <div class="category-name">{{ category.category }}</div>
-          <div class="category-amount">{{ formatCurrency(category.amount) }}</div>
-          <div class="category-count">{{ category.count }} transactions</div>
+        <!-- Forecast Card -->
+        <div class="planner-card" [@scaleIn]>
+          <div class="card-header">
+            <h3>Forecast</h3>
+            <span class="info-icon">ℹ️</span>
+          </div>
+          <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
+          
+          <div class="chart-container">
+            <h4>Expected balance by month-end</h4>
+            <div class="chart-wrapper">
+              <canvas baseChart
+                [data]="forecastData"
+                [options]="chartOptions"
+                type="line">
+              </canvas>
+            </div>
+            <div class="forecast-points">
+              <div class="forecast-point">
+                <span class="point-label">Today</span>
+                <span class="point-value">{{ formatCurrency((accounts[0] && accounts[0].balance) || 0) }}</span>
+              </div>
+              <div class="forecast-point">
+                <span class="point-label">6 months</span>
+                <span class="point-value">{{ formatCurrency(forecastData.datasets[0].data[6]) }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      
-      <button class="card-action-btn">View detailed breakdown</button>
     </div>
-  </div>
   </div>
 </app-client-layout>

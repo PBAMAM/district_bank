@@ -1,25 +1,63 @@
 <div class="client-login-container">
-  <div class="client-header">
-    <div class="logo">
-      <div class="logo-icon">S</div>
-      <div class="logo-text">
-        <span class="bank-name">MiraBauud</span>
-        <span class="bank-location">Client Portal</span>
+  <!-- Left Side - Branding -->
+  <div class="login-left" [@fadeInUp]>
+    <div class="branding-content">
+      <div class="logo-large">
+        <div class="logo-icon-large">
+          <span class="logo-letter">M</span>
+        </div>
+        <div class="logo-text-large">
+          <h1 class="brand-name">MiraBauud</h1>
+          <p class="brand-tagline">Your Trusted Banking Partner</p>
+        </div>
+      </div>
+      
+      <div class="branding-features">
+        <div class="feature-item" [@slideInRight]>
+          <div class="feature-icon">🔒</div>
+          <div class="feature-content">
+            <h3>Secure Banking</h3>
+            <p>Bank-level encryption and security</p>
+          </div>
+        </div>
+        
+        <div class="feature-item" [@slideInRight]>
+          <div class="feature-icon">⚡</div>
+          <div class="feature-content">
+            <h3>Fast Transactions</h3>
+            <p>Instant transfers and payments</p>
+          </div>
+        </div>
+        
+        <div class="feature-item" [@slideInRight]>
+          <div class="feature-icon">📱</div>
+          <div class="feature-content">
+            <h3>24/7 Access</h3>
+            <p>Manage your finances anytime</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="client-content">
-    <div class="client-card">
-      <div class="card-header">
-        <h1>{{ isLoginMode ? 'Client Login' : 'Open Account' }}</h1>
-        <p>{{ isLoginMode ? 'Access your banking dashboard' : 'Create your banking account' }}</p>
+  <!-- Right Side - Login Form -->
+  <div class="login-right" [@fadeInUp]>
+    <div class="login-form-container">
+      <div class="form-header" [@scaleIn]>
+        <div class="header-icon">
+          <span>{{ isLoginMode ? '🔐' : '✨' }}</span>
+        </div>
+        <h1>{{ isLoginMode ? 'Welcome Back' : 'Create Account' }}</h1>
+        <p>{{ isLoginMode ? 'Sign in to access your banking dashboard' : 'Start your banking journey with us' }}</p>
       </div>
 
       <!-- Login Form -->
-      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="client-form">
-        <div class="form-group">
-          <label for="email">Email Address</label>
+      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="client-form" [@fadeInUp]>
+        <div class="form-group" [@slideInRight]>
+          <label for="email">
+            <span class="label-icon">📧</span>
+            Email Address
+          </label>
           <input
             type="email"
             id="email"
@@ -30,8 +68,11 @@
           >
         </div>
 
-        <div class="form-group">
-          <label for="password">Password</label>
+        <div class="form-group" [@slideInRight]>
+          <label for="password">
+            <span class="label-icon">🔒</span>
+            Password
+          </label>
           <input
             type="password"
             id="password"
@@ -52,10 +93,13 @@
       </form>
 
       <!-- Register Form -->
-      <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="client-form">
+      <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="client-form" [@fadeInUp]>
         <div class="form-row">
-          <div class="form-group">
-            <label for="firstName">First Name</label>
+          <div class="form-group" [@slideInRight]>
+            <label for="firstName">
+              <span class="label-icon">👤</span>
+              First Name
+            </label>
             <input
               type="text"
               id="firstName"
@@ -65,8 +109,11 @@
               [class.error]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
             >
           </div>
-          <div class="form-group">
-            <label for="lastName">Last Name</label>
+          <div class="form-group" [@slideInRight]>
+            <label for="lastName">
+              <span class="label-icon">👤</span>
+              Last Name
+            </label>
             <input
               type="text"
               id="lastName"
@@ -78,8 +125,11 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="regEmail">Email Address</label>
+        <div class="form-group" [@slideInRight]>
+          <label for="regEmail">
+            <span class="label-icon">📧</span>
+            Email Address
+          </label>
           <input
             type="email"
             id="regEmail"
@@ -90,8 +140,11 @@
           >
         </div>
 
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
+        <div class="form-group" [@slideInRight]>
+          <label for="phone">
+            <span class="label-icon">📱</span>
+            Phone Number
+          </label>
           <input
             type="tel"
             id="phone"
@@ -102,8 +155,11 @@
           >
         </div>
 
-        <div class="form-group">
-          <label for="address">Address</label>
+        <div class="form-group" [@slideInRight]>
+          <label for="address">
+            <span class="label-icon">📍</span>
+            Address
+          </label>
           <input
             type="text"
             id="address"
@@ -114,8 +170,11 @@
           >
         </div>
 
-        <div class="form-group">
-          <label for="regPassword">Password</label>
+        <div class="form-group" [@slideInRight]>
+          <label for="regPassword">
+            <span class="label-icon">🔒</span>
+            Password
+          </label>
           <input
             type="password"
             id="regPassword"
@@ -126,8 +185,11 @@
           >
         </div>
 
-        <div class="form-group">
-          <label for="confirmPassword">Confirm Password</label>
+        <div class="form-group" [@slideInRight]>
+          <label for="confirmPassword">
+            <span class="label-icon">🔒</span>
+            Confirm Password
+          </label>
           <input
             type="password"
             id="confirmPassword"
@@ -151,31 +213,32 @@
       </form>
 
       <!-- Toggle Mode -->
-      <div class="toggle-mode">
+      <div class="toggle-mode" [@fadeIn]>
         <p>
           {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
           <button type="button" class="toggle-btn" (click)="toggleMode()">
             {{ isLoginMode ? 'Open Account' : 'Sign In' }}
+            <span class="toggle-arrow">→</span>
           </button>
         </p>
       </div>
 
       <!-- Messages -->
-      <div *ngIf="errorMessage" class="error-message">
+      <div *ngIf="errorMessage" class="error-message" [@fadeIn]>
         <span class="error-icon">⚠️</span>
-        {{ errorMessage }}
+        <span class="error-text">{{ errorMessage }}</span>
       </div>
 
-      <div *ngIf="successMessage" class="success-message">
+      <div *ngIf="successMessage" class="success-message" [@fadeIn]>
         <span class="success-icon">✓</span>
-        {{ successMessage }}
+        <span class="success-text">{{ successMessage }}</span>
       </div>
     </div>
   </div>
 
+  <!-- Footer -->
   <div class="client-footer">
     <div class="footer-links">
-      <a routerLink="/admin">Admin Portal</a>
       <a routerLink="/">Main Site</a>
       <a href="#">Help & Support</a>
     </div>

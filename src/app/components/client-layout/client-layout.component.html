@@ -2,7 +2,9 @@
   <div class="client-header">
     <div class="header-left">
       <div class="logo">
-        <div class="logo-icon">S</div>
+        <div class="logo-icon">
+          <span class="logo-letter">M</span>
+        </div>
         <div class="logo-text">
           <span class="bank-name">MiraBauud</span>
           <span class="bank-location">Client Portal</span>
@@ -11,10 +13,18 @@
     </div>
     
     <div class="header-right">
-      <span class="welcome-text">Welcome, {{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+      <div class="user-info">
+        <div class="user-avatar">
+          <span class="avatar-initials">{{ getInitials() }}</span>
+        </div>
+        <div class="user-details">
+          <span class="welcome-text">Welcome back,</span>
+          <span class="user-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+        </div>
+      </div>
       <button class="logout-btn" (click)="logout()">
         <span class="logout-icon">🚪</span>
-        Logout
+        <span class="logout-text">Logout</span>
       </button>
     </div>
   </div>
