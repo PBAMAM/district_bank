@@ -5,65 +5,88 @@
   color: white;
 }
 
+// Welcome Section
 .welcome-section {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  animation: fadeInUp 0.6s ease-out;
 }
 
 .welcome-section h1 {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
   color: white;
+  letter-spacing: -0.5px;
 }
 
 .notifications {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   margin-bottom: 20px;
 }
 
 .notification-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
+  gap: 12px;
+  padding: 14px 20px;
   background-color: #2a2a2a;
-  border-radius: 6px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
 
-.notification-item:hover {
-  background-color: #333;
+  &:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-color: rgba(220, 53, 69, 0.3);
+  }
 }
 
 .notification-text {
   color: white;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .notification-arrow {
   color: #ccc;
   font-size: 12px;
+  transition: transform 0.3s ease;
+
+  .notification-item:hover & {
+    transform: translateY(2px);
+  }
 }
 
+// Balance Forecast
 .balance-forecast {
   background-color: #2a2a2a;
-  padding: 25px;
-  border-radius: 8px;
+  padding: 32px;
+  border-radius: 16px;
   margin-bottom: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .balance-forecast h2 {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
   color: white;
+  letter-spacing: -0.3px;
 }
 
 .balance-forecast p {
-  color: #ccc;
-  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+  font-size: 14px;
 }
 
 .forecast-chart {
@@ -73,25 +96,42 @@
 .chart-container {
   height: 200px;
   background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-  border-radius: 8px;
+  border-radius: 12px;
   position: relative;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
 .chart-area {
   position: relative;
   height: 100%;
-  padding: 20px;
+  padding: 24px;
 }
 
 .chart-line {
   position: absolute;
   top: 50%;
-  left: 20px;
-  right: 20px;
+  left: 24px;
+  right: 24px;
   height: 3px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.4);
   border-radius: 2px;
+  animation: drawLine 1s ease-out;
+}
+
+@keyframes drawLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 
 .chart-points {
@@ -103,80 +143,130 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 24px;
 }
 
 .chart-point {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 10px 15px;
-  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 12px 18px;
+  border-radius: 10px;
   color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  animation: popIn 0.6s ease-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.today {
+    animation-delay: 0.2s;
+  }
+
+  &.future {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .point-label {
   font-size: 12px;
-  font-weight: 500;
-  margin-bottom: 5px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .point-value {
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .chart-description {
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .chart-link {
   color: #dc3545;
   text-decoration: none;
   font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    color: #ff6b6b;
+    transform: translateX(4px);
+  }
 }
 
-.chart-link:hover {
-  text-decoration: underline;
-}
-
+// Account Sections
 .accounts-section,
 .money-investment-section,
 .securities-section,
 .loans-section,
 .assets-section {
   background-color: #2a2a2a;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  border-radius: 16px;
+  margin-bottom: 24px;
   overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 25px;
+  padding: 24px 28px;
   background-color: #333;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
-.section-header:hover {
-  background-color: #3a3a3a;
+  &:hover {
+    background-color: #3a3a3a;
+
+    .expand-icon {
+      transform: translateY(2px);
+    }
+  }
 }
 
 .section-header h2 {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 700;
   color: white;
   margin: 0;
+  letter-spacing: -0.3px;
 }
 
 .expand-icon {
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 16px;
   transition: transform 0.3s ease;
 }
@@ -196,52 +286,83 @@
 .assets-item {
   display: flex;
   align-items: center;
-  padding: 20px 25px;
-  border-bottom: 1px solid #444;
-  transition: background-color 0.3s ease;
-}
+  padding: 24px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 
-.account-item:hover,
-.investment-item:hover,
-.securities-item:hover,
-.loans-item:hover,
-.assets-item:hover {
-  background-color: #333;
-}
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.2), transparent);
+    transition: width 0.3s ease;
+  }
 
-.account-item:last-child,
-.investment-item:last-child,
-.securities-item:last-child,
-.loans-item:last-child,
-.assets-item:last-child {
-  border-bottom: none;
+  &:hover {
+    background-color: #333;
+    transform: translateX(8px);
+    padding-left: 32px;
+
+    &::before {
+      width: 4px;
+    }
+
+    .account-icon,
+    .investment-icon,
+    .securities-icon,
+    .loans-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .info-icon {
+      transform: scale(1.2);
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .account-icon,
 .investment-icon,
 .securities-icon,
 .loans-icon {
-  width: 40px;
-  height: 40px;
-  background-color: #dc3545;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
   color: white;
-  border-radius: 50%;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
-  font-weight: bold;
-  font-size: 16px;
+  margin-right: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
 
 .assets-icon {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
-  font-size: 20px;
+  margin-right: 20px;
+  font-size: 24px;
+  transition: transform 0.3s ease;
+
+  .assets-item:hover & {
+    transform: scale(1.2) rotate(10deg);
+  }
 }
 
 .account-details,
@@ -250,6 +371,7 @@
 .loans-details,
 .assets-details {
   flex: 1;
+  min-width: 0;
 }
 
 .account-type,
@@ -257,9 +379,11 @@
 .securities-type,
 .loans-type,
 .assets-type {
-  font-weight: 500;
+  font-weight: 600;
   color: white;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+  font-size: 16px;
+  letter-spacing: 0.2px;
 }
 
 .account-iban,
@@ -267,8 +391,10 @@
 .securities-iban,
 .loans-iban,
 .assets-description {
-  color: #ccc;
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
 }
 
 .account-balance,
@@ -277,18 +403,29 @@
 .loans-balance,
 .assets-value {
   text-align: right;
-  margin-right: 15px;
+  margin-right: 20px;
+  min-width: 120px;
 }
 
 .balance-amount {
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+  transition: transform 0.3s ease;
+
+  .account-item:hover &,
+  .investment-item:hover &,
+  .securities-item:hover &,
+  .loans-item:hover &,
+  .assets-item:hover & {
+    transform: scale(1.05);
+  }
 }
 
 .balance-info {
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 12px;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .account-actions,
@@ -296,12 +433,22 @@
 .securities-actions,
 .loans-actions,
 .assets-actions {
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
 }
 
 .info-icon {
-  font-size: 16px;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+  display: block;
 }
 
 .accounts-subtotal,
@@ -312,164 +459,253 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 25px;
+  padding: 20px 28px;
   background-color: #333;
-  font-weight: bold;
+  font-weight: 700;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .subtotal-label {
   color: white;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .subtotal-amount {
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
+// Total Amount
 .total-amount {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px;
-  background-color: #dc3545;
-  border-radius: 8px;
-  margin-bottom: 30px;
+  padding: 32px 40px;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border-radius: 16px;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 24px rgba(220, 53, 69, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(220, 53, 69, 0.5);
+
+    &::before {
+      left: 100%;
+    }
+  }
 }
 
 .total-label {
   color: white;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .total-value {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
+// Footer Actions
 .footer-actions {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .action-links {
   display: flex;
-  gap: 30px;
+  gap: 40px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .action-link {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #ccc;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   font-size: 14px;
-  transition: color 0.3s ease;
-}
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 10px 16px;
+  border-radius: 8px;
 
-.action-link:hover {
-  color: white;
+  &:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
 }
 
 .action-icon {
-  font-size: 16px;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+
+  .action-link:hover & {
+    transform: scale(1.2);
+  }
 }
 
 .multibanking-section {
   background-color: #2a2a2a;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .multibanking-content {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .multibanking-icon {
-  width: 40px;
-  height: 40px;
-  background-color: #28a745;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
   color: white;
-  border-radius: 50%;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+
+  .multibanking-section:hover & {
+    transform: scale(1.1) rotate(90deg);
+  }
 }
 
 .multibanking-text p {
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 14px;
 }
 
 .features-section {
   background-color: #2a2a2a;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .features-progress {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .progress-text {
   color: white;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 15px;
 }
 
 .progress-circle {
-  width: 20px;
-  height: 20px;
-  background-color: #28a745;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
   border-radius: 50%;
+  box-shadow: 0 0 12px rgba(40, 167, 69, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
 }
 
 .features-text p {
-  color: #ccc;
-  margin-bottom: 15px;
-  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 16px;
+  line-height: 1.6;
+  font-size: 14px;
 }
 
 .customise-btn {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
-.customise-btn:hover {
-  background-color: #c82333;
-}
-
+// Loading State
 .loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  color: #ccc;
+  padding: 60px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #444;
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
   border-top: 4px solid #dc3545;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 @keyframes spin {
@@ -477,24 +713,95 @@
   100% { transform: rotate(360deg); }
 }
 
+// Text Colors
+.text-success {
+  color: #48d597;
+}
+
+.text-danger {
+  color: #ff6b6b;
+}
+
+// Responsive Design
 @media (max-width: 768px) {
   .account-overview {
-    padding: 15px;
+    padding: 16px;
+  }
+  
+  .welcome-section h1 {
+    font-size: 24px;
   }
   
   .notifications {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+  }
+  
+  .balance-forecast {
+    padding: 24px 20px;
+  }
+  
+  .section-header {
+    padding: 20px;
+  }
+  
+  .account-item,
+  .investment-item,
+  .securities-item,
+  .loans-item,
+  .assets-item {
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .account-balance,
+  .investment-balance,
+  .securities-balance,
+  .loans-balance,
+  .assets-value {
+    margin-right: 0;
+    margin-top: 12px;
+    width: 100%;
+    text-align: left;
   }
   
   .action-links {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
   }
   
   .multibanking-content,
   .features-progress {
     flex-direction: column;
     text-align: center;
+  }
+  
+  .total-amount {
+    padding: 24px 20px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .total-value {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-overview {
+    padding: 12px;
+  }
+  
+  .welcome-section h1 {
+    font-size: 20px;
+  }
+  
+  .balance-forecast {
+    padding: 20px 16px;
+  }
+  
+  .chart-container {
+    height: 160px;
   }
 }

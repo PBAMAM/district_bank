@@ -1,21 +1,21 @@
 <app-client-layout>
   <div class="account-overview">
-  <div class="welcome-section">
+  <div class="welcome-section" *ngIf="!isLoading" [@fadeInUp]>
     <h1>Hello {{ currentUser?.firstName }} {{ currentUser?.lastName }}</h1>
     
     <div class="notifications">
-      <div class="notification-item">
+      <div class="notification-item" [@scaleIn]>
         <span class="notification-text">Open orders</span>
         <span class="notification-arrow">▼</span>
       </div>
-      <div class="notification-item">
+      <div class="notification-item" [@scaleIn]>
         <span class="notification-text">1 more note</span>
         <span class="notification-arrow">▼</span>
       </div>
     </div>
   </div>
 
-  <div class="balance-forecast" *ngIf="!isLoading && forecastData.currentBalance > 0">
+  <div class="balance-forecast" *ngIf="!isLoading && forecastData.currentBalance > 0" [@fadeInUp]>
     <h2>Your account balance forecast</h2>
     <p>{{ (checkingAccounts[0] && checkingAccounts[0].accountType) || 'Main Account' }}</p>
     
@@ -40,14 +40,14 @@
     </div>
   </div>
 
-  <div class="accounts-section">
+  <div class="accounts-section" [@fadeInUp]>
     <div class="section-header">
       <h2>Accounts and cards</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="accounts-list" *ngIf="!isLoading; else loadingTemplate">
-      <div class="account-item" *ngFor="let account of checkingAccounts">
+      <div class="account-item" *ngFor="let account of checkingAccounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
         <div class="account-icon">
           <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
@@ -87,7 +87,7 @@
     </ng-template>
   </div>
 
-  <div class="money-investment-section" *ngIf="savingsAccounts.length > 0 || investmentAccounts.length > 0">
+  <div class="money-investment-section" *ngIf="savingsAccounts.length > 0 || investmentAccounts.length > 0" [@fadeInUp]>
     <div class="section-header">
       <h2>Money investment</h2>
       <span class="expand-icon">▼</span>
@@ -95,7 +95,7 @@
     
     <div class="investment-list">
       <!-- Savings Accounts -->
-      <div class="investment-item" *ngFor="let account of savingsAccounts">
+      <div class="investment-item" *ngFor="let account of savingsAccounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
         <div class="investment-icon">
           <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
@@ -112,7 +112,7 @@
       </div>
       
       <!-- Investment Accounts -->
-      <div class="investment-item" *ngFor="let account of investmentAccounts">
+      <div class="investment-item" *ngFor="let account of investmentAccounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
         <div class="investment-icon">
           <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
@@ -137,14 +137,14 @@
     </div>
   </div>
 
-  <div class="securities-section" *ngIf="securitiesAccounts.length > 0">
+  <div class="securities-section" *ngIf="securitiesAccounts.length > 0" [@fadeInUp]>
     <div class="section-header">
       <h2>Securities account</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="securities-list">
-      <div class="securities-item" *ngFor="let account of securitiesAccounts">
+      <div class="securities-item" *ngFor="let account of securitiesAccounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
         <div class="securities-icon">
           <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
@@ -169,14 +169,14 @@
     </div>
   </div>
 
-  <div class="loans-section" *ngIf="loanAccounts.length > 0">
+  <div class="loans-section" *ngIf="loanAccounts.length > 0" [@fadeInUp]>
     <div class="section-header">
       <h2>Loans & financing</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="loans-list">
-      <div class="loans-item" *ngFor="let account of loanAccounts">
+      <div class="loans-item" *ngFor="let account of loanAccounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
         <div class="loans-icon">
           <span class="icon">{{ getAccountIcon(account.accountType) }}</span>
         </div>
@@ -201,14 +201,14 @@
     </div>
   </div>
 
-  <div class="assets-section" *ngIf="assetAccounts.length > 0">
+  <div class="assets-section" *ngIf="assetAccounts.length > 0" [@fadeInUp]>
     <div class="section-header">
       <h2>Assets</h2>
       <span class="expand-icon">▼</span>
     </div>
     
     <div class="assets-list">
-      <div class="assets-item" *ngFor="let account of assetAccounts">
+      <div class="assets-item" *ngFor="let account of assetAccounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
         <div class="assets-icon">{{ getAssetIcon(account.accountType) }}</div>
         <div class="assets-details">
           <div class="assets-type">{{ account.accountType }}</div>
@@ -231,7 +231,7 @@
     </div>
   </div>
 
-  <div class="total-amount" *ngIf="!isLoading && grandTotal !== 0">
+  <div class="total-amount" *ngIf="!isLoading && grandTotal !== 0" [@fadeInUp]>
     <div class="total-label">Total amount:</div>
     <div class="total-value" [class]="grandTotal >= 0 ? 'text-success' : 'text-danger'">
       {{ formatCurrency(grandTotal, 'EUR') }}
