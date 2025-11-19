@@ -1,34 +1,45 @@
 <app-client-layout>
   <div class="client-dashboard">
- 
-
     <!-- Balance Overview -->
-    <div class="balance-overview" *ngIf="!isLoading">
+    <div class="balance-overview" *ngIf="!isLoading" [@fadeInUp]>
       <div class="balance-card">
         <div class="balance-header">
-          <h2>Total Balance</h2>
-          <span class="balance-amount" [class]="getBalanceClass(totalBalance)">
-            {{ formatCurrency(totalBalance) }}
-          </span>
+          <div class="header-content">
+            <h2>Total Balance</h2>
+            <p class="balance-subtitle">All Accounts</p>
+          </div>
+          <div class="balance-amount-wrapper">
+            <span class="balance-amount" [class]="getBalanceClass(totalBalance)">
+              {{ formatCurrency(totalBalance) }}
+            </span>
+            <div class="balance-indicator" [class.positive]="totalBalance >= 0" [class.negative]="totalBalance < 0"></div>
+          </div>
         </div>
         <div class="balance-accounts">
-          <div class="account-item" *ngFor="let account of accounts">
+          <div class="account-item" *ngFor="let account of accounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 100">
             <div class="account-icon">
-              <span class="icon">S</span>
+              <span class="icon">{{ account.accountName.charAt(0) }}</span>
             </div>
             <div class="account-info">
               <div class="account-name">{{ account.accountName }}</div>
               <div class="account-number">{{ account.iban }}</div>
+              <div class="account-type">{{ account.accountType }}</div>
             </div>
-            <div class="account-balance" [class]="getBalanceClass(getAccountBalance(account))">
-              {{ formatCurrency(getAccountBalance(account), account.currency) }}
+            <div class="account-balance-wrapper">
+              <div class="account-balance" [class]="getBalanceClass(getAccountBalance(account))">
+                {{ formatCurrency(getAccountBalance(account), account.currency) }}
+              </div>
+              <div class="account-currency">{{ account.currency }}</div>
             </div>
           </div>
           
           <!-- No accounts message --> 
-          <div *ngIf="accounts.length === 0" class="no-accounts">
-            <p>No accounts found. Create a sample account to get started.</p>
+          <div *ngIf="accounts.length === 0" class="no-accounts" [@fadeIn]>
+            <div class="no-accounts-icon">🏦</div>
+            <p>No accounts found</p>
+            <p class="no-accounts-subtitle">Create a sample account to get started with your banking experience</p>
             <button class="btn btn-primary" (click)="createSampleAccount()">
+              <span class="btn-icon">+</span>
               Create Sample Account
             </button>
           </div>
@@ -36,32 +47,141 @@
       </div>
     </div>
 
+    <!-- Stats Cards -->
+    <div class="stats-grid" *ngIf="!isLoading && accounts.length > 0" [@fadeInUp]>
+      <div class="stat-card" [@scaleIn]>
+        <div class="stat-icon accounts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ accounts.length }}</div>
+          <div class="stat-label">Active Accounts</div>
+        </div>
+      </div>
+      
+      <div class="stat-card" [@scaleIn]>
+        <div class="stat-icon transactions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ transactions.length }}</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+      </div>
+      
+      <div class="stat-card" [@scaleIn]>
+        <div class="stat-icon balance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ getRecentTransactions().length }}</div>
+          <div class="stat-label">Recent Activity</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Quick Actions -->
-    <div class="quick-actions" *ngIf="!isLoading">
-      <h3>Quick Actions</h3>
+    <div class="quick-actions" *ngIf="!isLoading" [@fadeInUp]>
+      <div class="section-header">
+        <h3>Quick Actions</h3>
+        <p class="section-subtitle">Manage your finances with ease</p>
+      </div>
       <div class="action-buttons">
-        <button class="action-btn transfer" routerLink="/client/transfer">
-          <span class="btn-icon">💸</span>
+        <a class="action-btn transfer" routerLink="/client/transfer" [@scaleIn]>
+          <div class="btn-icon-wrapper">
+            <span class="btn-icon">💸</span>
+          </div>
           <span class="btn-text">Transfer Money</span>
-        </button>
-        <button class="action-btn accounts" routerLink="/client/accounts">
-          <span class="btn-icon">🏦</span>
+          <span class="btn-arrow">→</span>
+        </a>
+        <a class="action-btn accounts" routerLink="/client/accounts" [@scaleIn]>
+          <div class="btn-icon-wrapper">
+            <span class="btn-icon">🏦</span>
+          </div>
           <span class="btn-text">View Accounts</span>
-        </button>
-        <button class="action-btn transactions" routerLink="/client/transactions">
-          <span class="btn-icon">📊</span>
+          <span class="btn-arrow">→</span>
+        </a>
+        <a class="action-btn transactions" routerLink="/client/transactions" [@scaleIn]>
+          <div class="btn-icon-wrapper">
+            <span class="btn-icon">📊</span>
+          </div>
           <span class="btn-text">Transaction History</span>
-        </button>
-        <button class="action-btn profile" routerLink="/client/profile">
-          <span class="btn-icon">👤</span>
+          <span class="btn-arrow">→</span>
+        </a>
+        <a class="action-btn profile" routerLink="/client/profile" [@scaleIn]>
+          <div class="btn-icon-wrapper">
+            <span class="btn-icon">👤</span>
+          </div>
           <span class="btn-text">Profile Settings</span>
-        </button>
+          <span class="btn-arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="recent-transactions" *ngIf="!isLoading && transactions.length > 0" [@fadeInUp]>
+      <div class="section-header">
+        <div>
+          <h3>Recent Transactions</h3>
+          <p class="section-subtitle">Your latest account activity</p>
+        </div>
+        <a routerLink="/client/transactions" class="view-all">
+          View All
+          <span class="arrow">→</span>
+        </a>
+      </div>
+      <div class="transaction-list">
+        <div class="transaction-item" *ngFor="let transaction of getRecentTransactions(); let i = index" [@slideInLeft] [style.animation-delay.ms]="i * 100">
+          <div class="transaction-icon" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+            <span>{{ transaction.amount > 0 ? '↑' : '↓' }}</span>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-description">{{ transaction.description || 'Transaction' }}</div>
+            <div class="transaction-meta">
+              <span class="transaction-date">{{ transaction.createdAt | date:'short' }}</span>
+              <span class="transaction-type">{{ transaction.type || 'Transfer' }}</span>
+            </div>
+          </div>
+          <div class="transaction-amount-wrapper">
+            <div class="transaction-amount" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+              {{ transaction.amount > 0 ? '+' : '' }}{{ formatCurrency(transaction.amount, transaction.currency) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty Transactions State -->
+    <div class="recent-transactions" *ngIf="!isLoading && transactions.length === 0 && accounts.length > 0" [@fadeIn]>
+      <div class="section-header">
+        <div>
+          <h3>Recent Transactions</h3>
+          <p class="section-subtitle">Your latest account activity</p>
+        </div>
+      </div>
+      <div class="no-transactions">
+        <div class="no-transactions-icon">📋</div>
+        <p>No transactions yet</p>
+        <p class="no-transactions-subtitle">Your transaction history will appear here</p>
       </div>
     </div>
 
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="loading-state">
-      <div class="spinner"></div>
+    <div *ngIf="isLoading" class="loading-state" [@fadeIn]>
+      <div class="spinner-wrapper">
+        <div class="spinner"></div>
+        <div class="spinner-ring"></div>
+      </div>
       <p>Loading your account information...</p>
     </div>
   </div>
