@@ -13,6 +13,47 @@ export class AuthService {
   constructor(private firebaseService: FirebaseService) {
     // Initialize with null user
     this.currentUserSubject.next(null);
+    
+    // Restore authentication state on app initialization
+    this.restoreAuthState();
+  }
+
+  private async restoreAuthState() {
+    // Listen to Firebase auth state changes
+    this.firebaseService.onAuthStateChanged().subscribe(async (firebaseUser) => {
+      if (firebaseUser) {
+        // User is authenticated, fetch user data from Firestore
+        try {
+          const userDoc = await this.firebaseService.getUser(firebaseUser.uid);
+          if (userDoc) {
+            this.currentUserSubject.next(userDoc);
+            console.log('AuthService: User session restored:', userDoc.role);
+          } else {
+            // User exists in Firebase Auth but not in Firestore, create basic user
+            const user: User = {
+              id: firebaseUser.uid,
+              email: firebaseUser.email || '',
+              firstName: 'User',
+              lastName: 'Name',
+              role: 'customer',
+              accounts: [],
+              isActive: true,
+              createdAt: new Date()
+            };
+            await this.firebaseService.createUser(user);
+            this.currentUserSubject.next(user);
+            console.log('AuthService: Basic user created from restored session');
+          }
+        } catch (error) {
+          console.error('AuthService: Error restoring user session:', error);
+          this.currentUserSubject.next(null);
+        }
+      } else {
+        // User is not authenticated
+        this.currentUserSubject.next(null);
+        console.log('AuthService: No user session found');
+      }
+    });
   }
 
   async login(credentials: LoginCredentials): Promise<boolean> {

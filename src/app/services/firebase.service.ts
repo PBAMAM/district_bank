@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
-import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, User as FirebaseUser } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, User as FirebaseUser, onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, getDocs, getDoc, addDoc, updateDoc, setDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore';
 import { Account, Transaction, User, LoginCredentials } from '../models/account.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -120,6 +121,16 @@ export class FirebaseService {
     return this.auth.currentUser;
   }
 
+  // Observable for auth state changes
+  onAuthStateChanged(): Observable<FirebaseUser | null> {
+    return new Observable(observer => {
+      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+        observer.next(user);
+      });
+      return () => unsubscribe();
+    });
+  }
+
   // User methods
   async getUser(userId: string): Promise<User | null> {
     try {
@@ -154,10 +165,13 @@ export class FirebaseService {
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => {
       const data = doc.data();
-      // Ensure balance is a number
-      if (data['balance'] !== undefined) {
+      // Ensure balance is a number - if undefined, default to 0
+      if (data['balance'] === undefined || data['balance'] === null) {
+        data['balance'] = 0;
+      } else {
         data['balance'] = typeof data['balance'] === 'number' ? data['balance'] : parseFloat(data['balance']) || 0;
       }
+      console.log(`Account ${doc.id} balance from Firebase:`, data['balance'], 'Type:', typeof data['balance']);
       return { id: doc.id, ...data } as Account;
     });
   }
@@ -173,10 +187,36 @@ export class FirebaseService {
 
   async updateAccountBalance(accountId: string, newBalance: number): Promise<void> {
     const accountRef = doc(this.db, 'accounts', accountId);
+    console.log(`Updating account ${accountId} balance to:`, newBalance);
     await updateDoc(accountRef, {
       balance: newBalance,
       updatedAt: new Date()
     });
+    console.log(`Successfully updated account ${accountId} balance to:`, newBalance);
+    
+    // Verify the update by reading back the balance
+    const accountDoc = await getDoc(accountRef);
+    if (accountDoc.exists()) {
+      const updatedData = accountDoc.data();
+      console.log(`Verified account ${accountId} balance in Firebase:`, updatedData['balance']);
+    }
+  }
+  
+  async getAccountBalance(accountId: string): Promise<number> {
+    try {
+      const accountRef = doc(this.db, 'accounts', accountId);
+      const accountDoc = await getDoc(accountRef);
+      if (accountDoc.exists()) {
+        const data = accountDoc.data();
+        const balance = typeof data['balance'] === 'number' ? data['balance'] : parseFloat(data['balance']) || 0;
+        console.log(`Account ${accountId} current balance from Firebase:`, balance);
+        return isNaN(balance) || !isFinite(balance) ? 0 : balance;
+      }
+      return 0;
+    } catch (error) {
+      console.error(`Error getting account balance for ${accountId}:`, error);
+      return 0;
+    }
   }
 
   // Transaction methods
@@ -190,19 +230,49 @@ export class FirebaseService {
 
   async getTransactions(accountId: string): Promise<Transaction[]> {
     const transactionsRef = collection(this.db, 'transactions');
-    const q = query(
+    
+    // Get transactions where account is the sender
+    const fromQuery = query(
       transactionsRef,
-      where('fromAccountId', '==', accountId),
-      orderBy('createdAt', 'desc')
+      where('fromAccountId', '==', accountId)
     );
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => {
+    
+    // Get transactions where account is the receiver
+    const toQuery = query(
+      transactionsRef,
+      where('toAccountId', '==', accountId)
+    );
+    
+    // Fetch both queries
+    const [fromSnapshot, toSnapshot] = await Promise.all([
+      getDocs(fromQuery),
+      getDocs(toQuery)
+    ]);
+    
+    // Combine and deduplicate transactions
+    const transactionMap = new Map<string, Transaction>();
+    
+    fromSnapshot.docs.forEach(doc => {
       const data = doc.data();
-      // Ensure amount is a number
       if (data['amount'] !== undefined) {
         data['amount'] = typeof data['amount'] === 'number' ? data['amount'] : parseFloat(data['amount']) || 0;
       }
-      return { id: doc.id, ...data } as Transaction;
+      transactionMap.set(doc.id, { id: doc.id, ...data } as Transaction);
+    });
+    
+    toSnapshot.docs.forEach(doc => {
+      const data = doc.data();
+      if (data['amount'] !== undefined) {
+        data['amount'] = typeof data['amount'] === 'number' ? data['amount'] : parseFloat(data['amount']) || 0;
+      }
+      transactionMap.set(doc.id, { id: doc.id, ...data } as Transaction);
+    });
+    
+    // Convert to array and sort by creation date (newest first)
+    return Array.from(transactionMap.values()).sort((a, b) => {
+      const dateA = a.createdAt instanceof Date ? a.createdAt.getTime() : new Date(a.createdAt).getTime();
+      const dateB = b.createdAt instanceof Date ? b.createdAt.getTime() : new Date(b.createdAt).getTime();
+      return dateB - dateA;
     });
   }
 

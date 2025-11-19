@@ -1,5 +1,7 @@
 <app-client-layout>
   <div class="client-dashboard">
+ 
+
     <!-- Balance Overview -->
     <div class="balance-overview" *ngIf="!isLoading">
       <div class="balance-card">
@@ -19,11 +21,11 @@
               <div class="account-number">{{ account.iban }}</div>
             </div>
             <div class="account-balance" [class]="getBalanceClass(getAccountBalance(account))">
-              {{ formatCurrency(totalBalance) }}
+              {{ formatCurrency(getAccountBalance(account), account.currency) }}
             </div>
           </div>
           
-          <!-- No accounts message -->
+          <!-- No accounts message --> 
           <div *ngIf="accounts.length === 0" class="no-accounts">
             <p>No accounts found. Create a sample account to get started.</p>
             <button class="btn btn-primary" (click)="createSampleAccount()">
@@ -54,31 +56,6 @@
           <span class="btn-icon">👤</span>
           <span class="btn-text">Profile Settings</span>
         </button>
-      </div>
-    </div>
-
-    <!-- Recent Transactions -->
-    <div class="recent-transactions" *ngIf="!isLoading">
-      <div class="section-header">
-        <h3>Recent Transactions</h3>
-        <a routerLink="/client/transactions" class="view-all">View All</a>
-      </div>
-      <div class="transaction-list">
-        <div class="transaction-item" *ngFor="let transaction of getRecentTransactions()">
-          <div class="transaction-icon">
-            <span class="icon">💳</span>
-          </div>
-          <div class="transaction-info">
-            <div class="transaction-description">{{ transaction.description }}</div>
-            <div class="transaction-date">{{ transaction.createdAt | date:'short' }}</div>
-          </div>
-          <div class="transaction-amount" [class.positive]="transaction.amount > 0">
-            {{ formatCurrency(transaction.amount, transaction.currency) }}
-          </div>
-        </div>
-        <div *ngIf="transactions.length === 0" class="no-transactions">
-          <p>No transactions found</p>
-        </div>
       </div>
     </div>
 

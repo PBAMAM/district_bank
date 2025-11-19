@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
 import { User, Account, Transaction } from '../../models/account.model';
+import { Subscription, filter } from 'rxjs';
 
 @Component({
   selector: 'app-client-dashboard',
   templateUrl: './client-dashboard.component.html',
   styleUrls: ['./client-dashboard.component.scss']
 })
-export class ClientDashboardComponent implements OnInit {
+export class ClientDashboardComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   accounts: Account[] = [];
   transactions: Transaction[] = [];
   isLoading = true;
   totalBalance = 0;
+  private routerSubscription?: Subscription;
+  private userSubscription?: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -24,12 +27,37 @@ export class ClientDashboardComponent implements OnInit {
 
   async ngOnInit() {
     // Get current user and load data
-    this.authService.currentUser$.subscribe(user => {
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       if (user) {
         this.loadClientData();
       }
     });
+
+    // Reload data when navigating to this route
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        if (event.url === '/client/dashboard' && this.currentUser) {
+          this.loadClientData();
+        }
+      });
+
+    // Reload data when page becomes visible (user switches back to tab)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && this.currentUser) {
+        this.loadClientData();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   async loadClientData() {
@@ -42,6 +70,14 @@ export class ClientDashboardComponent implements OnInit {
         // Load user's accounts
         this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
         console.log('Loaded accounts:', this.accounts);
+        
+        // Ensure all balances are valid numbers
+        this.accounts = this.accounts.map(account => ({
+          ...account,
+          balance: typeof account.balance === 'number' && !isNaN(account.balance) 
+            ? account.balance 
+            : (parseFloat(account.balance as any) || 0)
+        }));
         
         // Load transactions for all accounts
         if (this.accounts.length > 0) {
@@ -56,13 +92,12 @@ export class ClientDashboardComponent implements OnInit {
           );
         }
         
-        // Calculate total balance - ensure balance is a number
+        // Calculate total balance using the same method as individual account display
         if (this.accounts.length > 0) {
           this.totalBalance = this.accounts.reduce((total, account) => {
-            console.log('Processing account:', account.accountName, 'Balance:', account.balance, 'Type:', typeof account.balance);
-            const balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance) || 0;
-            console.log('Converted balance:', balance);
-            return total + balance;
+            const accountBalance = this.getAccountBalance(account);
+            console.log('Processing account:', account.accountName, 'Balance:', accountBalance);
+            return total + accountBalance;
           }, 0);
         } else {
           this.totalBalance = 0;
@@ -84,7 +119,13 @@ export class ClientDashboardComponent implements OnInit {
 
   formatCurrency(amount: number, currency: string = 'EUR'): string {
     // Ensure amount is a valid number
-    const numericAmount = typeof amount === 'number' ? amount : parseFloat(amount) || 0;
+    let numericAmount = typeof amount === 'number' ? amount : parseFloat(amount as any) || 0;
+    
+    // Check for NaN or invalid values
+    if (isNaN(numericAmount) || !isFinite(numericAmount)) {
+      numericAmount = 0;
+    }
+    
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: currency
@@ -101,7 +142,13 @@ export class ClientDashboardComponent implements OnInit {
 
   getAccountBalance(account: Account): number {
     // Ensure balance is always a valid number
-    const balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance) || 0;
+    let balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance as any) || 0;
+    
+    // Check for NaN or invalid values
+    if (isNaN(balance) || !isFinite(balance)) {
+      balance = 0;
+    }
+    
     console.log('getAccountBalance for', account.accountName, ':', balance, 'from', account.balance);
     return balance;
   }
@@ -117,6 +164,7 @@ export class ClientDashboardComponent implements OnInit {
           accountName: 'Private Current Account',
           balance: 1000.00,
           currency: 'EUR',
+          ownerId: this.currentUser.id,
           ownerName: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
           isActive: true,
           createdAt: new Date(),

@@ -165,7 +165,9 @@ export class AdminPanelComponent implements OnInit {
         // Create account in Firebase
         const newAccount: Omit<Account, 'id'> = {
           ...accountData,
+          ownerId: accountData.ownerId,
           ownerName: `${owner.firstName} ${owner.lastName}`,
+          balance: accountData.initialBalance || 0,
           isActive: true,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -303,11 +305,18 @@ export class AdminPanelComponent implements OnInit {
         const transactionId = await this.firebaseService.createTransaction(transaction);
         
         if (transactionId) {
+          // Fetch current balance from Firebase to ensure we have the latest value
+          const currentBalance = await this.firebaseService.getAccountBalance(toAccount.id);
+          console.log(`Admin Deposit: Fetched current balance from Firebase: ${currentBalance}, Deposit amount: ${amount}`);
+          
+          const newBalance = currentBalance + amount;
+          console.log(`Admin Deposit: New balance will be: ${newBalance}`);
+          
           // Update account balance in Firebase
-          await this.firebaseService.updateAccountBalance(toAccount.id, toAccount.balance + amount);
+          await this.firebaseService.updateAccountBalance(toAccount.id, newBalance);
           
           // Update local data for immediate UI update
-          toAccount.balance += amount;
+          toAccount.balance = newBalance;
           this.transactions.unshift({ id: transactionId, ...transaction });
           
           this.adminDepositForm.reset();
@@ -359,11 +368,12 @@ export class AdminPanelComponent implements OnInit {
       
       this.users.push(newUser);
       
-      // Add sample accounts
+      // Add sample accounts with correct ownerId
       sampleData.accounts.forEach((accountData, index) => {
         const newAccount: Account = {
           id: (Date.now() + index).toString(),
           ...accountData,
+          ownerId: newUser.id, // Set the actual user ID
           ownerName: 'John Doe'
         };
         this.accounts.push(newAccount);

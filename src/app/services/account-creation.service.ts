@@ -25,6 +25,7 @@ export class AccountCreationService {
       console.log('Creating sample user...');
       
       // Create sample accounts
+      // Note: ownerId should be set when actually creating accounts for a real user
       const accounts: Omit<Account, 'id'>[] = [
         {
           accountNumber: '123456789',
@@ -33,6 +34,7 @@ export class AccountCreationService {
           accountName: 'Private Current Account',
           balance: 1000.00,
           currency: 'EUR',
+          ownerId: 'sample-user-id', // Should be replaced with actual user ID when used
           ownerName: 'John Doe',
           isActive: true,
           createdAt: new Date(),
@@ -45,6 +47,7 @@ export class AccountCreationService {
           accountName: 'Savings Account',
           balance: 5000.00,
           currency: 'EUR',
+          ownerId: 'sample-user-id', // Should be replaced with actual user ID when used
           ownerName: 'John Doe',
           isActive: true,
           createdAt: new Date(),
@@ -57,6 +60,7 @@ export class AccountCreationService {
           accountName: 'Business Account',
           balance: 2500.00,
           currency: 'EUR',
+          ownerId: 'sample-user-id', // Should be replaced with actual user ID when used
           ownerName: 'John Doe',
           isActive: true,
           createdAt: new Date(),

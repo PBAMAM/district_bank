@@ -6,6 +6,7 @@ export interface Account {
   accountName: string;
   balance: number;
   currency: string;
+  ownerId: string;
   ownerName: string;
   isActive: boolean;
   createdAt: Date;

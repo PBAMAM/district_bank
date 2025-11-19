@@ -1,19 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { AuthService } from '../../services/auth.service';
 import { Account, Transaction, User } from '../../models/account.model';
+import { Subscription, filter } from 'rxjs';
 
 @Component({
   selector: 'app-account-overview',
   templateUrl: './account-overview.component.html',
   styleUrls: ['./account-overview.component.scss']
 })
-export class AccountOverviewComponent implements OnInit {
+export class AccountOverviewComponent implements OnInit, OnDestroy {
   accounts: Account[] = [];
   transactions: Transaction[] = [];
   currentUser: User | null = null;
   totalBalance = 0;
   isLoading = true;
+  private routerSubscription?: Subscription;
+  private userSubscription?: Subscription;
 
   // Account categories
   checkingAccounts: Account[] = [];
@@ -41,17 +45,43 @@ export class AccountOverviewComponent implements OnInit {
 
   constructor(
     private firebaseService: FirebaseService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     // Get current user and load accounts
-    this.authService.currentUser$.subscribe(user => {
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       if (user) {
         this.loadAccounts();
       }
     });
+
+    // Reload accounts when navigating to this route
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        if (event.url === '/client/accounts' && this.currentUser) {
+          this.loadAccounts();
+        }
+      });
+
+    // Reload accounts when page becomes visible (user switches back to tab)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && this.currentUser) {
+        this.loadAccounts();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   async loadAccounts() {
@@ -61,6 +91,27 @@ export class AccountOverviewComponent implements OnInit {
       if (this.currentUser) {
         // Load user's accounts from Firebase
         this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
+        
+        // Ensure all balances are valid numbers
+        this.accounts = this.accounts.map(account => ({
+          ...account,
+          balance: typeof account.balance === 'number' && !isNaN(account.balance) 
+            ? account.balance 
+            : (parseFloat(account.balance as any) || 0)
+        }));
+        
+        // Load transactions for all accounts
+        if (this.accounts.length > 0) {
+          const allTransactions: Transaction[] = [];
+          for (const account of this.accounts) {
+            const accountTransactions = await this.firebaseService.getTransactions(account.id);
+            allTransactions.push(...accountTransactions);
+          }
+          // Sort by creation date (newest first)
+          this.transactions = allTransactions.sort((a, b) => 
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        }
         
         // Categorize accounts
         this.categorizeAccounts();
@@ -79,6 +130,10 @@ export class AccountOverviewComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+  
+  getRecentTransactions(): Transaction[] {
+    return this.transactions.slice(0, 5);
   }
 
   categorizeAccounts() {
@@ -123,7 +178,12 @@ export class AccountOverviewComponent implements OnInit {
   calculateCategoryTotal(accounts: Account[]): number {
     return accounts.reduce((total, account) => {
       // Ensure balance is a valid number
-      const balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance) || 0;
+      let balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance as any) || 0;
+      
+      // Check for NaN or invalid values
+      if (isNaN(balance) || !isFinite(balance)) {
+        balance = 0;
+      }
       
       // Convert to EUR if needed (simplified conversion)
       let amount = balance;
@@ -143,7 +203,13 @@ export class AccountOverviewComponent implements OnInit {
     // Use the main checking account for forecast
     const mainAccount = this.checkingAccounts[0] || this.accounts[0];
     if (mainAccount) {
-      const balance = typeof mainAccount.balance === 'number' ? mainAccount.balance : parseFloat(mainAccount.balance) || 0;
+      let balance = typeof mainAccount.balance === 'number' ? mainAccount.balance : parseFloat(mainAccount.balance as any) || 0;
+      
+      // Check for NaN or invalid values
+      if (isNaN(balance) || !isFinite(balance)) {
+        balance = 0;
+      }
+      
       this.forecastData.currentBalance = balance;
       // Simple forecast: assume 5% growth over 6 months
       this.forecastData.futureBalance = balance * 1.05;
@@ -152,6 +218,11 @@ export class AccountOverviewComponent implements OnInit {
       const futureDate = new Date();
       futureDate.setMonth(futureDate.getMonth() + 6);
       this.forecastData.futureDate = futureDate.toLocaleDateString('de-DE');
+    } else {
+      // No accounts, set defaults
+      this.forecastData.currentBalance = 0;
+      this.forecastData.futureBalance = 0;
+      this.forecastData.futureDate = '';
     }
   }
 
@@ -167,10 +238,16 @@ export class AccountOverviewComponent implements OnInit {
 
   formatCurrency(amount: number, currency: string): string {
     // Ensure amount is a valid number
-    const numericAmount = typeof amount === 'number' ? amount : parseFloat(amount) || 0;
+    let numericAmount = typeof amount === 'number' ? amount : parseFloat(amount as any) || 0;
+    
+    // Check for NaN or invalid values
+    if (isNaN(numericAmount) || !isFinite(numericAmount)) {
+      numericAmount = 0;
+    }
+    
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
-      currency: currency
+      currency: currency || 'EUR'
     }).format(numericAmount);
   }
 
@@ -188,7 +265,9 @@ export class AccountOverviewComponent implements OnInit {
   }
 
   getBalanceClass(balance: number): string {
-    return balance >= 0 ? 'text-success' : 'text-danger';
+    // Ensure balance is a valid number
+    const numericBalance = typeof balance === 'number' && !isNaN(balance) ? balance : (parseFloat(balance as any) || 0);
+    return numericBalance >= 0 ? 'text-success' : 'text-danger';
   }
 
   getAssetIcon(accountType: string): string {
