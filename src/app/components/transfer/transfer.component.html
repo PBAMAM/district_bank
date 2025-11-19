@@ -1,11 +1,22 @@
 <app-client-layout>
   <div class="transfer-container">
-    <div class="transfer-content">
-    <div class="transfer-card" [@fadeInUp]>
-      <div class="transfer-title" [@scaleIn]>
-        <h1>Transfer Money</h1>
-        <span class="info-icon">ℹ️</span>
+    <div class="transfer-header" [@fadeInUp]>
+      <div class="header-content">
+        <div class="header-icon">💸</div>
+        <div class="header-text">
+          <h1>Transfer Money</h1>
+          <p class="header-subtitle">Send money securely to any account</p>
+        </div>
       </div>
+    </div>
+    
+    <div class="transfer-content">
+      <div class="transfer-main">
+        <div class="transfer-card" [@fadeInUp]>
+          <div class="card-header">
+            <h2>New Transfer</h2>
+            <span class="info-badge">Secure</span>
+          </div>
 
       <div class="source-account" [@slideInRight]>
         <div class="account-info">
@@ -103,7 +114,44 @@
           Transfer completed successfully!
         </div>
       </form>
-    </div>
+        </div>
+      </div>
+      
+      <div class="transfer-sidebar" [@slideInRight]>
+        <div class="info-card">
+          <div class="info-card-header">
+            <span class="info-icon-large">ℹ️</span>
+            <h3>Transfer Information</h3>
+          </div>
+          <div class="info-card-content">
+            <div class="info-item">
+              <span class="info-label">Processing Time</span>
+              <span class="info-value">Instant</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Transfer Limit</span>
+              <span class="info-value">No limit</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Security</span>
+              <span class="info-value">256-bit SSL</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tips-card">
+          <div class="tips-header">
+            <span class="tips-icon">💡</span>
+            <h3>Quick Tips</h3>
+          </div>
+          <ul class="tips-list">
+            <li>Double-check the recipient details before confirming</li>
+            <li>Keep your transfer description clear and concise</li>
+            <li>Transfers are processed instantly</li>
+            <li>Contact support if you need assistance</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </app-client-layout>

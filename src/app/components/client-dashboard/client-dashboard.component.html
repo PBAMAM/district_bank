@@ -1,5 +1,16 @@
 <app-client-layout>
   <div class="client-dashboard">
+    <!-- Header Section -->
+    <div class="dashboard-header" *ngIf="!isLoading" [@fadeInUp]>
+      <div class="header-content">
+        <div class="header-icon">🏠</div>
+        <div class="header-text">
+          <h1>Dashboard</h1>
+          <p class="header-subtitle">Welcome back! Here's your financial overview</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Balance Overview -->
     <div class="balance-overview" *ngIf="!isLoading" [@fadeInUp]>
       <div class="balance-card">
@@ -37,11 +48,7 @@
           <div *ngIf="accounts.length === 0" class="no-accounts" [@fadeIn]>
             <div class="no-accounts-icon">🏦</div>
             <p>No accounts found</p>
-            <p class="no-accounts-subtitle">Create a sample account to get started with your banking experience</p>
-            <button class="btn btn-primary" (click)="createSampleAccount()">
-              <span class="btn-icon">+</span>
-              Create Sample Account
-            </button>
+            <p class="no-accounts-subtitle">Please contact an administrator to create an account</p>
           </div>
         </div>
       </div>

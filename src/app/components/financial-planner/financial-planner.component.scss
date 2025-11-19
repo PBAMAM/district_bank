@@ -1,26 +1,138 @@
 .financial-planner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 30px 20px;
+  padding: 0;
   color: white;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  min-height: 100vh;
 }
 
-// Header
-.planner-header {
+// Header Section
+.transactions-header {
+  padding: 40px 40px 32px;
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 32px;
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .header-icon {
+    font-size: 56px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(220, 53, 69, 0.3);
+  }
+  
+  .header-text {
+    flex: 1;
+    
+    h1 {
+      color: white;
+      font-size: 42px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+    }
+    
+    .header-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+      margin: 0;
+    }
+  }
+}
+
+// Summary Cards
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  padding: 0 40px 32px;
+  margin-bottom: 32px;
+}
+
+.summary-card {
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 40px;
-  padding-bottom: 24px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.planner-header h1 {
-  font-size: 36px;
-  font-weight: 700;
-  color: white;
-  margin: 0;
-  letter-spacing: -0.5px;
+  gap: 20px;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: rgba(220, 53, 69, 0.3);
+  }
+  
+  .card-icon {
+    font-size: 40px;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.2) 0%, rgba(220, 53, 69, 0.1) 100%);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  &.total .card-icon {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.3) 0%, rgba(220, 53, 69, 0.2) 100%);
+  }
+  
+  &.income .card-icon {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.2) 0%, rgba(40, 167, 69, 0.1) 100%);
+  }
+  
+  &.expenditure .card-icon {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.2) 0%, rgba(220, 53, 69, 0.1) 100%);
+  }
+  
+  &.surplus .card-icon {
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(0, 123, 255, 0.1) 100%);
+  }
+  
+  .card-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .card-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  
+  .card-value {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    
+    &.positive {
+      color: #48d597;
+    }
+    
+    &.negative {
+      color: #ff6b6b;
+    }
+  }
 }
 
 .info-icon {
@@ -97,6 +209,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  padding: 0 40px 40px;
 }
 
 // Recent Transactions - Highlighted Main Card
@@ -344,6 +457,8 @@
 
 // Empty State
 .empty-transactions {
+  margin: 0;
+  padding: 60px 40px;
   text-align: center;
   padding: 80px 40px;
   background-color: #2a2a2a;
@@ -525,12 +640,52 @@
 }
 
 @media (max-width: 768px) {
-  .financial-planner {
-    padding: 20px 16px;
+  .transactions-header {
+    padding: 24px 20px 20px;
+    
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    .header-icon {
+      width: 70px;
+      height: 70px;
+      font-size: 40px;
+    }
+    
+    .header-text h1 {
+      font-size: 28px;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+    }
   }
-
-  .planner-header h1 {
-    font-size: 28px;
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+    padding: 0 20px 24px;
+    gap: 16px;
+  }
+  
+  .summary-card {
+    padding: 20px;
+    
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      font-size: 32px;
+    }
+    
+    .card-value {
+      font-size: 20px;
+    }
+  }
+  
+  .planner-content {
+    padding: 0 20px 32px;
   }
 
   .recent-transactions-card {
@@ -566,6 +721,50 @@
 }
 
 @media (max-width: 480px) {
+  .transactions-header {
+    padding: 20px 16px 16px;
+    
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 36px;
+    }
+    
+    .header-text h1 {
+      font-size: 24px;
+    }
+    
+    .header-subtitle {
+      font-size: 13px;
+    }
+  }
+  
+  .summary-cards {
+    padding: 0 16px 20px;
+  }
+  
+  .summary-card {
+    padding: 16px;
+    
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      font-size: 28px;
+    }
+    
+    .card-label {
+      font-size: 12px;
+    }
+    
+    .card-value {
+      font-size: 18px;
+    }
+  }
+  
+  .planner-content {
+    padding: 0 16px 24px;
+  }
+  
   .recent-transactions-card {
     padding: 24px 20px;
   }

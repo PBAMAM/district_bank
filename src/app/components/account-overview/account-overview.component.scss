@@ -1,62 +1,137 @@
 .account-overview {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
   color: white;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  min-height: 100vh;
 }
 
-// Welcome Section
-.welcome-section {
-  margin-bottom: 40px;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.welcome-section h1 {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 24px;
-  color: white;
-  letter-spacing: -0.5px;
-}
-
-.notifications {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.notification-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
-  background-color: #2a2a2a;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent;
-
-  &:hover {
-    background-color: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    border-color: rgba(220, 53, 69, 0.3);
+// Header Section
+.accounts-header {
+  padding: 40px 40px 32px;
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 32px;
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .header-icon {
+    font-size: 56px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(220, 53, 69, 0.3);
+  }
+  
+  .header-text {
+    flex: 1;
+    
+    h1 {
+      color: white;
+      font-size: 42px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+    }
+    
+    .header-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+      margin: 0;
+    }
   }
 }
 
-.notification-text {
-  color: white;
-  font-weight: 500;
-  font-size: 14px;
+// Summary Cards
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  padding: 0 40px 32px;
+  margin-bottom: 32px;
 }
 
-.notification-arrow {
-  color: #ccc;
-  font-size: 12px;
-  transition: transform 0.3s ease;
-
-  .notification-item:hover & {
-    transform: translateY(2px);
+.summary-card {
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: rgba(220, 53, 69, 0.3);
+  }
+  
+  .card-icon {
+    font-size: 40px;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.2) 0%, rgba(220, 53, 69, 0.1) 100%);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  &.total .card-icon {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.3) 0%, rgba(220, 53, 69, 0.2) 100%);
+  }
+  
+  &.accounts .card-icon {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.2) 0%, rgba(40, 167, 69, 0.1) 100%);
+  }
+  
+  &.checking .card-icon {
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(0, 123, 255, 0.1) 100%);
+  }
+  
+  &.savings .card-icon {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+  }
+  
+  .card-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .card-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  
+  .card-value {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    
+    &.positive {
+      color: #48d597;
+    }
+    
+    &.negative {
+      color: #ff6b6b;
+    }
   }
 }
 
@@ -65,9 +140,10 @@
   background-color: #2a2a2a;
   padding: 32px;
   border-radius: 16px;
-  margin-bottom: 30px;
+    margin: 0 40px 30px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 
   &:hover {
     transform: translateY(-4px);
@@ -221,6 +297,27 @@
 }
 
 // Account Sections
+.accounts-section {
+  margin: 0 40px 30px;
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.money-investment-section,
+.securities-section,
+.loans-section,
+.assets-section {
+  margin: 0 40px 30px;
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
 .accounts-section,
 .money-investment-section,
 .securities-section,
@@ -228,13 +325,15 @@
 .assets-section {
   background-color: #2a2a2a;
   border-radius: 16px;
-  margin-bottom: 24px;
+  margin: 0 40px 24px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 
   &:hover {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
   }
 }
 
@@ -485,7 +584,7 @@
   padding: 32px 40px;
   background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
   border-radius: 16px;
-  margin-bottom: 40px;
+  margin: 0 40px 32px;
   box-shadow: 0 8px 24px rgba(220, 53, 69, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
@@ -527,6 +626,11 @@
 
 // Footer Actions
 .footer-actions {
+  margin: 0 40px 40px;
+  padding: 24px;
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -724,17 +828,60 @@
 
 // Responsive Design
 @media (max-width: 768px) {
-  .account-overview {
-    padding: 16px;
+  .accounts-header {
+    padding: 24px 20px 20px;
+    
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    .header-icon {
+      width: 70px;
+      height: 70px;
+      font-size: 40px;
+    }
+    
+    .header-text h1 {
+      font-size: 28px;
+    }
+    
+    .header-subtitle {
+      font-size: 14px;
+    }
   }
   
-  .welcome-section h1 {
-    font-size: 24px;
+  .summary-cards {
+    grid-template-columns: 1fr;
+    padding: 0 20px 24px;
+    gap: 16px;
   }
   
-  .notifications {
-    flex-direction: column;
-    gap: 12px;
+  .summary-card {
+    padding: 20px;
+    
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      font-size: 32px;
+    }
+    
+    .card-value {
+      font-size: 20px;
+    }
+  }
+  
+  .balance-forecast,
+  .accounts-section,
+  .money-investment-section,
+  .securities-section,
+  .loans-section,
+  .assets-section,
+  .total-amount,
+  .footer-actions {
+    margin-left: 20px;
+    margin-right: 20px;
   }
   
   .balance-forecast {
@@ -789,12 +936,56 @@
 }
 
 @media (max-width: 480px) {
-  .account-overview {
-    padding: 12px;
+  .accounts-header {
+    padding: 20px 16px 16px;
+    
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 36px;
+    }
+    
+    .header-text h1 {
+      font-size: 24px;
+    }
+    
+    .header-subtitle {
+      font-size: 13px;
+    }
   }
   
-  .welcome-section h1 {
-    font-size: 20px;
+  .summary-cards {
+    padding: 0 16px 20px;
+  }
+  
+  .summary-card {
+    padding: 16px;
+    
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      font-size: 28px;
+    }
+    
+    .card-label {
+      font-size: 12px;
+    }
+    
+    .card-value {
+      font-size: 18px;
+    }
+  }
+  
+  .balance-forecast,
+  .accounts-section,
+  .money-investment-section,
+  .securities-section,
+  .loans-section,
+  .assets-section,
+  .total-amount,
+  .footer-actions {
+    margin-left: 16px;
+    margin-right: 16px;
   }
   
   .balance-forecast {

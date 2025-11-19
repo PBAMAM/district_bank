@@ -1,8 +1,51 @@
 <app-client-layout>
   <div class="financial-planner">
-    <div class="planner-header" *ngIf="!isLoading" [@fadeInUp]>
-      <h1>Transaction History</h1>
-      <span class="info-icon">ℹ️</span>
+    <!-- Header Section -->
+    <div class="transactions-header" *ngIf="!isLoading" [@fadeInUp]>
+      <div class="header-content">
+        <div class="header-icon">📊</div>
+        <div class="header-text">
+          <h1>Transaction History</h1>
+          <p class="header-subtitle">View and analyze all your financial transactions</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards" *ngIf="!isLoading && recentTransactions.length > 0" [@fadeInUp]>
+      <div class="summary-card total" [@scaleIn]>
+        <div class="card-icon">📋</div>
+        <div class="card-content">
+          <div class="card-label">Total Transactions</div>
+          <div class="card-value">{{ recentTransactions.length }}</div>
+        </div>
+      </div>
+      
+      <div class="summary-card income" [@scaleIn]>
+        <div class="card-icon">💰</div>
+        <div class="card-content">
+          <div class="card-label">Total Income</div>
+          <div class="card-value positive">{{ formatCurrency(totalIncome) }}</div>
+        </div>
+      </div>
+      
+      <div class="summary-card expenditure" [@scaleIn]>
+        <div class="card-icon">💸</div>
+        <div class="card-content">
+          <div class="card-label">Total Expenditure</div>
+          <div class="card-value negative">{{ formatCurrency(totalExpenditure) }}</div>
+        </div>
+      </div>
+      
+      <div class="summary-card surplus" [@scaleIn]>
+        <div class="card-icon">📈</div>
+        <div class="card-content">
+          <div class="card-label">Net Surplus</div>
+          <div class="card-value" [class]="totalSurplus >= 0 ? 'positive' : 'negative'">
+            {{ formatCurrency(totalSurplus) }}
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Loading State -->

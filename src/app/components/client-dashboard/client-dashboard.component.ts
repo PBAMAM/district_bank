@@ -185,33 +185,4 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
     console.log('getAccountBalance for', account.accountName, ':', balance, 'from', account.balance);
     return balance;
   }
-
-  // Method to create sample account for testing
-  async createSampleAccount() {
-    if (this.currentUser) {
-      try {
-        const sampleAccount: Omit<Account, 'id'> = {
-          accountNumber: '123456',
-          iban: 'DE97 6605 0101 0000 1234 56',
-          accountType: 'Privatgirokonto',
-          accountName: 'Private Current Account',
-          balance: 1000.00,
-          currency: 'EUR',
-          ownerId: this.currentUser.id,
-          ownerName: `${this.currentUser.firstName} ${this.currentUser.lastName}`,
-          isActive: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
-
-        const accountId = await this.firebaseService.createAccount(sampleAccount);
-        console.log('Sample account created with ID:', accountId);
-        
-        // Reload data
-        await this.loadClientData();
-      } catch (error) {
-        console.error('Error creating sample account:', error);
-      }
-    }
-  }
 }

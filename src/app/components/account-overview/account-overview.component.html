@@ -1,19 +1,56 @@
 <app-client-layout>
   <div class="account-overview">
-  <div class="welcome-section" *ngIf="!isLoading" [@fadeInUp]>
-    <h1>Hello {{ currentUser?.firstName }} {{ currentUser?.lastName }}</h1>
-    
-    <div class="notifications">
-      <div class="notification-item" [@scaleIn]>
-        <span class="notification-text">Open orders</span>
-        <span class="notification-arrow">▼</span>
-      </div>
-      <div class="notification-item" [@scaleIn]>
-        <span class="notification-text">1 more note</span>
-        <span class="notification-arrow">▼</span>
+    <!-- Header Section -->
+    <div class="accounts-header" *ngIf="!isLoading" [@fadeInUp]>
+      <div class="header-content">
+        <div class="header-icon">🏦</div>
+        <div class="header-text">
+          <h1>Account Overview</h1>
+          <p class="header-subtitle">Welcome back, {{ currentUser?.firstName }} {{ currentUser?.lastName }}</p>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards" *ngIf="!isLoading" [@fadeInUp]>
+      <div class="summary-card total" [@scaleIn]>
+        <div class="card-icon">💰</div>
+        <div class="card-content">
+          <div class="card-label">Total Balance</div>
+          <div class="card-value" [class]="grandTotal >= 0 ? 'positive' : 'negative'">
+            {{ formatCurrency(grandTotal, 'EUR') }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="summary-card accounts" [@scaleIn]>
+        <div class="card-icon">📊</div>
+        <div class="card-content">
+          <div class="card-label">Active Accounts</div>
+          <div class="card-value">{{ accounts.length }}</div>
+        </div>
+      </div>
+      
+      <div class="summary-card checking" [@scaleIn]>
+        <div class="card-icon">💳</div>
+        <div class="card-content">
+          <div class="card-label">Checking Accounts</div>
+          <div class="card-value" [class]="checkingTotal >= 0 ? 'positive' : 'negative'">
+            {{ formatCurrency(checkingTotal, 'EUR') }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="summary-card savings" [@scaleIn]>
+        <div class="card-icon">💵</div>
+        <div class="card-content">
+          <div class="card-label">Savings & Investments</div>
+          <div class="card-value" [class]="(savingsTotal + investmentTotal) >= 0 ? 'positive' : 'negative'">
+            {{ formatCurrency(savingsTotal + investmentTotal, 'EUR') }}
+          </div>
+        </div>
+      </div>
+    </div>
 
   <div class="balance-forecast" *ngIf="!isLoading && forecastData.currentBalance > 0" [@fadeInUp]>
     <h2>Your account balance forecast</h2>
@@ -252,26 +289,6 @@
         <span class="action-icon">👁️</span>
         Current account detail overview
       </a>
-    </div>
-    
-    <div class="multibanking-section">
-      <div class="multibanking-content">
-        <span class="multibanking-icon">+</span>
-        <div class="multibanking-text">
-          <p>A single point of access to all of your financial information - add your assets, accounts and securities accounts with other banks or payment services.</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="features-section">
-      <div class="features-progress">
-        <span class="progress-text">3/3 Active</span>
-        <div class="progress-circle"></div>
-      </div>
-      <div class="features-text">
-        <p>It's great that you have already activated all of the features. You can now customise them to suit your specific needs.</p>
-        <button class="customise-btn">Customise features</button>
-      </div>
     </div>
   </div>
   </div>
