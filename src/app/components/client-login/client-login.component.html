@@ -4,14 +4,14 @@
     <div class="branding-content">
       <div class="logo-large">
         <div class="logo-icon-large">
-          <span class="logo-letter">M</span>
+          <span class="logo-letter">S</span>
         </div>
         <div class="logo-text-large">
-          <h1 class="brand-name">MiraBauud</h1>
+          <span class="bank-name">SwissOne</span>
           <p class="brand-tagline">Your Trusted Banking Partner</p>
         </div>
       </div>
-      
+
       <div class="branding-features">
         <div class="feature-item" [@slideInRight]>
           <div class="feature-icon">🔒</div>
@@ -20,7 +20,7 @@
             <p>Bank-level encryption and security</p>
           </div>
         </div>
-        
+
         <div class="feature-item" [@slideInRight]>
           <div class="feature-icon">⚡</div>
           <div class="feature-content">
@@ -28,7 +28,7 @@
             <p>Instant transfers and payments</p>
           </div>
         </div>
-        
+
         <div class="feature-item" [@slideInRight]>
           <div class="feature-icon">📱</div>
           <div class="feature-content">
@@ -58,14 +58,9 @@
             <span class="label-icon">📧</span>
             Email Address
           </label>
-          <input
-            type="email"
-            id="email"
-            formControlName="email"
-            class="form-control"
+          <input type="email" id="email" formControlName="email" class="form-control"
             placeholder="your.email@example.com"
-            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-          >
+            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
         </div>
 
         <div class="form-group" [@slideInRight]>
@@ -73,21 +68,12 @@
             <span class="label-icon">🔒</span>
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-            formControlName="password"
-            class="form-control"
+          <input type="password" id="password" formControlName="password" class="form-control"
             placeholder="Enter your password"
-            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-          >
+            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         </div>
 
-        <button
-          type="submit"
-          class="btn btn-primary client-btn"
-          [disabled]="loginForm.invalid || isLoading"
-        >
+        <button type="submit" class="btn btn-primary client-btn" [disabled]="loginForm.invalid || isLoading">
           {{ isLoading ? 'Signing in...' : 'Sign In' }}
         </button>
       </form>
@@ -100,28 +86,16 @@
               <span class="label-icon">👤</span>
               First Name
             </label>
-            <input
-              type="text"
-              id="firstName"
-              formControlName="firstName"
-              class="form-control"
-              placeholder="John"
-              [class.error]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
-            >
+            <input type="text" id="firstName" formControlName="firstName" class="form-control" placeholder="John"
+              [class.error]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
           </div>
           <div class="form-group" [@slideInRight]>
             <label for="lastName">
               <span class="label-icon">👤</span>
               Last Name
             </label>
-            <input
-              type="text"
-              id="lastName"
-              formControlName="lastName"
-              class="form-control"
-              placeholder="Doe"
-              [class.error]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
-            >
+            <input type="text" id="lastName" formControlName="lastName" class="form-control" placeholder="Doe"
+              [class.error]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
           </div>
         </div>
 
@@ -130,14 +104,9 @@
             <span class="label-icon">📧</span>
             Email Address
           </label>
-          <input
-            type="email"
-            id="regEmail"
-            formControlName="email"
-            class="form-control"
+          <input type="email" id="regEmail" formControlName="email" class="form-control"
             placeholder="your.email@example.com"
-            [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-          >
+            [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
         </div>
 
         <div class="form-group" [@slideInRight]>
@@ -145,14 +114,8 @@
             <span class="label-icon">📱</span>
             Phone Number
           </label>
-          <input
-            type="tel"
-            id="phone"
-            formControlName="phone"
-            class="form-control"
-            placeholder="+1 (555) 123-4567"
-            [class.error]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
-          >
+          <input type="tel" id="phone" formControlName="phone" class="form-control" placeholder="+1 (555) 123-4567"
+            [class.error]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
         </div>
 
         <div class="form-group" [@slideInRight]>
@@ -160,14 +123,9 @@
             <span class="label-icon">📍</span>
             Address
           </label>
-          <input
-            type="text"
-            id="address"
-            formControlName="address"
-            class="form-control"
+          <input type="text" id="address" formControlName="address" class="form-control"
             placeholder="123 Main St, City, State 12345"
-            [class.error]="registerForm.get('address')?.invalid && registerForm.get('address')?.touched"
-          >
+            [class.error]="registerForm.get('address')?.invalid && registerForm.get('address')?.touched">
         </div>
 
         <div class="form-group" [@slideInRight]>
@@ -175,14 +133,9 @@
             <span class="label-icon">🔒</span>
             Password
           </label>
-          <input
-            type="password"
-            id="regPassword"
-            formControlName="password"
-            class="form-control"
+          <input type="password" id="regPassword" formControlName="password" class="form-control"
             placeholder="Minimum 6 characters"
-            [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-          >
+            [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
         </div>
 
         <div class="form-group" [@slideInRight]>
@@ -190,24 +143,15 @@
             <span class="label-icon">🔒</span>
             Confirm Password
           </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            formControlName="confirmPassword"
-            class="form-control"
+          <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control"
             placeholder="Confirm your password"
-            [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
-          >
+            [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
           <div *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']" class="error-text">
             Passwords do not match
           </div>
         </div>
 
-        <button
-          type="submit"
-          class="btn btn-primary client-btn"
-          [disabled]="registerForm.invalid || isLoading"
-        >
+        <button type="submit" class="btn btn-primary client-btn" [disabled]="registerForm.invalid || isLoading">
           {{ isLoading ? 'Creating Account...' : 'Open Account' }}
         </button>
       </form>

@@ -1,4 +1,4 @@
-/* Global Styles for MiraBauud */
+/* Global Styles for SwissOne */
 * {
   margin: 0;
   padding: 0;
@@ -136,4 +136,11 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  margin-right: 10px;
+  object-fit: contain;
 }

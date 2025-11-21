@@ -3,7 +3,7 @@
     <div class="logo">
       <div class="logo-icon">S</div>
       <div class="logo-text">
-        <span class="bank-name">MiraBauud</span>
+        <span class="bank-name">SwissOne</span>
         <span class="bank-location">Karlsruhe</span>
       </div>
     </div>
@@ -16,7 +16,7 @@
   <div class="login-content">
     <div class="login-card">
       <h1 class="login-title">Online Banking Demo</h1>
-      
+
       <div class="demo-credentials">
         <h3>Your login details</h3>
         <p>Please make a test using the following access data:</p>
@@ -35,46 +35,26 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
         <div class="form-group">
           <label for="email">Login name</label>
-          <input
-            type="email"
-            id="email"
-            formControlName="email"
-            class="form-control"
-            placeholder="Enter your email"
-            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-          >
+          <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter your email"
+            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
         </div>
 
         <div class="form-group">
           <label for="password">Password/PIN</label>
           <div class="password-input">
-            <input
-              type="password"
-              id="password"
-              formControlName="password"
-              class="form-control"
+            <input type="password" id="password" formControlName="password" class="form-control"
               placeholder="Enter your password"
-              [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-            >
+              [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             <button type="button" class="show-password-btn">Show</button>
           </div>
         </div>
 
         <div class="form-actions">
-          <button
-            type="submit"
-            class="btn btn-primary login-btn"
-            [disabled]="loginForm.invalid || isLoading"
-          >
+          <button type="submit" class="btn btn-primary login-btn" [disabled]="loginForm.invalid || isLoading">
             {{ isLoading ? 'Logging in...' : 'Log in' }}
           </button>
-          
-          <button
-            type="button"
-            class="btn btn-secondary demo-btn"
-            (click)="demoLogin()"
-            [disabled]="isLoading"
-          >
+
+          <button type="button" class="btn btn-secondary demo-btn" (click)="demoLogin()" [disabled]="isLoading">
             Demo Login
           </button>
         </div>

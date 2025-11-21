@@ -42,7 +42,7 @@ import { FirebaseService } from '../../services/firebase.service';
               id="email"
               formControlName="email"
               class="form-control"
-              placeholder="admin@mirabauud.com"
+              placeholder="admin@swissone.com"
             >
           </div>
           
