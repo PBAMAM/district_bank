@@ -408,6 +408,18 @@
   padding: 2px 8px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
+
+  &.transfer-out {
+    background: rgba(220, 53, 69, 0.2);
+    color: #ff6b6b;
+    font-weight: 600;
+  }
+
+  &.transfer-in {
+    background: rgba(40, 167, 69, 0.2);
+    color: #48d597;
+    font-weight: 600;
+  }
 }
 
 .transaction-status {

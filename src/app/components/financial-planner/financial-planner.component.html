@@ -80,7 +80,9 @@
               <div class="transaction-description">{{ transaction.description || 'Transaction' }}</div>
               <div class="transaction-meta">
                 <span class="transaction-date">{{ transaction.createdAt | date:'medium' }}</span>
-                <span class="transaction-type">{{ transaction.type || 'Transfer' }}</span>
+                <span class="transaction-type" [class.transfer-out]="transaction.type === 'transfer' && transaction.amount < 0" [class.transfer-in]="transaction.type === 'transfer' && transaction.amount > 0">
+                  {{ transaction.type === 'transfer' && transaction.amount < 0 ? 'TRANSFER OUT' : transaction.type === 'transfer' && transaction.amount > 0 ? 'TRANSFER IN' : (transaction.type || 'Transfer') | uppercase }}
+                </span>
                 <span class="transaction-status" [class.completed]="transaction.status === 'completed'">
                   {{ transaction.status || 'Completed' }}
                 </span>

@@ -126,11 +126,11 @@ export class TransferComponent implements OnInit {
           return;
         }
         
-        // Create transaction record
+        // Create transaction record (negative amount for transfer out)
         const transaction: Omit<Transaction, 'id'> = {
           fromAccountId: formValue.fromAccount,
           toAccountId: 'external', // For external transfers
-          amount: amount,
+          amount: -amount, // Negative amount for transfer out
           currency: this.selectedAccount.currency,
           description: formValue.description,
           type: 'transfer',
