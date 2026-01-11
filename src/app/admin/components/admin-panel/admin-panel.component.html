@@ -1,11 +1,11 @@
 <div class="admin-panel">
   <div class="admin-header">
-    <h1>Admin Panel</h1>
-    <p>Manage customers, accounts, and transactions</p>
-    <div class="quick-actions">
-      <button class="btn btn-secondary" (click)="createSampleData()" [disabled]="isLoading">
-        {{ isLoading ? 'Creating...' : 'Create Sample Data' }}
-      </button>
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Admin Panel</h1>
+        <p>Manage customers, accounts, and transactions</p>
+      </div>
+     
     </div>
   </div>
 
@@ -14,318 +14,462 @@
       class="tab-btn" 
       [class.active]="activeTab === 'users'"
       (click)="setActiveTab('users')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
       Users
     </button>
     <button 
       class="tab-btn" 
       [class.active]="activeTab === 'accounts'"
       (click)="setActiveTab('accounts')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
       Accounts
     </button>
     <button 
       class="tab-btn" 
       [class.active]="activeTab === 'transfers'"
       (click)="setActiveTab('transfers')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <polyline points="19 12 12 19 5 12"></polyline>
+      </svg>
       Transfers
     </button>
   </div>
 
   <!-- Messages -->
-  <div *ngIf="successMessage" class="success-message">
-    <span class="success-icon">✓</span>
-    {{ successMessage }}
+  <div *ngIf="successMessage" class="message success-message">
+    <svg class="message-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span>{{ successMessage }}</span>
   </div>
 
-  <div *ngIf="errorMessage" class="error-message">
-    <span class="error-icon">✕</span>
-    {{ errorMessage }}
+  <div *ngIf="errorMessage" class="message error-message">
+    <svg class="message-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span>{{ errorMessage }}</span>
   </div>
 
   <!-- Users Tab -->
   <div *ngIf="activeTab === 'users'" class="tab-content">
-    <div class="section-header">
-      <h2>Create New User</h2>
+    <div class="content-card">
+      <div class="card-header">
+        <div class="header-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          <h2>Create New User</h2>
+        </div>
+      </div>
+      
+      <form [formGroup]="createUserForm" (ngSubmit)="createUser()" class="admin-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              Email
+            </label>
+            <input type="email" id="email" formControlName="email" class="form-control" placeholder="user@example.com">
+          </div>
+          <div class="form-group">
+            <label for="firstName">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              First Name
+            </label>
+            <input type="text" id="firstName" formControlName="firstName" class="form-control" placeholder="John">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="lastName">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Last Name
+            </label>
+            <input type="text" id="lastName" formControlName="lastName" class="form-control" placeholder="Doe">
+          </div>
+          <div class="form-group">
+            <label for="role">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+              Role
+            </label>
+            <select id="role" formControlName="role" class="form-control">
+              <option value="customer">Customer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" [disabled]="createUserForm.invalid || isLoading">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          {{ isLoading ? 'Creating...' : 'Create User' }}
+        </button>
+      </form>
     </div>
-    
-    <form [formGroup]="createUserForm" (ngSubmit)="createUser()" class="admin-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" formControlName="email" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="firstName">First Name</label>
-          <input type="text" id="firstName" formControlName="firstName" class="form-control">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="lastName">Last Name</label>
-          <input type="text" id="lastName" formControlName="lastName" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="role">Role</label>
-          <select id="role" formControlName="role" class="form-control">
-            <option value="customer">Customer</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-      </div>
-      
-      <button type="submit" class="btn btn-primary" [disabled]="createUserForm.invalid || isLoading">
-        {{ isLoading ? 'Creating...' : 'Create User' }}
-      </button>
-    </form>
 
-    <div class="section-header">
-      <h2>All Users</h2>
-    </div>
-    
-    <div class="data-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Accounts</th>
-            <th>Status</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td>{{ user.firstName }} {{ user.lastName }}</td>
-            <td>{{ user.email }}</td>
-            <td>
-              <span class="role-badge" [class.admin]="user.role === 'admin'">
-                {{ user.role }}
-              </span>
-            </td>
-            <td>{{ user.accounts.length }}</td>
-            <td>
-              <span class="status-badge" [class.active]="user.isActive">
-                {{ user.isActive ? 'Active' : 'Inactive' }}
-              </span>
-            </td>
-            <td>{{ user.createdAt | date:'short' }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="content-card">
+      <div class="card-header">
+        <div class="header-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <h2>All Users</h2>
+          <span class="user-count">{{ users.length }} {{ users.length === 1 ? 'user' : 'users' }}</span>
+        </div>
+      </div>
+      
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Accounts</th>
+              <th>Status</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users" class="table-row">
+              <td>
+                <div class="user-name-cell">
+                  <div class="user-avatar">
+                    {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+                  </div>
+                  <div>
+                    <div class="name">{{ user.firstName }} {{ user.lastName }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="email-cell">{{ user.email }}</div>
+              </td>
+              <td>
+                <span class="role-badge" [class.admin]="user.role === 'admin'" [class.customer]="user.role === 'customer'">
+                  {{ user.role === 'admin' ? 'ADMIN' : 'CUSTOMER' }}
+                </span>
+              </td>
+              <td>
+                <div class="accounts-cell">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  {{ (user.accounts || []).length }}
+                </div>
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="user.isActive">
+                  {{ user.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="date-cell">{{ user.createdAt | date:'short' }}</div>
+              </td>
+            </tr>
+            <tr *ngIf="users.length === 0" class="empty-row">
+              <td colspan="6">
+                <div class="empty-state">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                  <p>No users found</p>
+                  <span>Create your first user using the form above</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <!-- Accounts Tab -->
   <div *ngIf="activeTab === 'accounts'" class="tab-content">
-    <div class="section-header">
-      <h2>Create New Account</h2>
-    </div>
-    
-    <form [formGroup]="createAccountForm" (ngSubmit)="createAccount()" class="admin-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="accountNumber">Account Number</label>
-          <input type="text" id="accountNumber" formControlName="accountNumber" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="iban">IBAN</label>
-          <input type="text" id="iban" formControlName="iban" class="form-control">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="header-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <h2>Create New Account</h2>
         </div>
       </div>
       
-      <div class="form-row">
-        <div class="form-group">
-          <label for="accountType">Account Type</label>
-          <input type="text" id="accountType" formControlName="accountType" class="form-control">
+      <form [formGroup]="createAccountForm" (ngSubmit)="createAccount()" class="admin-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="accountNumber">Account Number</label>
+            <input type="text" id="accountNumber" formControlName="accountNumber" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="iban">IBAN</label>
+            <input type="text" id="iban" formControlName="iban" class="form-control">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="accountName">Account Name</label>
-          <input type="text" id="accountName" formControlName="accountName" class="form-control">
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="accountType">Account Type</label>
+            <input type="text" id="accountType" formControlName="accountType" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="accountName">Account Name</label>
+            <input type="text" id="accountName" formControlName="accountName" class="form-control">
+          </div>
         </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="initialBalance">Initial Balance</label>
-          <input type="number" id="initialBalance" formControlName="initialBalance" class="form-control" step="0.01">
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="initialBalance">Initial Balance</label>
+            <input type="number" id="initialBalance" formControlName="initialBalance" class="form-control" step="0.01">
+          </div>
+          <div class="form-group">
+            <label for="currency">Currency</label>
+            <select id="currency" formControlName="currency" class="form-control">
+              <option value="EUR">EUR</option>
+              <option value="USD">USD</option>
+              <option value="GBP">GBP</option>
+            </select>
+          </div>
         </div>
+        
         <div class="form-group">
-          <label for="currency">Currency</label>
-          <select id="currency" formControlName="currency" class="form-control">
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
-            <option value="GBP">GBP</option>
+          <label for="ownerId">Owner</label>
+          <select id="ownerId" formControlName="ownerId" class="form-control">
+            <option value="">Select Owner</option>
+            <option *ngFor="let user of users" [value]="user.id">
+              {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
+            </option>
           </select>
         </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="ownerId">Owner</label>
-        <select id="ownerId" formControlName="ownerId" class="form-control">
-          <option value="">Select Owner</option>
-          <option *ngFor="let user of users" [value]="user.id">
-            {{ user.firstName }} {{ user.lastName }} ({{ user.email }})
-          </option>
-        </select>
-      </div>
-      
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary" [disabled]="createAccountForm.invalid || isLoading">
-          {{ isLoading ? 'Creating...' : 'Create Account' }}
-        </button>
-        <button type="button" class="btn btn-secondary" (click)="fillSampleAccountData()">
-          Fill Sample Data
-        </button>
-      </div>
-    </form>
-
-    <div class="section-header">
-      <h2>All Accounts</h2>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" [disabled]="createAccountForm.invalid || isLoading">
+            {{ isLoading ? 'Creating...' : 'Create Account' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="fillSampleAccountData()">
+            Fill Sample Data
+          </button>
+        </div>
+      </form>
     </div>
-    
-    <div class="data-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Account Number</th>
-            <th>IBAN</th>
-            <th>Type</th>
-            <th>Owner</th>
-            <th>Balance</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let account of accounts">
-            <td>{{ account.accountNumber }}</td>
-            <td>{{ account.iban }}</td>
-            <td>{{ account.accountType }}</td>
-            <td>{{ account.ownerName }}</td>
-            <td [class]="account.balance >= 0 ? 'text-success' : 'text-danger'">
-              {{ formatCurrency(account.balance, account.currency) }}
-            </td>
-            <td>
-              <span class="status-badge" [class.active]="account.isActive">
-                {{ account.isActive ? 'Active' : 'Inactive' }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="content-card">
+      <div class="card-header">
+        <div class="header-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <h2>All Accounts</h2>
+        </div>
+      </div>
+      
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Account Number</th>
+              <th>IBAN</th>
+              <th>Type</th>
+              <th>Owner</th>
+              <th>Balance</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of accounts" class="table-row">
+              <td>{{ account.accountNumber }}</td>
+              <td>{{ account.iban }}</td>
+              <td>{{ account.accountType }}</td>
+              <td>{{ account.ownerName }}</td>
+              <td [class]="account.balance >= 0 ? 'text-success' : 'text-danger'">
+                {{ formatCurrency(account.balance, account.currency) }}
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="account.isActive">
+                  {{ account.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <!-- Transfers Tab -->
   <div *ngIf="activeTab === 'transfers'" class="tab-content">
-    <div class="section-header">
-      <h2>Admin Deposit</h2>
-      <p>Add money to any client account</p>
+    <div class="content-card">
+      <div class="card-header">
+        <div class="header-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="6" x2="12" y2="18"></line>
+            <line x1="6" y1="12" x2="18" y2="12"></line>
+          </svg>
+          <h2>Admin Deposit</h2>
+        </div>
+        <p class="card-subtitle">Add money to any client account</p>
+      </div>
+      
+      <form [formGroup]="adminDepositForm" (ngSubmit)="processAdminDeposit()" class="admin-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="depositToAccountId">To Account</label>
+            <select id="depositToAccountId" formControlName="toAccountId" class="form-control">
+              <option value="">Select Account</option>
+              <option *ngFor="let account of accounts" [value]="account.id">
+                {{ account.ownerName }} - {{ account.accountType }} ({{ account.iban }}) - {{ formatCurrency(account.balance, account.currency) }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="depositAmount">Amount</label>
+            <input type="number" id="depositAmount" formControlName="amount" class="form-control" step="0.01" min="0.01">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="depositDescription">Description</label>
+          <input type="text" id="depositDescription" formControlName="description" class="form-control" placeholder="e.g., Bank deposit, Refund, etc.">
+        </div>
+        
+        <button type="submit" class="btn btn-success" [disabled]="adminDepositForm.invalid || isLoading">
+          {{ isLoading ? 'Processing...' : 'Add Money to Account' }}
+        </button>
+      </form>
     </div>
-    
-    <form [formGroup]="adminDepositForm" (ngSubmit)="processAdminDeposit()" class="admin-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="depositToAccountId">To Account</label>
-          <select id="depositToAccountId" formControlName="toAccountId" class="form-control">
-            <option value="">Select Account</option>
-            <option *ngFor="let account of accounts" [value]="account.id">
-              {{ account.ownerName }} - {{ account.accountType }} ({{ account.iban }}) - {{ formatCurrency(account.balance, account.currency) }}
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="depositAmount">Amount</label>
-          <input type="number" id="depositAmount" formControlName="amount" class="form-control" step="0.01" min="0.01">
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="depositDescription">Description</label>
-        <input type="text" id="depositDescription" formControlName="description" class="form-control" placeholder="e.g., Bank deposit, Refund, etc.">
-      </div>
-      
-      <button type="submit" class="btn btn-success" [disabled]="adminDepositForm.invalid || isLoading">
-        {{ isLoading ? 'Processing...' : 'Add Money to Account' }}
-      </button>
-    </form>
 
-    <div class="section-header">
-      <h2>Process Transfer</h2>
-      <p>Transfer money between accounts</p>
+    <div class="content-card">
+      <div class="card-header">
+        <div class="header-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+          <h2>Process Transfer</h2>
+        </div>
+        <p class="card-subtitle">Transfer money between accounts</p>
+      </div>
+      
+      <form [formGroup]="transferForm" (ngSubmit)="processTransfer()" class="admin-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fromAccountId">From Account</label>
+            <select id="fromAccountId" formControlName="fromAccountId" class="form-control">
+              <option value="">Select From Account</option>
+              <option *ngFor="let account of accounts" [value]="account.id">
+                {{ account.accountType }} - {{ account.iban }} ({{ formatCurrency(account.balance, account.currency) }})
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="toAccountId">To Account</label>
+            <select id="toAccountId" formControlName="toAccountId" class="form-control">
+              <option value="">Select To Account</option>
+              <option *ngFor="let account of accounts" [value]="account.id">
+                {{ account.accountType }} - {{ account.iban }} ({{ formatCurrency(account.balance, account.currency) }})
+              </option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" formControlName="amount" class="form-control" step="0.01" min="0.01">
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" formControlName="description" class="form-control">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" [disabled]="transferForm.invalid || isLoading">
+          {{ isLoading ? 'Processing...' : 'Process Transfer' }}
+        </button>
+      </form>
     </div>
-    
-    <form [formGroup]="transferForm" (ngSubmit)="processTransfer()" class="admin-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fromAccountId">From Account</label>
-          <select id="fromAccountId" formControlName="fromAccountId" class="form-control">
-            <option value="">Select From Account</option>
-            <option *ngFor="let account of accounts" [value]="account.id">
-              {{ account.accountType }} - {{ account.iban }} ({{ formatCurrency(account.balance, account.currency) }})
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="toAccountId">To Account</label>
-          <select id="toAccountId" formControlName="toAccountId" class="form-control">
-            <option value="">Select To Account</option>
-            <option *ngFor="let account of accounts" [value]="account.id">
-              {{ account.accountType }} - {{ account.iban }} ({{ formatCurrency(account.balance, account.currency) }})
-            </option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="amount">Amount</label>
-          <input type="number" id="amount" formControlName="amount" class="form-control" step="0.01" min="0.01">
-        </div>
-        <div class="form-group">
-          <label for="description">Description</label>
-          <input type="text" id="description" formControlName="description" class="form-control">
-        </div>
-      </div>
-      
-      <button type="submit" class="btn btn-primary" [disabled]="transferForm.invalid || isLoading">
-        {{ isLoading ? 'Processing...' : 'Process Transfer' }}
-      </button>
-    </form>
 
-    <div class="section-header">
-      <h2>Recent Transactions</h2>
-    </div>
-    
-    <div class="data-table">
-      <table>
-        <thead>
-          <tr>
-            <th>From</th>
-            <th>To</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let transaction of transactions">
-            <td>{{ getAccountOwner(transaction.fromAccountId) }}</td>
-            <td>{{ getAccountOwner(transaction.toAccountId) }}</td>
-            <td [class]="transaction.amount >= 0 ? 'text-success' : 'text-danger'">
-              {{ formatCurrency(transaction.amount, transaction.currency) }}
-            </td>
-            <td>{{ transaction.description }}</td>
-            <td>
-              <span class="status-badge" [class.completed]="transaction.status === 'completed'">
-                {{ transaction.status }}
-              </span>
-            </td>
-            <td>{{ transaction.createdAt | date:'short' }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="content-card">
+      <div class="card-header">
+        <div class="header-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+          <h2>Recent Transactions</h2>
+        </div>
+      </div>
+      
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>From</th>
+              <th>To</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of transactions" class="table-row">
+              <td>{{ getAccountOwner(transaction.fromAccountId) }}</td>
+              <td>{{ getAccountOwner(transaction.toAccountId) }}</td>
+              <td [class]="transaction.amount >= 0 ? 'text-success' : 'text-danger'">
+                {{ formatCurrency(transaction.amount, transaction.currency) }}
+              </td>
+              <td>{{ transaction.description }}</td>
+              <td>
+                <span class="status-badge" [class.completed]="transaction.status === 'completed'">
+                  {{ transaction.status }}
+                </span>
+              </td>
+              <td>{{ transaction.createdAt | date:'short' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

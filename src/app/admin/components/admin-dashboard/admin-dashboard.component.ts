@@ -77,7 +77,9 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getRecentTransactions(): Transaction[] {
-    return this.transactions.slice(0, 5);
+    return this.transactions
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5);
   }
 
   getRecentUsers(): User[] {
