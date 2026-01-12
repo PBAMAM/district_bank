@@ -133,4 +133,13 @@ export class AuthService {
   isAdmin(): boolean {
     return this.currentUserSubject.value?.role === 'admin';
   }
+
+  async resetPassword(email: string): Promise<void> {
+    try {
+      await this.firebaseService.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.error('Password reset error:', error);
+      throw error;
+    }
+  }
 }

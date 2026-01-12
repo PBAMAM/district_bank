@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
-import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, User as FirebaseUser, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, User as FirebaseUser, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
 import { collection, doc, getDocs, getDoc, addDoc, updateDoc, setDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore';
 import { Account, Transaction, User, LoginCredentials } from '../models/account.model';
 import { Observable } from 'rxjs';
@@ -115,6 +115,14 @@ export class FirebaseService {
 
   async logout(): Promise<void> {
     await signOut(this.auth);
+  }
+
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+    } catch (error) {
+      throw error;
+    }
   }
 
   getCurrentUser(): FirebaseUser | null {

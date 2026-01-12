@@ -45,14 +45,14 @@
     <div class="login-form-container">
       <div class="form-header" [@scaleIn]>
         <div class="header-icon">
-          <span>{{ isLoginMode ? '🔐' : '✨' }}</span>
+          <span>{{ isResetPasswordMode ? '🔑' : (isLoginMode ? '🔐' : '✨') }}</span>
         </div>
-        <h1>{{ isLoginMode ? 'Welcome Back' : 'Create Account' }}</h1>
-        <p>{{ isLoginMode ? 'Sign in to access your banking dashboard' : 'Start your banking journey with us' }}</p>
+        <h1>{{ isResetPasswordMode ? 'Reset Password' : (isLoginMode ? 'Welcome Back' : 'Create Account') }}</h1>
+        <p>{{ isResetPasswordMode ? 'Enter your email to receive a password reset link' : (isLoginMode ? 'Sign in to access your banking dashboard' : 'Start your banking journey with us') }}</p>
       </div>
 
       <!-- Login Form -->
-      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="client-form" [@fadeInUp]>
+      <form *ngIf="isLoginMode && !isResetPasswordMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="client-form" [@fadeInUp]>
         <div class="form-group" [@slideInRight]>
           <label for="email">
             <span class="label-icon">📧</span>
@@ -73,13 +73,43 @@
             [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         </div>
 
+        <div class="forgot-password" [@fadeIn]>
+          <button type="button" class="forgot-password-btn" (click)="showResetPassword()">
+            Forgot Password?
+          </button>
+        </div>
+
         <button type="submit" class="btn btn-primary client-btn" [disabled]="loginForm.invalid || isLoading">
           {{ isLoading ? 'Signing in...' : 'Sign In' }}
         </button>
       </form>
 
+      <!-- Reset Password Form -->
+      <form *ngIf="isResetPasswordMode" [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="client-form" [@fadeInUp]>
+        <div class="form-group" [@slideInRight]>
+          <label for="resetEmail">
+            <span class="label-icon">📧</span>
+            Email Address
+          </label>
+          <input type="email" id="resetEmail" formControlName="email" class="form-control"
+            placeholder="your.email@example.com"
+            [class.error]="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
+          <p class="reset-instructions">
+            Enter your email address and we'll send you a link to reset your password.
+          </p>
+        </div>
+
+        <button type="submit" class="btn btn-primary client-btn" [disabled]="resetPasswordForm.invalid || isLoading">
+          {{ isLoading ? 'Sending...' : 'Send Reset Link' }}
+        </button>
+
+        <button type="button" class="btn btn-secondary back-btn" (click)="backToLogin()" [disabled]="isLoading">
+          Back to Login
+        </button>
+      </form>
+
       <!-- Register Form -->
-      <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="client-form" [@fadeInUp]>
+      <form *ngIf="!isLoginMode && !isResetPasswordMode" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="client-form" [@fadeInUp]>
         <div class="form-row">
           <div class="form-group" [@slideInRight]>
             <label for="firstName">
@@ -157,10 +187,10 @@
       </form>
 
       <!-- Toggle Mode -->
-      <div class="toggle-mode" [@fadeIn]>
-        <p>
+      <div class="toggle-mode" *ngIf="!isResetPasswordMode" [@fadeIn]>
+        <p *ngIf="!isResetPasswordMode">
           {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
-          <button type="button" class="toggle-btn" (click)="toggleMode()">
+          <button type="button" class="toggle-btn" (click)="toggleMode()" *ngIf="!isResetPasswordMode">
             {{ isLoginMode ? 'Open Account' : 'Sign In' }}
             <span class="toggle-arrow">→</span>
           </button>

@@ -38,7 +38,9 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class ClientLoginComponent implements OnInit {
   loginForm: FormGroup;
   registerForm: FormGroup;
+  resetPasswordForm: FormGroup;
   isLoginMode = true;
+  isResetPasswordMode = false;
   isLoading = false;
   errorMessage = '';
   successMessage = '';
@@ -62,6 +64,10 @@ export class ClientLoginComponent implements OnInit {
       phone: ['', [Validators.required]],
       address: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
+
+    this.resetPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
   }
 
   ngOnInit() {
@@ -88,7 +94,50 @@ export class ClientLoginComponent implements OnInit {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
+    this.isResetPasswordMode = false;
     this.clearMessages();
+  }
+
+  showResetPassword() {
+    this.isResetPasswordMode = true;
+    this.isLoginMode = false;
+    this.clearMessages();
+  }
+
+  backToLogin() {
+    this.isResetPasswordMode = false;
+    this.isLoginMode = true;
+    this.resetPasswordForm.reset();
+    this.clearMessages();
+  }
+
+  async onResetPassword() {
+    if (this.resetPasswordForm.valid) {
+      this.isLoading = true;
+      this.clearMessages();
+
+      try {
+        const email = this.resetPasswordForm.get('email')?.value;
+        await this.authService.resetPassword(email);
+        this.successMessage = 'Password reset email sent! Please check your inbox.';
+        setTimeout(() => {
+          this.backToLogin();
+        }, 3000);
+      } catch (error: any) {
+        if (error.code === 'auth/user-not-found') {
+          this.errorMessage = 'No account found with this email address.';
+        } else if (error.code === 'auth/invalid-email') {
+          this.errorMessage = 'Invalid email address.';
+        } else if (error.code === 'auth/too-many-requests') {
+          this.errorMessage = 'Too many requests. Please try again later.';
+        } else {
+          this.errorMessage = 'Failed to send reset email. Please try again.';
+        }
+        console.error('Password reset error:', error);
+      } finally {
+        this.isLoading = false;
+      }
+    }
   }
 
   async onLogin() {
