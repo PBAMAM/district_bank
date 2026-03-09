@@ -1,92 +1,203 @@
-<div class="login-container">
-  <div class="login-header">
-    <div class="logo">
-      <div class="logo-icon">S</div>
-      <div class="logo-text">
-        <span class="bank-name">SwissOne</span>
-        <span class="bank-location">Karlsruhe</span>
+<div class="landing-page-container">
+  <!-- Top Header -->
+  <header class="main-header">
+    <div class="container d-flex justify-between align-center">
+      <div class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/CaixaBank.svg/1200px-CaixaBank.svg.png"
+          alt="District Bank" class="logo-img" style="filter: brightness(0) invert(1);">
+        <span class="logo-text">District Bank</span>
       </div>
+      <nav class="main-nav">
+        <a href="#">Products</a>
+        <a href="#">Expats</a>
+        <a href="#">Help & Contact</a>
+        <button class="btn btn-primary login-trigger" (click)="showLoginForm = !showLoginForm">
+          <span class="icon">🔒</span> Customer area
+        </button>
+      </nav>
     </div>
-    <div class="search-section">
-      <span class="search-icon">🔍</span>
-      <span class="search-text">Search</span>
-    </div>
-  </div>
+  </header>
 
-  <div class="login-content">
-    <div class="login-card">
-      <h1 class="login-title">Online Banking Demo</h1>
+  <!-- Hero Section -->
+  <section class="hero-section" style="background-image: url('assets/images/hero_lifestyle.png');">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="hero-content">
+        <h1>Everything you require of a bank and more</h1>
+        <p>A specialized service for your needs in Spain or anywhere in the world. Secure, digital, and always close to
+          you.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary">Become a customer</button>
+          <button class="btn btn-outline" (click)="showLoginForm = true">Online Banking</button>
+        </div>
+      </div>
 
-      <div class="demo-credentials">
-        <h3>Your login details</h3>
-        <p>Please make a test using the following access data:</p>
-        <div class="credentials-box">
-          <div class="credential-item">
-            <span class="label">Login name:</span>
-            <span class="value">demo@bank.com</span>
+      <!-- Login Card (Overlays on Hero) -->
+      <div class="login-overlay-card" *ngIf="showLoginForm">
+        <div class="card">
+          <div class="d-flex justify-between align-center mb-2">
+            <h3>Online Banking Login</h3>
+            <button class="close-btn" (click)="showLoginForm = false">✕</button>
           </div>
-          <div class="credential-item">
-            <span class="label">Password/PIN:</span>
-            <span class="value">123456</span>
+
+          <div class="demo-info mb-2">
+            <p><small>Demo: <strong>demo@bank.com</strong> / <strong>123456</strong></small></p>
+          </div>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+            <div class="form-group">
+              <label class="form-label">Email or Identifier</label>
+              <input type="email" formControlName="email" class="form-control" placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Password/PIN</label>
+              <input type="password" formControlName="password" class="form-control" placeholder="Enter your password">
+            </div>
+
+            <div class="form-actions gap-1">
+              <button type="submit" class="btn btn-secondary w-100" [disabled]="loginForm.invalid || isLoading">
+                {{ isLoading ? 'Entering...' : 'Log in' }}
+              </button>
+              <button type="button" class="btn btn-outline w-100" (click)="demoLogin()">Try Demo</button>
+            </div>
+
+            <div *ngIf="errorMessage" class="error-text mt-1 text-danger">
+              {{ errorMessage }}
+            </div>
+          </form>
+          <div class="mt-2 text-center">
+            <a href="#" class="text-muted"><small>Forgot password?</small></a>
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-        <div class="form-group">
-          <label for="email">Login name</label>
-          <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter your email"
-            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-        </div>
+  <!-- Quick Access -->
+  <section class="quick-access">
+    <div class="container grid-4">
+      <div class="access-item">
+        <span class="item-icon">💳</span>
+        <span>Open account</span>
+      </div>
+      <div class="access-item">
+        <span class="item-icon">🏦</span>
+        <span>Mortgages</span>
+      </div>
+      <div class="access-item">
+        <span class="item-icon">📈</span>
+        <span>Investment</span>
+      </div>
+      <div class="access-item">
+        <span class="item-icon">🛡️</span>
+        <span>Insurance</span>
+      </div>
+    </div>
+  </section>
 
-        <div class="form-group">
-          <label for="password">Password/PIN</label>
-          <div class="password-input">
-            <input type="password" id="password" formControlName="password" class="form-control"
-              placeholder="Enter your password"
-              [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            <button type="button" class="show-password-btn">Show</button>
+  <!-- Welcome / Features Section -->
+  <section class="features-section py-5">
+    <div class="container">
+      <h2 class="text-center mb-3">Welcome to District Bank</h2>
+      <div class="products-grid grid-2">
+        <div class="product-card">
+          <div class="product-image"
+            style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800');">
+          </div>
+          <div class="product-info">
+            <span class="badge">Lending</span>
+            <h3>An insurance suite for our clients</h3>
+            <p>We protect what matters most to you with tailored plans.</p>
+            <a href="#" class="learn-more">Learn more →</a>
           </div>
         </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary login-btn" [disabled]="loginForm.invalid || isLoading">
-            {{ isLoading ? 'Logging in...' : 'Log in' }}
-          </button>
-
-          <button type="button" class="btn btn-secondary demo-btn" (click)="demoLogin()" [disabled]="isLoading">
-            Demo Login
-          </button>
+        <div class="product-card">
+          <div class="product-image"
+            style="background-image: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80&w=800');">
+          </div>
+          <div class="product-info">
+            <span class="badge">Loans</span>
+            <h3>Are you going to buy a home in Spain?</h3>
+            <p>Finance your future with our flexible mortgage solutions.</p>
+            <a href="#" class="learn-more">Learn more →</a>
+          </div>
         </div>
-
-        <div *ngIf="errorMessage" class="error-message">
-          {{ errorMessage }}
-        </div>
-      </form>
-
-      <div class="safety-notes">
-        <a href="#" class="safety-link">Safety notes</a>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="login-footer">
-    <div class="footer-links">
-      <div class="language-selector">
-        <span class="globe-icon">🌐</span>
-        <span>English</span>
-        <span class="dropdown-arrow">▼</span>
-      </div>
-      <div class="legal-links">
-        <a href="#">General Terms & Conditions</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Legal Information</a>
-        <a href="#">Fees and other Information</a>
-        <a href="#">Contact</a>
-        <a href="#">Change cookie settings</a>
-        <a href="#">Accessibility (German)</a>
-        <a href="#">Report barrier (German)</a>
+  <!-- Advantages Section -->
+  <section class="advantages-section py-5 bg-white">
+    <div class="container">
+      <h2 class="text-center mb-3">Advantages of being an District Bank customer</h2>
+      <div class="advantages-grid grid-4">
+        <div class="adv-item text-center">
+          <div class="adv-icon">🌍</div>
+          <h4>Multilingual support</h4>
+          <p>We speak your language to make everything easier.</p>
+        </div>
+        <div class="adv-item text-center">
+          <div class="adv-icon">📱</div>
+          <h4>Digital Banking</h4>
+          <p>Manage your finances anywhere, anytime with our app.</p>
+        </div>
+        <div class="adv-item text-center">
+          <div class="adv-icon">🤝</div>
+          <h4>Personal Advisor</h4>
+          <p>A dedicated expert always ready to help you.</p>
+        </div>
+        <div class="adv-item text-center">
+          <div class="adv-icon">📍</div>
+          <h4>Global Network</h4>
+          <p>Access your funds through thousands of ATMs worldwide.</p>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid grid-4 py-4">
+        <div>
+          <h5>Products</h5>
+          <ul>
+            <li><a href="#">Accounts</a></li>
+            <li><a href="#">Cards</a></li>
+            <li><a href="#">Savings</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>It may interest you</h5>
+          <ul>
+            <li><a href="#">Find an office</a></li>
+            <li><a href="#">Holiday Bank Club</a></li>
+            <li><a href="#">Exchange rates</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>About us</h5>
+          <ul>
+            <li><a href="#">Corporate info</a></li>
+            <li><a href="#">Newsroom</a></li>
+            <li><a href="#">Sustainability</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Contact</h5>
+          <p>900 123 456</p>
+          <p>customer.service@districtbank.com</p>
+        </div>
+      </div>
+      <div class="footer-bottom py-2 border-top">
+        <p>&copy; 2026 District Bank. All rights reserved.</p>
+        <div class="legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Legal Notice</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>

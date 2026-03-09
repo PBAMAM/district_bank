@@ -1,24 +1,29 @@
 <aside class="sidebar">
   <div class="sidebar-header">
     <div class="logo">
-      <div class="logo-icon">
-        <span class="logo-letter">S</span>
-      </div>
-      <div class="logo-text">
-        <span class="bank-name">SwissOne</span>
-        <span class="bank-location">Karlsruhe</span>
-      </div>
+      <svg viewBox="0 0 150 30" width="160" height="40" class="logo-svg">
+        <!-- Star Logo -->
+        <path fill="#007EB5" d="M12,2 L18,12 L8,18 Z" />
+        <circle fill="#F4B223" cx="22" cy="8" r="3" />
+        <circle fill="#E63027" cx="6" cy="12" r="2" />
+        <!-- Divider -->
+        <line x1="30" y1="5" x2="30" y2="25" stroke="#ccc" stroke-width="1" />
+        <!-- Text -->
+        <text x="38" y="21" font-family="Arial, sans-serif" font-weight="bold" font-style="italic" font-size="20"
+          fill="#1A202C">HolaBank</text>
+      </svg>
     </div>
   </div>
 
   <nav class="sidebar-nav">
     <div class="nav-section">
+      <p class="nav-section-title">MY BANKING</p>
+
       <a routerLink="/client/dashboard" routerLinkActive="active" class="nav-item">
         <div class="nav-icon-wrapper">
           <span class="nav-icon">🏠</span>
         </div>
         <span class="nav-text">Dashboard</span>
-        <span class="nav-arrow">→</span>
       </a>
 
       <a routerLink="/client/accounts" routerLinkActive="active" class="nav-item">
@@ -26,7 +31,6 @@
           <span class="nav-icon">📊</span>
         </div>
         <span class="nav-text">Account Overview</span>
-        <span class="nav-arrow">→</span>
       </a>
 
       <a routerLink="/client/transfer" routerLinkActive="active" class="nav-item">
@@ -34,15 +38,23 @@
           <span class="nav-icon">💸</span>
         </div>
         <span class="nav-text">Transfer Money</span>
-        <span class="nav-arrow">→</span>
       </a>
 
       <a routerLink="/client/transactions" routerLinkActive="active" class="nav-item">
         <div class="nav-icon-wrapper">
           <span class="nav-icon">📈</span>
         </div>
-        <span class="nav-text">Transaction History</span>
-        <span class="nav-arrow">→</span>
+        <span class="nav-text">Transactions</span>
+      </a>
+    </div>
+
+    <div class="nav-section mt-4">
+      <p class="nav-section-title">SETTINGS</p>
+      <a href="javascript:void(0)" class="nav-item">
+        <div class="nav-icon-wrapper">
+          <span class="nav-icon">⚙️</span>
+        </div>
+        <span class="nav-text">Preferences</span>
       </a>
     </div>
   </nav>

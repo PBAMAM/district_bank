@@ -42,6 +42,7 @@ export class ClientLoginComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
+  showLoginForm = false;
 
   constructor(
     private fb: FormBuilder,
@@ -76,13 +77,13 @@ export class ClientLoginComponent implements OnInit {
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
+
     if (password && confirmPassword && password.value !== confirmPassword.value) {
       confirmPassword.setErrors({ passwordMismatch: true });
     } else {
       confirmPassword?.setErrors(null);
     }
-    
+
     return null;
   }
 
@@ -97,7 +98,12 @@ export class ClientLoginComponent implements OnInit {
       this.clearMessages();
 
       try {
-        const success = await this.authService.login(this.loginForm.value);
+        const payload = {
+          email: this.loginForm.value.email,
+          password: this.loginForm.value.password,
+          role: 'customer' as const
+        };
+        const success = await this.authService.login(payload);
         if (success) {
           const user = this.authService.getCurrentUser();
           if (user?.role === 'customer') {
