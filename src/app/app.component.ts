@@ -8,22 +8,22 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'SwissOne';
+  title = 'HolaBank';
   isAuthenticated = false;
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.isAuthenticated = !!user;
-      
+
       // Allow access to login pages without authentication
       const publicRoutes = ['/admin', '/client', '/login'];
       const currentUrl = this.router.url;
-      
+
       // Check if current route is a public route
       const isPublicRoute = publicRoutes.some(route => currentUrl.startsWith(route));
     });
