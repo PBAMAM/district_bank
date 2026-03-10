@@ -395,7 +395,7 @@ export class AdminPanelComponent implements OnInit {
     this.createAccountForm.patchValue({
       accountNumber: this.accountCreationService.generateAccountNumber(),
       iban: this.accountCreationService.generateIBAN(),
-      accountType: 'Privatgirokonto',
+      accountType: 'Private Current Account',
       accountName: 'Private Current Account',
       initialBalance: 1000.00,
       currency: 'EUR',

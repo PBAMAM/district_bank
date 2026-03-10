@@ -80,7 +80,7 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
     private firebaseService: FirebaseService,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Get current user and load accounts
@@ -120,19 +120,19 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
   async loadAccounts() {
     try {
       this.isLoading = true;
-      
+
       if (this.currentUser) {
         // Load user's accounts from Firebase
         this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
-        
+
         // Ensure all balances are valid numbers
         this.accounts = this.accounts.map(account => ({
           ...account,
-          balance: typeof account.balance === 'number' && !isNaN(account.balance) 
-            ? account.balance 
+          balance: typeof account.balance === 'number' && !isNaN(account.balance)
+            ? account.balance
             : (parseFloat(account.balance as any) || 0)
         }));
-        
+
         // Load transactions for all accounts
         if (this.accounts.length > 0) {
           const allTransactions: Transaction[] = [];
@@ -141,20 +141,20 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
             allTransactions.push(...accountTransactions);
           }
           // Sort by creation date (newest first)
-          this.transactions = allTransactions.sort((a, b) => 
+          this.transactions = allTransactions.sort((a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         }
-        
+
         // Categorize accounts
         this.categorizeAccounts();
-        
+
         // Calculate totals for each category
         this.calculateCategoryTotals();
-        
+
         // Calculate grand total
         this.calculateGrandTotal();
-        
+
         // Generate forecast data
         this.generateForecastData();
       }
@@ -164,7 +164,7 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
       this.isLoading = false;
     }
   }
-  
+
   getRecentTransactions(): Transaction[] {
     return this.transactions.slice(0, 5);
   }
@@ -179,18 +179,18 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
 
     this.accounts.forEach(account => {
       const accountType = account.accountType.toLowerCase();
-      
-      if (accountType.includes('girokonto') || accountType.includes('checking') || accountType.includes('current')) {
+
+      if (accountType.includes('checking') || accountType.includes('current')) {
         this.checkingAccounts.push(account);
-      } else if (accountType.includes('sparkonto') || accountType.includes('savings') || accountType.includes('tagesgeld')) {
+      } else if (accountType.includes('savings')) {
         this.savingsAccounts.push(account);
-      } else if (accountType.includes('investment') || accountType.includes('termgeld') || accountType.includes('fixed deposit')) {
+      } else if (accountType.includes('investment') || accountType.includes('term deposit') || accountType.includes('fixed deposit')) {
         this.investmentAccounts.push(account);
-      } else if (accountType.includes('depot') || accountType.includes('securities') || accountType.includes('portfolio')) {
+      } else if (accountType.includes('securities') || accountType.includes('portfolio') || accountType.includes('brokerage')) {
         this.securitiesAccounts.push(account);
-      } else if (accountType.includes('kredit') || accountType.includes('loan') || accountType.includes('credit') || account.balance < 0) {
+      } else if (accountType.includes('loan') || accountType.includes('credit') || accountType.includes('mortgage') || account.balance < 0) {
         this.loanAccounts.push(account);
-      } else if (accountType.includes('asset') || accountType.includes('immobilie') || accountType.includes('fahrzeug')) {
+      } else if (accountType.includes('asset') || accountType.includes('property') || accountType.includes('vehicle')) {
         this.assetAccounts.push(account);
       } else {
         // Default to checking account for unknown types
@@ -212,12 +212,12 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
     return accounts.reduce((total, account) => {
       // Ensure balance is a valid number
       let balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance as any) || 0;
-      
+
       // Check for NaN or invalid values
       if (isNaN(balance) || !isFinite(balance)) {
         balance = 0;
       }
-      
+
       // Convert to EUR if needed (simplified conversion)
       let amount = balance;
       if (account.currency === 'USD') {
@@ -228,8 +228,8 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
   }
 
   calculateGrandTotal() {
-    this.grandTotal = this.checkingTotal + this.savingsTotal + this.investmentTotal + 
-                     this.securitiesTotal + this.loanTotal + this.assetTotal;
+    this.grandTotal = this.checkingTotal + this.savingsTotal + this.investmentTotal +
+      this.securitiesTotal + this.loanTotal + this.assetTotal;
   }
 
   generateForecastData() {
@@ -237,16 +237,16 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
     const mainAccount = this.checkingAccounts[0] || this.accounts[0];
     if (mainAccount) {
       let balance = typeof mainAccount.balance === 'number' ? mainAccount.balance : parseFloat(mainAccount.balance as any) || 0;
-      
+
       // Check for NaN or invalid values
       if (isNaN(balance) || !isFinite(balance)) {
         balance = 0;
       }
-      
+
       this.forecastData.currentBalance = balance;
       // Simple forecast: assume 5% growth over 6 months
       this.forecastData.futureBalance = balance * 1.05;
-      
+
       // Set future date to 6 months from now
       const futureDate = new Date();
       futureDate.setMonth(futureDate.getMonth() + 6);
@@ -272,12 +272,12 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
   formatCurrency(amount: number, currency: string): string {
     // Ensure amount is a valid number
     let numericAmount = typeof amount === 'number' ? amount : parseFloat(amount as any) || 0;
-    
+
     // Check for NaN or invalid values
     if (isNaN(numericAmount) || !isFinite(numericAmount)) {
       numericAmount = 0;
     }
-    
+
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: currency || 'EUR'
@@ -285,13 +285,13 @@ export class AccountOverviewComponent implements OnInit, OnDestroy {
   }
 
   getAccountIcon(accountType: string): string {
-    if (accountType.includes('Girokonto') || accountType.includes('Privatgirokonto')) {
+    if (accountType.includes('Checking') || accountType.includes('Current Account')) {
       return 'S';
-    } else if (accountType.includes('Tagesgeld') || accountType.includes('Savings')) {
+    } else if (accountType.includes('Savings')) {
       return 'S';
-    } else if (accountType.includes('Goldkarte') || accountType.includes('Credit')) {
+    } else if (accountType.includes('Credit') || accountType.includes('Card')) {
       return 'S';
-    } else if (accountType.includes('Firmenkonto') || accountType.includes('Business')) {
+    } else if (accountType.includes('Business Account') || accountType.includes('Business')) {
       return 'S';
     }
     return 'S';

@@ -23,14 +23,14 @@ export class AccountCreationService {
 
       // Register the user (in a real app, this would create Firebase Auth user)
       console.log('Creating sample user...');
-      
+
       // Create sample accounts
       // Note: ownerId should be set when actually creating accounts for a real user
       const accounts: Omit<Account, 'id'>[] = [
         {
           accountNumber: '123456789',
           iban: 'DE97 6605 0101 0000 1234 56',
-          accountType: 'Privatgirokonto',
+          accountType: 'Private Current Account',
           accountName: 'Private Current Account',
           balance: 1000.00,
           currency: 'EUR',
@@ -70,7 +70,7 @@ export class AccountCreationService {
 
       console.log('Sample accounts created:', accounts);
       return { user: userData, accounts };
-      
+
     } catch (error) {
       console.error('Error creating sample user and accounts:', error);
       throw error;
@@ -83,7 +83,7 @@ export class AccountCreationService {
     const bankCode = '66050101';
     const accountNumber = Math.floor(Math.random() * 100000000).toString().padStart(8, '0');
     const checkDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-    
+
     return `${countryCode}${checkDigits} ${bankCode} ${accountNumber.slice(0, 4)} ${accountNumber.slice(4, 8)} ${accountNumber.slice(0, 2)}`;
   }
 

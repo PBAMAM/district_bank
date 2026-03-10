@@ -69,7 +69,7 @@ export class AdminPanelComponent implements OnInit {
       id: '1',
       accountNumber: '123456',
       iban: 'DE97 6605 0101 0000 1234 56',
-      accountType: 'Privatgirokonto',
+      accountType: 'Private Current Account',
       accountName: 'Private Current Account',
       balance: 1000.00,
       currency: 'EUR',
@@ -147,7 +147,7 @@ export class AdminPanelComponent implements OnInit {
       // For demo purposes, use mock data
       this.users = this.mockUsers;
       this.accounts = this.mockAccounts;
-      
+
       // In a real app, you would load from Firebase:
       // this.users = await this.firebaseService.getAllUsers();
       // this.accounts = await this.firebaseService.getAllAccounts();
@@ -177,10 +177,10 @@ export class AdminPanelComponent implements OnInit {
 
       try {
         const userData = this.createUserForm.value;
-        
+
         // In a real app, you would create the user in Firebase Auth and Firestore
         // const newUser = await this.firebaseService.register(userData.email, 'defaultPassword', userData);
-        
+
         // For demo, add to mock data
         const newUser: User = {
           id: Date.now().toString(),
@@ -189,11 +189,11 @@ export class AdminPanelComponent implements OnInit {
           isActive: true,
           createdAt: new Date()
         };
-        
+
         this.users.push(newUser);
         this.createUserForm.reset();
         this.successMessage = 'User created successfully!';
-        
+
       } catch (error) {
         this.errorMessage = 'Failed to create user';
         console.error('Error creating user:', error);
@@ -211,10 +211,10 @@ export class AdminPanelComponent implements OnInit {
       try {
         const accountData = this.createAccountForm.value;
         const owner = this.users.find(u => u.id === accountData.ownerId);
-        
+
         // In a real app, you would save to Firebase
         // const accountId = await this.firebaseService.createAccount(accountData);
-        
+
         // For demo, add to mock data
         const newAccount: Account = {
           id: Date.now().toString(),
@@ -224,11 +224,11 @@ export class AdminPanelComponent implements OnInit {
           createdAt: new Date(),
           updatedAt: new Date()
         };
-        
+
         this.accounts.push(newAccount);
         this.createAccountForm.reset();
         this.successMessage = 'Account created successfully!';
-        
+
       } catch (error) {
         this.errorMessage = 'Failed to create account';
         console.error('Error creating account:', error);
@@ -312,7 +312,7 @@ export class AdminPanelComponent implements OnInit {
 
     try {
       const sampleData = await this.accountCreationService.createSampleUserWithAccounts();
-      
+
       // Add sample user
       const newUser: User = {
         id: Date.now().toString(),
@@ -324,9 +324,9 @@ export class AdminPanelComponent implements OnInit {
         isActive: true,
         createdAt: new Date()
       };
-      
+
       this.users.push(newUser);
-      
+
       // Add sample accounts
       sampleData.accounts.forEach((accountData, index) => {
         const newAccount: Account = {
@@ -336,9 +336,9 @@ export class AdminPanelComponent implements OnInit {
         };
         this.accounts.push(newAccount);
       });
-      
+
       this.successMessage = 'Sample data created successfully!';
-      
+
     } catch (error) {
       this.errorMessage = 'Failed to create sample data';
       console.error('Error creating sample data:', error);
@@ -352,7 +352,7 @@ export class AdminPanelComponent implements OnInit {
     this.createAccountForm.patchValue({
       accountNumber: this.accountCreationService.generateAccountNumber(),
       iban: this.accountCreationService.generateIBAN(),
-      accountType: 'Privatgirokonto',
+      accountType: 'Private Current Account',
       accountName: 'Private Current Account',
       initialBalance: 1000.00,
       currency: 'EUR',
