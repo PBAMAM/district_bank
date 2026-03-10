@@ -21,7 +21,8 @@ export interface Transaction {
   currency: string;
   description: string;
   type: 'transfer' | 'deposit' | 'withdrawal';
-  status: 'pending' | 'completed' | 'failed';
+  status: 'pending' | 'completed' | 'failed' | 'rejected';
+  adminMessage?: string;
   createdAt: Date;
   processedAt?: Date;
 }

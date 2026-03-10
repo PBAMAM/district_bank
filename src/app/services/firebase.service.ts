@@ -23,7 +23,7 @@ export class FirebaseService {
       console.log('Firestore instance:', this.db);
       console.log('Firestore app:', this.db.app);
       console.log('Firestore app options:', this.db.app.options);
-      
+
       // Try to create a test document
       const testDoc = doc(this.db, 'test', 'connection-test');
       await setDoc(testDoc, {
@@ -31,11 +31,11 @@ export class FirebaseService {
         timestamp: new Date()
       });
       console.log('✅ Firestore write test successful');
-      
+
       // Clean up test document
       await deleteDoc(testDoc);
       console.log('✅ Firestore delete test successful');
-      
+
     } catch (error: any) {
       console.error('❌ Firestore connection test failed:', error);
       console.error('Error code:', error.code);
@@ -59,18 +59,18 @@ export class FirebaseService {
       console.log('Attempting to register user:', email);
       console.log('Auth instance:', this.auth);
       console.log('Auth app:', this.auth?.app);
-      
+
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
       console.log('User created successfully:', userCredential.user.uid);
-      
+
       // Test Firestore connection first
       console.log('Testing Firestore connection...');
       console.log('Firestore instance:', this.db);
       console.log('Firestore app:', this.db.app);
-      
+
       const userDoc = doc(this.db, 'users', userCredential.user.uid);
       console.log('User document reference created:', userDoc.path);
-      
+
       const userDocData = {
         ...userData,
         email: userCredential.user.email,
@@ -78,22 +78,22 @@ export class FirebaseService {
         isActive: true
       };
       console.log('User document data to write:', userDocData);
-      
+
       await setDoc(userDoc, userDocData);
       console.log('User document created in Firestore successfully');
-      
+
       return userCredential.user;
     } catch (error: any) {
       console.error('Registration error details:', error);
       console.error('Error code:', error.code);
       console.error('Error message:', error.message);
       console.error('Error stack:', error.stack);
-      
+
       // Check if it's a Firestore error
       if (error.code && error.code.startsWith('firestore/')) {
         throw new Error(`Firestore error: ${error.message} (Code: ${error.code})`);
       }
-      
+
       // Provide more specific error messages
       if (error.code === 'auth/configuration-not-found') {
         throw new Error('Firebase Authentication is not properly configured. Please enable Authentication in Firebase Console.');
@@ -193,7 +193,7 @@ export class FirebaseService {
       updatedAt: new Date()
     });
     console.log(`Successfully updated account ${accountId} balance to:`, newBalance);
-    
+
     // Verify the update by reading back the balance
     const accountDoc = await getDoc(accountRef);
     if (accountDoc.exists()) {
@@ -201,7 +201,7 @@ export class FirebaseService {
       console.log(`Verified account ${accountId} balance in Firebase:`, updatedData['balance']);
     }
   }
-  
+
   async getAccountBalance(accountId: string): Promise<number> {
     try {
       const accountRef = doc(this.db, 'accounts', accountId);
@@ -228,30 +228,38 @@ export class FirebaseService {
     return docRef.id;
   }
 
+  async updateTransaction(transactionId: string, updates: Partial<Transaction>): Promise<void> {
+    const transactionRef = doc(this.db, 'transactions', transactionId);
+    await updateDoc(transactionRef, {
+      ...updates,
+      updatedAt: new Date()
+    });
+  }
+
   async getTransactions(accountId: string): Promise<Transaction[]> {
     const transactionsRef = collection(this.db, 'transactions');
-    
+
     // Get transactions where account is the sender
     const fromQuery = query(
       transactionsRef,
       where('fromAccountId', '==', accountId)
     );
-    
+
     // Get transactions where account is the receiver
     const toQuery = query(
       transactionsRef,
       where('toAccountId', '==', accountId)
     );
-    
+
     // Fetch both queries
     const [fromSnapshot, toSnapshot] = await Promise.all([
       getDocs(fromQuery),
       getDocs(toQuery)
     ]);
-    
+
     // Combine and deduplicate transactions
     const transactionMap = new Map<string, Transaction>();
-    
+
     fromSnapshot.docs.forEach(doc => {
       const data = doc.data();
       if (data['amount'] !== undefined) {
@@ -259,7 +267,7 @@ export class FirebaseService {
       }
       transactionMap.set(doc.id, { id: doc.id, ...data } as Transaction);
     });
-    
+
     toSnapshot.docs.forEach(doc => {
       const data = doc.data();
       if (data['amount'] !== undefined) {
@@ -267,7 +275,7 @@ export class FirebaseService {
       }
       transactionMap.set(doc.id, { id: doc.id, ...data } as Transaction);
     });
-    
+
     // Convert to array and sort by creation date (newest first)
     return Array.from(transactionMap.values()).sort((a, b) => {
       const dateA = a.createdAt instanceof Date ? a.createdAt.getTime() : new Date(a.createdAt).getTime();

@@ -21,6 +21,7 @@ export class AdminPanelComponent implements OnInit {
   users: User[] = [];
   accounts: Account[] = [];
   transactions: Transaction[] = [];
+  pendingWithdrawals: Transaction[] = [];
   selectedUser: User | null = null;
   selectedFromAccount: Account | null = null;
   selectedToAccount: Account | null = null;
@@ -81,6 +82,7 @@ export class AdminPanelComponent implements OnInit {
       this.users = await this.firebaseService.getAllUsers();
       this.accounts = await this.firebaseService.getAllAccounts();
       this.transactions = await this.firebaseService.getAllTransactions();
+      this.pendingWithdrawals = this.transactions.filter(t => t.type === 'withdrawal' && t.status === 'pending');
 
       console.log('Loaded data:', {
         users: this.users.length,
@@ -332,6 +334,88 @@ export class AdminPanelComponent implements OnInit {
       } finally {
         this.isLoading = false;
       }
+    }
+  }
+
+  async saveAdminMessage(transaction: Transaction, message: string) {
+    this.isLoading = true;
+    this.clearMessages();
+    try {
+      await this.firebaseService.updateTransaction(transaction.id, { adminMessage: message });
+      transaction.adminMessage = message;
+      this.successMessage = 'Admin message saved successfully!';
+    } catch (error) {
+      this.errorMessage = 'Failed to save admin message';
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async acceptWithdrawal(transaction: Transaction) {
+    this.isLoading = true;
+    this.clearMessages();
+    try {
+      const account = this.accounts.find(a => a.id === transaction.fromAccountId);
+      if (!account) {
+        this.errorMessage = 'Account not found';
+        return;
+      }
+
+      const amountToDeduct = Math.abs(transaction.amount);
+
+      if (account.balance < amountToDeduct) {
+        this.errorMessage = 'Insufficient funds in the source account to approve withdrawal.';
+        return;
+      }
+
+      // Deduct funds
+      const newBalance = account.balance - amountToDeduct;
+      await this.firebaseService.updateAccountBalance(account.id, newBalance);
+      account.balance = newBalance;
+
+      // Update transaction status
+      await this.firebaseService.updateTransaction(transaction.id, {
+        status: 'completed',
+        processedAt: new Date(),
+        adminMessage: transaction.adminMessage || 'Withdrawal Approved'
+      });
+
+      transaction.status = 'completed';
+
+      // Update local array
+      this.pendingWithdrawals = this.pendingWithdrawals.filter(t => t.id !== transaction.id);
+
+      this.successMessage = `Withdrawal of ${this.formatCurrency(amountToDeduct, transaction.currency)} accepted. Funds deducted.`;
+    } catch (error) {
+      this.errorMessage = 'Failed to accept withdrawal';
+      console.error(error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async revokeWithdrawal(transaction: Transaction) {
+    this.isLoading = true;
+    this.clearMessages();
+    try {
+      // Just update transaction status to rejected, no funds deducted
+      await this.firebaseService.updateTransaction(transaction.id, {
+        status: 'rejected',
+        processedAt: new Date(),
+        adminMessage: transaction.adminMessage || 'Withdrawal Rejected'
+      });
+
+      transaction.status = 'rejected';
+
+      // Update local array
+      this.pendingWithdrawals = this.pendingWithdrawals.filter(t => t.id !== transaction.id);
+
+      this.successMessage = 'Withdrawal request revoked successfully.';
+    } catch (error) {
+      this.errorMessage = 'Failed to revoke withdrawal';
+      console.error(error);
+    } finally {
+      this.isLoading = false;
     }
   }
 

@@ -20,7 +20,7 @@
           <div class="card-value">{{ recentTransactions.length }}</div>
         </div>
       </div>
-      
+
       <div class="summary-card income" [@scaleIn]>
         <div class="card-icon">💰</div>
         <div class="card-content">
@@ -28,7 +28,7 @@
           <div class="card-value positive">{{ formatCurrency(totalIncome) }}</div>
         </div>
       </div>
-      
+
       <div class="summary-card expenditure" [@scaleIn]>
         <div class="card-icon">💸</div>
         <div class="card-content">
@@ -36,7 +36,7 @@
           <div class="card-value negative">{{ formatCurrency(totalExpenditure) }}</div>
         </div>
       </div>
-      
+
       <div class="summary-card surplus" [@scaleIn]>
         <div class="card-icon">📈</div>
         <div class="card-content">
@@ -70,26 +70,38 @@
             <span class="count-label">Transactions</span>
           </div>
         </div>
-        
+
         <div class="transactions-list">
-          <div class="transaction-item" *ngFor="let transaction of recentTransactions; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 50">
-            <div class="transaction-icon" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+          <div class="transaction-item" *ngFor="let transaction of recentTransactions; let i = index" [@slideInRight]
+            [style.animation-delay.ms]="i * 50">
+            <div class="transaction-icon" [class.positive]="transaction.amount > 0"
+              [class.negative]="transaction.amount < 0">
               <span class="icon">{{ transaction.amount > 0 ? '↑' : '↓' }}</span>
             </div>
             <div class="transaction-details">
               <div class="transaction-description">{{ transaction.description || 'Transaction' }}</div>
               <div class="transaction-meta">
                 <span class="transaction-date">{{ transaction.createdAt | date:'medium' }}</span>
-                <span class="transaction-type" [class.transfer-out]="transaction.type === 'transfer' && transaction.amount < 0" [class.transfer-in]="transaction.type === 'transfer' && transaction.amount > 0">
-                  {{ transaction.type === 'transfer' && transaction.amount < 0 ? 'TRANSFER OUT' : transaction.type === 'transfer' && transaction.amount > 0 ? 'TRANSFER IN' : (transaction.type || 'Transfer') | uppercase }}
+                <span class="transaction-type"
+                  [class.transfer-out]="transaction.type === 'transfer' && transaction.amount < 0"
+                  [class.transfer-in]="transaction.type === 'transfer' && transaction.amount > 0">
+                  {{ transaction.type === 'transfer' && transaction.amount < 0 ? 'TRANSFER OUT' :
+                    transaction.type==='transfer' && transaction.amount> 0 ? 'TRANSFER IN' : (transaction.type ||
+                    'Transfer') | uppercase }}
                 </span>
-                <span class="transaction-status" [class.completed]="transaction.status === 'completed'">
-                  {{ transaction.status || 'Completed' }}
+                <span class="transaction-status" [class.completed]="transaction.status === 'completed'"
+                  [class.pending]="transaction.status === 'pending'"
+                  [class.failed]="transaction.status === 'failed' || transaction.status === 'rejected'"
+                  (click)="transaction.status === 'pending' ? showAdminMessage(transaction.adminMessage) : null"
+                  [style.cursor]="transaction.status === 'pending' ? 'pointer' : 'default'">
+                  {{ (transaction.status || 'Completed') | uppercase }}
+                  <span *ngIf="transaction.status === 'pending'" style="margin-left:4px;">ℹ️</span>
                 </span>
               </div>
             </div>
             <div class="transaction-amount-wrapper">
-              <div class="transaction-amount" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+              <div class="transaction-amount" [class.positive]="transaction.amount > 0"
+                [class.negative]="transaction.amount < 0">
                 {{ transaction.amount > 0 ? '+' : '' }}{{ formatCurrency(transaction.amount) }}
               </div>
               <div class="transaction-currency">{{ transaction.currency || 'EUR' }}</div>
@@ -114,14 +126,11 @@
             <span class="info-icon">ℹ️</span>
           </div>
           <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
-          
+
           <div class="chart-container">
             <h4>Last 3 months</h4>
             <div class="chart-wrapper">
-              <canvas baseChart
-                [data]="incomeExpenditureData"
-                [options]="chartOptions"
-                type="bar">
+              <canvas baseChart [data]="incomeExpenditureData" [options]="chartOptions" type="bar">
               </canvas>
             </div>
             <div class="chart-legend">
@@ -148,14 +157,11 @@
             <span class="info-icon">ℹ️</span>
           </div>
           <div class="card-subtitle">{{ (accounts[0] && accounts[0].accountType) || 'Main Account' }}</div>
-          
+
           <div class="chart-container">
             <h4>Expected balance by month-end</h4>
             <div class="chart-wrapper">
-              <canvas baseChart
-                [data]="forecastData"
-                [options]="chartOptions"
-                type="line">
+              <canvas baseChart [data]="forecastData" [options]="chartOptions" type="line">
               </canvas>
             </div>
             <div class="forecast-points">
@@ -169,6 +175,22 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- Admin Message Modal -->
+    <div class="message-modal-overlay" *ngIf="selectedMessage" [@fadeIn] (click)="closeMessage()">
+      <div class="message-modal-card" [@scaleIn] (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-icon">ℹ️</div>
+          <h3>Transaction Status</h3>
+          <button class="close-btn" (click)="closeMessage()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="message-text">{{ selectedMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" (click)="closeMessage()">Okay</button>
         </div>
       </div>
     </div>

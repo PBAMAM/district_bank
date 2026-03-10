@@ -7,27 +7,29 @@ import { TransferComponent } from './components/transfer/transfer.component';
 import { FinancialPlannerComponent } from './components/financial-planner/financial-planner.component';
 import { ClientLoginComponent } from './components/client-login/client-login.component';
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
+import { WithdrawalComponent } from './components/withdrawal/withdrawal.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/client', pathMatch: 'full' },
-  
+
   // Admin routes - using lazy loading
-  { 
-    path: 'admin', 
+  {
+    path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
-  
+
   // Client routes
   { path: 'client', component: ClientLoginComponent },
   { path: 'client/dashboard', component: ClientDashboardComponent },
   { path: 'client/transfer', component: TransferComponent },
+  { path: 'client/withdrawal', component: WithdrawalComponent },
   { path: 'client/accounts', component: AccountOverviewComponent },
   { path: 'client/transactions', component: FinancialPlannerComponent },
-  
+
   // Legacy routes (for backward compatibility)
   { path: 'login', component: LoginComponent },
-  { 
-    path: 'dashboard', 
+  {
+    path: 'dashboard',
     component: DashboardComponent,
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },

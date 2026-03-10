@@ -23,11 +23,13 @@
             <span class="balance-amount" [class]="getBalanceClass(totalBalance)">
               {{ formatCurrency(totalBalance) }}
             </span>
-            <div class="balance-indicator" [class.positive]="totalBalance >= 0" [class.negative]="totalBalance < 0"></div>
+            <div class="balance-indicator" [class.positive]="totalBalance >= 0" [class.negative]="totalBalance < 0">
+            </div>
           </div>
         </div>
         <div class="balance-accounts">
-          <div class="account-item" *ngFor="let account of accounts; let i = index" [@slideInRight] [style.animation-delay.ms]="i * 100">
+          <div class="account-item" *ngFor="let account of accounts; let i = index" [@slideInRight]
+            [style.animation-delay.ms]="i * 100">
             <div class="account-icon">
               <span class="icon">{{ account.accountName.charAt(0) }}</span>
             </div>
@@ -43,8 +45,8 @@
               <div class="account-currency">{{ account.currency }}</div>
             </div>
           </div>
-          
-          <!-- No accounts message --> 
+
+          <!-- No accounts message -->
           <div *ngIf="accounts.length === 0" class="no-accounts" [@fadeIn]>
             <div class="no-accounts-icon">🏦</div>
             <p>No accounts found</p>
@@ -70,7 +72,7 @@
           <div class="stat-label">Active Accounts</div>
         </div>
       </div>
-      
+
       <div class="stat-card" [@scaleIn]>
         <div class="stat-icon transactions">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -82,7 +84,7 @@
           <div class="stat-label">Total Transactions</div>
         </div>
       </div>
-      
+
       <div class="stat-card" [@scaleIn]>
         <div class="stat-icon balance">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -148,19 +150,32 @@
         </a>
       </div>
       <div class="transaction-list">
-        <div class="transaction-item" *ngFor="let transaction of getRecentTransactions(); let i = index" [@slideInLeft] [style.animation-delay.ms]="i * 100">
-          <div class="transaction-icon" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+        <div class="transaction-item" *ngFor="let transaction of getRecentTransactions(); let i = index" [@slideInLeft]
+          [style.animation-delay.ms]="i * 100">
+          <div class="transaction-icon" [class.positive]="transaction.amount > 0"
+            [class.negative]="transaction.amount < 0">
             <span>{{ transaction.amount > 0 ? '↑' : '↓' }}</span>
           </div>
           <div class="transaction-info">
             <div class="transaction-description">{{ transaction.description || 'Transaction' }}</div>
-            <div class="transaction-meta">
+            <div class="transaction-meta" style="display: flex; align-items: center; gap: 8px;">
               <span class="transaction-date">{{ transaction.createdAt | date:'short' }}</span>
               <span class="transaction-type">{{ transaction.type || 'Transfer' }}</span>
+              <span *ngIf="transaction.status === 'pending'" class="badge badge-warning"
+                style="font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; background: #fff3cd; color: #856404; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;"
+                (click)="showAdminMessage(transaction.adminMessage)">
+                Pending
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+              </span>
             </div>
           </div>
           <div class="transaction-amount-wrapper">
-            <div class="transaction-amount" [class.positive]="transaction.amount > 0" [class.negative]="transaction.amount < 0">
+            <div class="transaction-amount" [class.positive]="transaction.amount > 0"
+              [class.negative]="transaction.amount < 0">
               {{ transaction.amount > 0 ? '+' : '' }}{{ formatCurrency(transaction.amount, transaction.currency) }}
             </div>
           </div>
@@ -190,6 +205,23 @@
         <div class="spinner-ring"></div>
       </div>
       <p>Loading your account information...</p>
+    </div>
+
+    <!-- Admin Message Modal -->
+    <div class="message-modal-overlay" *ngIf="selectedMessage" [@fadeIn] (click)="closeMessage()">
+      <div class="message-modal-card" [@scaleIn] (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-icon">ℹ️</div>
+          <h3>Transaction Status</h3>
+          <button class="close-btn" (click)="closeMessage()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="message-text">{{ selectedMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" (click)="closeMessage()">Okay</button>
+        </div>
+      </div>
     </div>
   </div>
 </app-client-layout>

@@ -49,6 +49,7 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
   transactions: Transaction[] = [];
   isLoading = true;
   totalBalance = 0;
+  selectedMessage: string | null = null;
   private routerSubscription?: Subscription;
   private userSubscription?: Subscription;
 
@@ -56,7 +57,7 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private firebaseService: FirebaseService,
     private router: Router
-  ) {}
+  ) { }
 
   async ngOnInit() {
     // Get current user and load data
@@ -96,22 +97,22 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
   async loadClientData() {
     try {
       this.isLoading = true;
-      
+
       if (this.currentUser) {
         console.log('Loading data for user:', this.currentUser.id);
-        
+
         // Load user's accounts
         this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
         console.log('Loaded accounts:', this.accounts);
-        
+
         // Ensure all balances are valid numbers
         this.accounts = this.accounts.map(account => ({
           ...account,
-          balance: typeof account.balance === 'number' && !isNaN(account.balance) 
-            ? account.balance 
+          balance: typeof account.balance === 'number' && !isNaN(account.balance)
+            ? account.balance
             : (parseFloat(account.balance as any) || 0)
         }));
-        
+
         // Load transactions for all accounts
         if (this.accounts.length > 0) {
           const allTransactions: Transaction[] = [];
@@ -120,11 +121,11 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
             allTransactions.push(...accountTransactions);
           }
           // Sort by creation date (newest first)
-          this.transactions = allTransactions.sort((a, b) => 
+          this.transactions = allTransactions.sort((a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         }
-        
+
         // Calculate total balance using the same method as individual account display
         if (this.accounts.length > 0) {
           this.totalBalance = this.accounts.reduce((total, account) => {
@@ -136,12 +137,12 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
           this.totalBalance = 0;
           console.log('No accounts found, setting total balance to 0');
         }
-        
+
         console.log('Total balance calculated:', this.totalBalance);
       } else {
         console.log('No current user found');
       }
-      
+
     } catch (error) {
       console.error('Error loading client data:', error);
     } finally {
@@ -153,12 +154,12 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
   formatCurrency(amount: number, currency: string = 'EUR'): string {
     // Ensure amount is a valid number
     let numericAmount = typeof amount === 'number' ? amount : parseFloat(amount as any) || 0;
-    
+
     // Check for NaN or invalid values
     if (isNaN(numericAmount) || !isFinite(numericAmount)) {
       numericAmount = 0;
     }
-    
+
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: currency
@@ -176,13 +177,25 @@ export class ClientDashboardComponent implements OnInit, OnDestroy {
   getAccountBalance(account: Account): number {
     // Ensure balance is always a valid number
     let balance = typeof account.balance === 'number' ? account.balance : parseFloat(account.balance as any) || 0;
-    
+
     // Check for NaN or invalid values
     if (isNaN(balance) || !isFinite(balance)) {
       balance = 0;
     }
-    
+
     console.log('getAccountBalance for', account.accountName, ':', balance, 'from', account.balance);
     return balance;
+  }
+
+  showAdminMessage(message: string | undefined) {
+    if (message) {
+      this.selectedMessage = message;
+    } else {
+      this.selectedMessage = 'Pending Admin Approval';
+    }
+  }
+
+  closeMessage() {
+    this.selectedMessage = null;
   }
 }

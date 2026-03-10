@@ -19,6 +19,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ClientLoginComponent } from './components/client-login/client-login.component';
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
 import { ClientLayoutComponent } from './components/client-layout/client-layout.component';
+import { WithdrawalComponent } from './components/withdrawal/withdrawal.component';
 // import { TestAdminComponent } from './components/test-admin/test-admin.component';
 import { AdminModule } from './admin/admin.module';
 import { FirebaseTestService } from './services/firebase-test.service';
@@ -38,7 +39,8 @@ import { environment } from '../environments/environment';
     SidebarComponent,
     ClientLoginComponent,
     ClientDashboardComponent,
-    ClientLayoutComponent
+    ClientLayoutComponent,
+    WithdrawalComponent
   ],
   imports: [
     BrowserModule,

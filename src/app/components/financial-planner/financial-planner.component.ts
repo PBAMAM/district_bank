@@ -40,6 +40,7 @@ export class FinancialPlannerComponent implements OnInit {
   transactions: Transaction[] = [];
   currentUser: User | null = null;
   isLoading = true;
+  selectedMessage: string | null = null;
 
   // Transaction analysis data
   monthlyIncome: number[] = [];
@@ -178,11 +179,11 @@ export class FinancialPlannerComponent implements OnInit {
   async loadFinancialData() {
     try {
       this.isLoading = true;
-      
+
       if (this.currentUser) {
         // Load user's accounts and transactions
         this.accounts = await this.firebaseService.getAccounts(this.currentUser.id);
-        
+
         // Load transactions for all accounts
         if (this.accounts.length > 0) {
           const allTransactions: Transaction[] = [];
@@ -191,23 +192,23 @@ export class FinancialPlannerComponent implements OnInit {
             allTransactions.push(...accountTransactions);
           }
           // Sort by creation date (newest first)
-          this.transactions = allTransactions.sort((a, b) => 
+          this.transactions = allTransactions.sort((a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         }
-        
+
         // Update chart data with real transaction data
         this.updateChartData();
-        
+
         // Perform comprehensive transaction analysis
         this.analyzeTransactions();
-        
+
         // Generate keywords from transactions
         this.generateKeywords();
-        
+
         // Calculate budget analysis
         this.calculateBudgetAnalysis();
-        
+
         // Generate forecast data
         this.generateForecastData();
       }
@@ -223,7 +224,7 @@ export class FinancialPlannerComponent implements OnInit {
     const last3Months = this.getLast3MonthsTransactions();
     const income = this.calculateMonthlyAmounts(last3Months, 'income');
     const expenditure = this.calculateMonthlyAmounts(last3Months, 'expenditure');
-    
+
     this.incomeExpenditureData = {
       labels: ['July', 'August', 'September'],
       datasets: [
@@ -248,8 +249,8 @@ export class FinancialPlannerComponent implements OnInit {
   getLast3MonthsTransactions(): Transaction[] {
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-    
-    return this.transactions.filter(transaction => 
+
+    return this.transactions.filter(transaction =>
       new Date(transaction.createdAt) >= threeMonthsAgo
     );
   }
@@ -261,7 +262,7 @@ export class FinancialPlannerComponent implements OnInit {
         const transactionDate = new Date(t.createdAt);
         return transactionDate.getMonth() + 1 === month;
       });
-      
+
       return monthTransactions.reduce((total, t) => {
         if (type === 'income' && t.amount > 0) {
           return total + t.amount;
@@ -278,11 +279,11 @@ export class FinancialPlannerComponent implements OnInit {
     this.totalIncome = this.transactions
       .filter(t => t.amount > 0)
       .reduce((total, t) => total + t.amount, 0);
-    
+
     this.totalExpenditure = this.transactions
       .filter(t => t.amount < 0)
       .reduce((total, t) => total + Math.abs(t.amount), 0);
-    
+
     this.totalSurplus = this.totalIncome - this.totalExpenditure;
 
     // Calculate monthly averages
@@ -310,12 +311,12 @@ export class FinancialPlannerComponent implements OnInit {
 
   analyzeTransactionCategories() {
     const categories: { [key: string]: { amount: number; count: number } } = {};
-    
+
     this.transactions.forEach(transaction => {
       // Extract category from description (simplified)
       const description = transaction.description.toLowerCase();
       let category = 'Other';
-      
+
       if (description.includes('grocery') || description.includes('food') || description.includes('supermarket')) {
         category = 'Food & Groceries';
       } else if (description.includes('rent') || description.includes('mortgage') || description.includes('housing')) {
@@ -345,19 +346,19 @@ export class FinancialPlannerComponent implements OnInit {
 
   generateKeywords() {
     const keywordCount: { [key: string]: number } = {};
-    
+
     this.transactions.forEach(transaction => {
       const words = transaction.description.toLowerCase()
         .split(/\s+/)
         .filter(word => word.length > 3 && !this.isCommonWord(word));
-      
+
       words.forEach(word => {
         keywordCount[word] = (keywordCount[word] || 0) + 1;
       });
     });
 
     this.keywords = Object.entries(keywordCount)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 10)
       .map(([word]) => `#${word}`);
   }
@@ -370,17 +371,17 @@ export class FinancialPlannerComponent implements OnInit {
   calculateBudgetAnalysis() {
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
-    
+
     const currentMonthTransactions = this.transactions.filter(t => {
       const transactionDate = new Date(t.createdAt);
-      return transactionDate.getMonth() === currentMonth && 
-             transactionDate.getFullYear() === currentYear;
+      return transactionDate.getMonth() === currentMonth &&
+        transactionDate.getFullYear() === currentYear;
     });
 
     this.postedAmount = currentMonthTransactions
       .filter(t => t.amount < 0)
       .reduce((total, t) => total + Math.abs(t.amount), 0);
-    
+
     this.remainingAmount = Math.max(0, this.monthlyBudget - this.postedAmount);
 
     // Update budget chart
@@ -400,7 +401,7 @@ export class FinancialPlannerComponent implements OnInit {
     const mainAccount = this.accounts[0];
     const currentBalance = mainAccount.balance;
     const monthlyGrowth = this.averageMonthlySurplus;
-    
+
     const forecastData = [currentBalance];
     for (let i = 1; i < 12; i++) {
       forecastData.push(currentBalance + (monthlyGrowth * i));
@@ -420,5 +421,17 @@ export class FinancialPlannerComponent implements OnInit {
       style: 'currency',
       currency: 'EUR'
     }).format(amount);
+  }
+
+  showAdminMessage(message: string | undefined) {
+    if (message) {
+      this.selectedMessage = message;
+    } else {
+      this.selectedMessage = 'Pending Admin Approval';
+    }
+  }
+
+  closeMessage() {
+    this.selectedMessage = null;
   }
 }
