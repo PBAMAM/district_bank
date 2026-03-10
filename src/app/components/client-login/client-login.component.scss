@@ -258,6 +258,14 @@
         }
       }
     }
+
+    .mobile-only {
+      display: none;
+    }
+
+    .desktop-only {
+      display: flex;
+    }
   }
 
   /* Sub Nav */
@@ -319,6 +327,9 @@
       width: 100%;
       max-width: 400px;
       border-radius: 12px;
+      margin: 0 16px;
+      max-height: 90vh;
+      overflow-y: auto;
 
       .btn-close {
         background: none;
@@ -599,14 +610,255 @@
       }
     }
 
+    .hero-section {
+      height: auto !important;
+    }
+
     .hero-section .hero-content-left {
       width: 100%;
-      background: rgba(230, 217, 202, 0.9);
+      position: relative;
+      background: rgba(230, 217, 202, 0.95);
       padding: 40px 20px;
     }
 
-    .sub-nav-bar {
-      display: none;
+    .sub-nav-wrapper {
+      display: none; // Hide subnav on mobile
+    }
+
+    .actions-area {
+      gap: 12px !important;
+
+      .btn-yellow-pill .d-none-mobile {
+        display: none;
+      }
+    }
+
+    .main-header {
+      .desktop-only {
+        display: none !important;
+      }
+
+      .mobile-only {
+        display: flex;
+        background-color: #0076a8;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+    }
+
+    .virtual-keyboard-overlay {
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      justify-content: center;
+
+      .vk-container {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 12px 12px 0 0;
+        padding: 12px;
+
+        .vk-key {
+          padding: 12px 0;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    /* Clean up the top bar */
+    .top-meta-bar {
+
+      .meta-links-left,
+      .stock-ticker {
+        display: none !important;
+      }
+
+      .container {
+        justify-content: flex-end !important;
+      }
+    }
+
+    /* Resize logo */
+    .logo-svg {
+      width: 130px;
+      height: auto;
+    }
+
+    /* Create horizontal scroll carousels for products and articles */
+    .products-section .grid-2,
+    .also-like-section .grid-3 {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 16px;
+      padding-bottom: 20px;
+      margin-left: -20px;
+      margin-right: -20px;
+      padding-left: 20px;
+      padding-right: 20px;
+
+      &::-webkit-scrollbar {
+        height: 0px;
+        display: none;
+        /* Hide scrollbar for cleaner look */
+      }
+
+      >div {
+        flex: 0 0 85%;
+        scroll-snap-align: center;
+      }
+    }
+
+    /* Make advantages a 2-column grid instead of 1 column */
+    .advantages-container .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .advantages-container .adv-icon {
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+    }
+
+    /* Footer: 2 columns instead of 1 */
+    .dense-footer .footer-links-grid.grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 24px;
+    }
+
+    /* Adjust video section vertical spacing */
+    .video-section .video-thumbnail {
+      min-height: 200px;
+    }
+
+    /* Center hero section text on mobile */
+    .hero-section .hero-content-left {
+      text-align: center;
+
+      .hero-title {
+        font-size: 32px;
+      }
+    }
+
+    /* Quick links styling to distribute better */
+    .quick-links-section .d-flex {
+      justify-content: space-evenly !important;
+
+      .quick-pill {
+        flex: 0 0 45%;
+        /* Two columns roughly */
+        justify-content: center;
+        padding: 10px 12px;
+
+        .pill-icon {
+          display: none;
+          /* Hide icon to fit text better */
+        }
+      }
+    }
+  }
+
+  /* Virtual Keyboard */
+  .virtual-keyboard-overlay {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10001;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    .vk-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      width: 400px;
+      user-select: none;
+
+      .vk-header {
+        .vk-close {
+          background: none;
+          border: none;
+          font-size: 20px;
+          cursor: pointer;
+          color: var(--text-muted);
+          line-height: 1;
+
+          &:hover {
+            color: var(--text-dark);
+          }
+        }
+      }
+
+      .vk-body {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .vk-row {
+          display: flex;
+          justify-content: center;
+          gap: 6px;
+
+          &.vk-action-row {
+            justify-content: space-between;
+          }
+
+          .vk-key {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 0;
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+            &:hover,
+            &:active {
+              background: #e2e8f0;
+              transform: translateY(1px);
+            }
+
+            &.vk-action {
+              font-size: 12px;
+              font-weight: 600;
+              padding: 10px 8px;
+              background: #e2e8f0;
+
+              &.vk-active {
+                background: var(--blue-brand);
+                color: white;
+                border-color: var(--blue-brand);
+              }
+            }
+
+            &.vk-space {
+              flex: 3;
+            }
+
+            &.text-danger {
+              color: #e53e3e;
+            }
+          }
+        }
+      }
     }
   }
 }

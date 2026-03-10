@@ -44,6 +44,27 @@ export class ClientLoginComponent implements OnInit {
   successMessage = '';
   showLoginForm = false;
 
+  // Virtual Keyboard State
+  showKeyboard = false;
+  keyboardTarget: 'login-header' | 'login-modal' | 'register-modal' = 'login-header';
+  keyboardControl: 'email' | 'password' = 'password';
+  isShifted = false;
+  isSymbols = false;
+
+  // Keyboard Layouts
+  keyboardLetters = [
+    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+    ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+  ];
+
+  keyboardSymbols = [
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'],
+    ['-', '_', '=', '+', '[', ']', '{', '}', ';', ':'],
+    ['\'', '"', ',', '.', '<', '>', '/', '?', '\\', '|']
+  ];
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -159,5 +180,81 @@ export class ClientLoginComponent implements OnInit {
   clearMessages() {
     this.errorMessage = '';
     this.successMessage = '';
+  }
+
+  // Virtual Keyboard Logic
+  toggleKeyboard(target: 'login-header' | 'login-modal' | 'register-modal', control: 'email' | 'password', event: Event) {
+    event.preventDefault(); // Prevent page scroll/jump
+    if (this.showKeyboard && this.keyboardTarget === target && this.keyboardControl === control) {
+      this.closeKeyboard();
+    } else {
+      this.keyboardTarget = target;
+      this.keyboardControl = control;
+      this.showKeyboard = true;
+    }
+  }
+
+  closeKeyboard() {
+    this.showKeyboard = false;
+    this.isShifted = false;
+    this.isSymbols = false;
+  }
+
+  handleKeyPress(key: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Determine target form and control
+    let targetForm: FormGroup;
+    let controlName = this.keyboardControl;
+
+    if (this.keyboardTarget === 'login-header' || this.keyboardTarget === 'login-modal') {
+      targetForm = this.loginForm;
+    } else {
+      targetForm = this.registerForm;
+    }
+
+    const control = targetForm.get(controlName);
+    if (!control) return;
+
+    let currentValue = control.value || '';
+
+    // Handle special keys
+    switch (key) {
+      case 'BACKSPACE':
+        control.setValue(currentValue.slice(0, -1));
+        break;
+      case 'CLEAR':
+        control.setValue('');
+        break;
+      case 'SHIFT':
+        this.isShifted = !this.isShifted;
+        break;
+      case 'SYMBOLS':
+        this.isSymbols = !this.isSymbols;
+        this.isShifted = false; // Reset shift when changing mode
+        break;
+      case 'SPACE':
+        control.setValue(currentValue + ' ');
+        break;
+      case 'CLOSE':
+        this.closeKeyboard();
+        break;
+      default:
+        // Handle regular keys
+        const charToAppend = this.isShifted ? key.toUpperCase() : key;
+        control.setValue(currentValue + charToAppend);
+
+        // Auto-unshift if shifted but not in symbol mode
+        if (this.isShifted && !this.isSymbols) {
+          this.isShifted = false;
+        }
+        break;
+    }
+
+    // Mark as dirty and touched so validation messages (if any) update
+    control.markAsDirty();
+    control.markAsTouched();
+    targetForm.updateValueAndValidity();
   }
 }

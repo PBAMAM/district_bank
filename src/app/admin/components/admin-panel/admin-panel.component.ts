@@ -52,7 +52,8 @@ export class AdminPanelComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      role: ['customer', [Validators.required]]
+      role: ['customer', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
     this.transferForm = this.fb.group({
@@ -80,7 +81,7 @@ export class AdminPanelComponent implements OnInit {
       this.users = await this.firebaseService.getAllUsers();
       this.accounts = await this.firebaseService.getAllAccounts();
       this.transactions = await this.firebaseService.getAllTransactions();
-      
+
       console.log('Loaded data:', {
         users: this.users.length,
         accounts: this.accounts.length,
@@ -110,15 +111,15 @@ export class AdminPanelComponent implements OnInit {
       this.clearMessages();
 
       try {
-        const userData = this.createUserForm.value;
-        
+        const { password, ...userData } = this.createUserForm.value;
+
         // Create user in Firebase Auth and Firestore
         const firebaseUser = await this.firebaseService.register(
-          userData.email, 
-          'defaultPassword123', // Default password for new users
+          userData.email,
+          password,
           userData
         );
-        
+
         if (firebaseUser) {
           // Create our custom User object
           const newUser: User = {
@@ -131,14 +132,14 @@ export class AdminPanelComponent implements OnInit {
             isActive: true,
             createdAt: new Date()
           };
-          
+
           this.users.push(newUser);
           this.createUserForm.reset();
-          this.successMessage = 'User created successfully! Password: defaultPassword123';
+          this.successMessage = 'User created successfully!';
         } else {
           this.errorMessage = 'Failed to create user';
         }
-        
+
       } catch (error) {
         this.errorMessage = 'Failed to create user: ' + (error as Error).message;
         console.error('Error creating user:', error);
@@ -156,12 +157,12 @@ export class AdminPanelComponent implements OnInit {
       try {
         const accountData = this.createAccountForm.value;
         const owner = this.users.find(u => u.id === accountData.ownerId);
-        
+
         if (!owner) {
           this.errorMessage = 'Selected user not found';
           return;
         }
-        
+
         // Create account in Firebase
         const newAccount: Omit<Account, 'id'> = {
           ...accountData,
@@ -172,9 +173,9 @@ export class AdminPanelComponent implements OnInit {
           createdAt: new Date(),
           updatedAt: new Date()
         };
-        
+
         const accountId = await this.firebaseService.createAccount(newAccount);
-        
+
         if (accountId) {
           // Add to local array for immediate UI update
           this.accounts.push({ id: accountId, ...newAccount });
@@ -183,7 +184,7 @@ export class AdminPanelComponent implements OnInit {
         } else {
           this.errorMessage = 'Failed to create account';
         }
-        
+
       } catch (error) {
         this.errorMessage = 'Failed to create account: ' + (error as Error).message;
         console.error('Error creating account:', error);
@@ -200,16 +201,16 @@ export class AdminPanelComponent implements OnInit {
 
       try {
         const transferData = this.transferForm.value;
-        
+
         // Convert amount to number to prevent NaN issues
         const amount = parseFloat(transferData.amount);
-        
+
         // Validate amount conversion
         if (isNaN(amount) || amount <= 0) {
           this.errorMessage = 'Please enter a valid amount';
           return;
         }
-        
+
         const fromAccount = this.accounts.find(a => a.id === transferData.fromAccountId);
         const toAccount = this.accounts.find(a => a.id === transferData.toAccountId);
 
@@ -238,17 +239,17 @@ export class AdminPanelComponent implements OnInit {
 
         // Save transaction to Firebase
         const transactionId = await this.firebaseService.createTransaction(transaction);
-        
+
         if (transactionId) {
           // Update account balances in Firebase
           await this.firebaseService.updateAccountBalance(fromAccount.id, fromAccount.balance - amount);
           await this.firebaseService.updateAccountBalance(toAccount.id, toAccount.balance + amount);
-          
+
           // Update local data for immediate UI update
           fromAccount.balance -= amount;
           toAccount.balance += amount;
           this.transactions.unshift({ id: transactionId, ...transaction });
-          
+
           this.transferForm.reset();
           this.successMessage = 'Transfer completed successfully!';
         } else {
@@ -271,16 +272,16 @@ export class AdminPanelComponent implements OnInit {
 
       try {
         const depositData = this.adminDepositForm.value;
-        
+
         // Convert amount to number to prevent NaN issues
         const amount = parseFloat(depositData.amount);
-        
+
         // Validate amount conversion
         if (isNaN(amount) || amount <= 0) {
           this.errorMessage = 'Please enter a valid amount';
           return;
         }
-        
+
         const toAccount = this.accounts.find(a => a.id === depositData.toAccountId);
 
         if (!toAccount) {
@@ -303,22 +304,22 @@ export class AdminPanelComponent implements OnInit {
 
         // Save transaction to Firebase
         const transactionId = await this.firebaseService.createTransaction(transaction);
-        
+
         if (transactionId) {
           // Fetch current balance from Firebase to ensure we have the latest value
           const currentBalance = await this.firebaseService.getAccountBalance(toAccount.id);
           console.log(`Admin Deposit: Fetched current balance from Firebase: ${currentBalance}, Deposit amount: ${amount}`);
-          
+
           const newBalance = currentBalance + amount;
           console.log(`Admin Deposit: New balance will be: ${newBalance}`);
-          
+
           // Update account balance in Firebase
           await this.firebaseService.updateAccountBalance(toAccount.id, newBalance);
-          
+
           // Update local data for immediate UI update
           toAccount.balance = newBalance;
           this.transactions.unshift({ id: transactionId, ...transaction });
-          
+
           this.adminDepositForm.reset();
           this.successMessage = `Successfully deposited ${this.formatCurrency(amount)} to ${toAccount.ownerName}'s account!`;
         } else {
@@ -353,7 +354,7 @@ export class AdminPanelComponent implements OnInit {
 
     try {
       const sampleData = await this.accountCreationService.createSampleUserWithAccounts();
-      
+
       // Add sample user
       const newUser: User = {
         id: Date.now().toString(),
@@ -365,9 +366,9 @@ export class AdminPanelComponent implements OnInit {
         isActive: true,
         createdAt: new Date()
       };
-      
+
       this.users.push(newUser);
-      
+
       // Add sample accounts with correct ownerId
       sampleData.accounts.forEach((accountData, index) => {
         const newAccount: Account = {
@@ -378,9 +379,9 @@ export class AdminPanelComponent implements OnInit {
         };
         this.accounts.push(newAccount);
       });
-      
+
       this.successMessage = 'Sample data created successfully!';
-      
+
     } catch (error) {
       this.errorMessage = 'Failed to create sample data';
       console.error('Error creating sample data:', error);

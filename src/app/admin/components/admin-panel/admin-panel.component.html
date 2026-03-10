@@ -5,15 +5,12 @@
         <h1>Admin Panel</h1>
         <p>Manage customers, accounts, and transactions</p>
       </div>
-     
+
     </div>
   </div>
 
   <div class="admin-tabs">
-    <button 
-      class="tab-btn" 
-      [class.active]="activeTab === 'users'"
-      (click)="setActiveTab('users')">
+    <button class="tab-btn" [class.active]="activeTab === 'users'" (click)="setActiveTab('users')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
         <circle cx="9" cy="7" r="4"></circle>
@@ -22,20 +19,14 @@
       </svg>
       Users
     </button>
-    <button 
-      class="tab-btn" 
-      [class.active]="activeTab === 'accounts'"
-      (click)="setActiveTab('accounts')">
+    <button class="tab-btn" [class.active]="activeTab === 'accounts'" (click)="setActiveTab('accounts')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
       </svg>
       Accounts
     </button>
-    <button 
-      class="tab-btn" 
-      [class.active]="activeTab === 'transfers'"
-      (click)="setActiveTab('transfers')">
+    <button class="tab-btn" [class.active]="activeTab === 'transfers'" (click)="setActiveTab('transfers')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"></line>
         <polyline points="19 12 12 19 5 12"></polyline>
@@ -46,14 +37,16 @@
 
   <!-- Messages -->
   <div *ngIf="successMessage" class="message success-message">
-    <svg class="message-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg class="message-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
     <span>{{ successMessage }}</span>
   </div>
 
   <div *ngIf="errorMessage" class="message error-message">
-    <svg class="message-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg class="message-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="12" y1="8" x2="12" y2="12"></line>
       <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -75,7 +68,7 @@
           <h2>Create New User</h2>
         </div>
       </div>
-      
+
       <form [formGroup]="createUserForm" (ngSubmit)="createUser()" class="admin-form">
         <div class="form-row">
           <div class="form-group">
@@ -99,7 +92,7 @@
             <input type="text" id="firstName" formControlName="firstName" class="form-control" placeholder="John">
           </div>
         </div>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="lastName">
@@ -126,7 +119,22 @@
             </select>
           </div>
         </div>
-        
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              Password
+            </label>
+            <input type="password" id="password" formControlName="password" class="form-control"
+              placeholder="Password (min 6 chars)"
+              [class.error]="createUserForm.get('password')?.invalid && createUserForm.get('password')?.touched">
+          </div>
+        </div>
+
         <button type="submit" class="btn btn-primary" [disabled]="createUserForm.invalid || isLoading">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -150,7 +158,7 @@
           <span class="user-count">{{ users.length }} {{ users.length === 1 ? 'user' : 'users' }}</span>
         </div>
       </div>
-      
+
       <div class="data-table-wrapper">
         <table class="data-table">
           <thead>
@@ -179,7 +187,8 @@
                 <div class="email-cell">{{ user.email }}</div>
               </td>
               <td>
-                <span class="role-badge" [class.admin]="user.role === 'admin'" [class.customer]="user.role === 'customer'">
+                <span class="role-badge" [class.admin]="user.role === 'admin'"
+                  [class.customer]="user.role === 'customer'">
                   {{ user.role === 'admin' ? 'ADMIN' : 'CUSTOMER' }}
                 </span>
               </td>
@@ -231,7 +240,7 @@
           <h2>Create New Account</h2>
         </div>
       </div>
-      
+
       <form [formGroup]="createAccountForm" (ngSubmit)="createAccount()" class="admin-form">
         <div class="form-row">
           <div class="form-group">
@@ -243,7 +252,7 @@
             <input type="text" id="iban" formControlName="iban" class="form-control">
           </div>
         </div>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="accountType">Account Type</label>
@@ -254,7 +263,7 @@
             <input type="text" id="accountName" formControlName="accountName" class="form-control">
           </div>
         </div>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="initialBalance">Initial Balance</label>
@@ -269,7 +278,7 @@
             </select>
           </div>
         </div>
-        
+
         <div class="form-group">
           <label for="ownerId">Owner</label>
           <select id="ownerId" formControlName="ownerId" class="form-control">
@@ -279,7 +288,7 @@
             </option>
           </select>
         </div>
-        
+
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" [disabled]="createAccountForm.invalid || isLoading">
             {{ isLoading ? 'Creating...' : 'Create Account' }}
@@ -301,7 +310,7 @@
           <h2>All Accounts</h2>
         </div>
       </div>
-      
+
       <div class="data-table-wrapper">
         <table class="data-table">
           <thead>
@@ -349,7 +358,7 @@
         </div>
         <p class="card-subtitle">Add money to any client account</p>
       </div>
-      
+
       <form [formGroup]="adminDepositForm" (ngSubmit)="processAdminDeposit()" class="admin-form">
         <div class="form-row">
           <div class="form-group">
@@ -357,21 +366,24 @@
             <select id="depositToAccountId" formControlName="toAccountId" class="form-control">
               <option value="">Select Account</option>
               <option *ngFor="let account of accounts" [value]="account.id">
-                {{ account.ownerName }} - {{ account.accountType }} ({{ account.iban }}) - {{ formatCurrency(account.balance, account.currency) }}
+                {{ account.ownerName }} - {{ account.accountType }} ({{ account.iban }}) - {{
+                formatCurrency(account.balance, account.currency) }}
               </option>
             </select>
           </div>
           <div class="form-group">
             <label for="depositAmount">Amount</label>
-            <input type="number" id="depositAmount" formControlName="amount" class="form-control" step="0.01" min="0.01">
+            <input type="number" id="depositAmount" formControlName="amount" class="form-control" step="0.01"
+              min="0.01">
           </div>
         </div>
-        
+
         <div class="form-group">
           <label for="depositDescription">Description</label>
-          <input type="text" id="depositDescription" formControlName="description" class="form-control" placeholder="e.g., Bank deposit, Refund, etc.">
+          <input type="text" id="depositDescription" formControlName="description" class="form-control"
+            placeholder="e.g., Bank deposit, Refund, etc.">
         </div>
-        
+
         <button type="submit" class="btn btn-success" [disabled]="adminDepositForm.invalid || isLoading">
           {{ isLoading ? 'Processing...' : 'Add Money to Account' }}
         </button>
@@ -389,7 +401,7 @@
         </div>
         <p class="card-subtitle">Transfer money between accounts</p>
       </div>
-      
+
       <form [formGroup]="transferForm" (ngSubmit)="processTransfer()" class="admin-form">
         <div class="form-row">
           <div class="form-group">
@@ -411,7 +423,7 @@
             </select>
           </div>
         </div>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="amount">Amount</label>
@@ -422,7 +434,7 @@
             <input type="text" id="description" formControlName="description" class="form-control">
           </div>
         </div>
-        
+
         <button type="submit" class="btn btn-primary" [disabled]="transferForm.invalid || isLoading">
           {{ isLoading ? 'Processing...' : 'Process Transfer' }}
         </button>
@@ -439,7 +451,7 @@
           <h2>Recent Transactions</h2>
         </div>
       </div>
-      
+
       <div class="data-table-wrapper">
         <table class="data-table">
           <thead>

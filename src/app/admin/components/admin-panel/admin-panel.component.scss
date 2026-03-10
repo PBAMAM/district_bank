@@ -136,6 +136,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -274,6 +275,21 @@
 
 .form-control::placeholder {
   color: #6c757d;
+}
+
+select.form-control {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+
+  option {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 10px;
+  }
 }
 
 .form-actions {
@@ -515,11 +531,11 @@
   .tab-content {
     padding: 24px 32px;
   }
-  
+
   .admin-header {
     padding: 24px 32px;
   }
-  
+
   .admin-tabs {
     padding: 20px 32px;
   }
@@ -529,65 +545,73 @@
   .admin-panel {
     padding: 0;
   }
-  
+
   .admin-header {
     padding: 20px 24px;
   }
-  
+
   .header-content {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .admin-header h1 {
     font-size: 24px;
   }
-  
+
   .admin-tabs {
     padding: 16px 24px;
     overflow-x: auto;
     flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
-  
+
   .tab-btn {
     padding: 12px 16px;
     font-size: 14px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
-  
+
   .tab-content {
     padding: 20px 24px;
   }
-  
+
   .content-card {
     padding: 24px;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
   .data-table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    margin: 0 -24px;
+    padding: 0 24px 16px 24px;
   }
-  
+
   .data-table {
     min-width: 800px;
   }
-  
+
   .data-table th,
   .data-table td {
     padding: 12px 16px;
     font-size: 13px;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .btn {
     width: 100%;
     justify-content: center;
@@ -598,27 +622,27 @@
   .admin-header {
     padding: 16px 20px;
   }
-  
+
   .admin-header h1 {
     font-size: 20px;
   }
-  
+
   .admin-header p {
     font-size: 14px;
   }
-  
+
   .tab-content {
     padding: 16px 20px;
   }
-  
+
   .content-card {
     padding: 20px;
   }
-  
+
   .header-title h2 {
     font-size: 20px;
   }
-  
+
   .data-table th,
   .data-table td {
     padding: 10px 12px;

@@ -34,20 +34,29 @@
 
       <div class="actions-area d-flex align-center gap-4">
         <button class="btn-yellow-pill d-flex align-center gap-2" (click)="showLoginForm = true; isLoginMode = false">
-          <span class="icon">👤+</span> Open account
+          <span class="icon">👤+</span> <span class="d-none-mobile">Open account</span>
+        </button>
+
+        <!-- Mobile Login Button -->
+        <button class="btn-blue-pill mobile-only d-flex align-center gap-2"
+          (click)="showLoginForm = true; isLoginMode = true">
+          <span class="icon">🔒</span> Login
         </button>
 
         <!-- Inline Login Form inside Header -->
-        <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="inline-login-form d-flex gap-2 align-start">
-          <div class="input-col">
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()"
+          class="inline-login-form desktop-only d-flex gap-2 align-start">
+          <div class="input-col" style="position: relative;">
             <input type="email" formControlName="email" placeholder="Identifier" class="header-input"
               [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-            <a href="#" class="header-link mt-1 d-block">Have you forgotten your credentials?</a>
+            <a href="#" (click)="toggleKeyboard('login-header', 'email', $event)"
+              class="header-link mt-1 d-block text-right">Virtual keyboard ⌨️</a>
           </div>
-          <div class="input-col">
+          <div class="input-col" style="position: relative;">
             <input type="password" formControlName="password" placeholder="Password" class="header-input"
               [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            <a href="#" class="header-link mt-1 d-block text-right">Virtual keyboard</a>
+            <a href="#" (click)="toggleKeyboard('login-header', 'password', $event)"
+              class="header-link mt-1 d-block text-right">Virtual keyboard ⌨️</a>
           </div>
           <button type="submit" class="btn-blue-pill" [disabled]="loginForm.invalid || isLoading">
             {{ isLoading ? '...' : 'Log in' }}
@@ -91,13 +100,23 @@
       <!-- Login Form -->
       <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <div class="form-group mb-3">
-          <label class="form-label text-sm text-muted mb-1">Identifier or Email</label>
+          <div class="d-flex justify-between align-center mb-1">
+            <label class="form-label text-sm text-muted mb-0">Identifier or Email</label>
+            <a href="#" (click)="toggleKeyboard('login-modal', 'email', $event)"
+              class="text-xs color-primary underline">Virtual
+              keyboard ⌨️</a>
+          </div>
           <input type="email" formControlName="email" class="form-control"
             [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
         </div>
 
         <div class="form-group mb-4">
-          <label class="form-label text-sm text-muted mb-1">Password</label>
+          <div class="d-flex justify-between align-center mb-1">
+            <label class="form-label text-sm text-muted mb-0">Password</label>
+            <a href="#" (click)="toggleKeyboard('login-modal', 'password', $event)"
+              class="text-xs color-primary underline">Virtual
+              keyboard ⌨️</a>
+          </div>
           <input type="password" formControlName="password" class="form-control"
             [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         </div>
@@ -120,8 +139,21 @@
           <input type="text" formControlName="firstName" class="form-control flex-1" placeholder="First Name">
           <input type="text" formControlName="lastName" class="form-control flex-1" placeholder="Last Name">
         </div>
+        <div class="d-flex justify-between align-center mb-1 mt-2">
+          <label class="form-label text-sm text-muted mb-0">Email Address</label>
+          <a href="#" (click)="toggleKeyboard('register-modal', 'email', $event)"
+            class="text-xs color-primary underline">Virtual
+            keyboard ⌨️</a>
+        </div>
         <input type="email" formControlName="email" class="form-control mb-2" placeholder="Email Address">
         <input type="tel" formControlName="phone" class="form-control mb-2" placeholder="Phone Number">
+        <input type="text" formControlName="address" class="form-control mb-2" placeholder="Address">
+        <div class="d-flex justify-between align-center mb-1">
+          <label class="form-label text-sm text-muted mb-0">Password</label>
+          <a href="#" (click)="toggleKeyboard('register-modal', 'password', $event)"
+            class="text-xs color-primary underline">Virtual
+            keyboard ⌨️</a>
+        </div>
         <input type="password" formControlName="password" class="form-control mb-2" placeholder="Password">
         <input type="password" formControlName="confirmPassword" class="form-control mb-3"
           placeholder="Confirm Password">
@@ -419,4 +451,51 @@
 
     </div>
   </footer>
+
+  <!-- Virtual Keyboard Overlay -->
+  <div class="virtual-keyboard-overlay" *ngIf="showKeyboard">
+    <div class="vk-container shadow-elegant" (mousedown)="$event.preventDefault()">
+      <div class="vk-header d-flex justify-between align-center mb-3 border-bottom pb-2">
+        <span class="font-bold text-sm color-dark">Virtual Keyboard</span>
+        <button class="vk-close" (click)="closeKeyboard()">&times;</button>
+      </div>
+
+      <div class="vk-body">
+        <ng-container *ngIf="!isSymbols">
+          <div class="vk-row" *ngFor="let row of keyboardLetters">
+            <button class="vk-key" *ngFor="let key of row" (click)="handleKeyPress(key, $event)">
+              {{ isShifted ? (key | uppercase) : key }}
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="isSymbols">
+          <div class="vk-row" *ngFor="let row of keyboardSymbols">
+            <button class="vk-key" *ngFor="let key of row" (click)="handleKeyPress(key, $event)">
+              {{ key }}
+            </button>
+          </div>
+        </ng-container>
+
+        <div class="vk-row vk-action-row mt-2">
+          <button class="vk-key vk-action" (click)="handleKeyPress('SHIFT', $event)"
+            [class.vk-active]="isShifted && !isSymbols">
+            Shift ⇧
+          </button>
+          <button class="vk-key vk-action" (click)="handleKeyPress('SYMBOLS', $event)" [class.vk-active]="isSymbols">
+            123 / !#?
+          </button>
+          <button class="vk-key vk-space" (click)="handleKeyPress('SPACE', $event)">
+            Space
+          </button>
+          <button class="vk-key vk-action" (click)="handleKeyPress('CLEAR', $event)">
+            Clear
+          </button>
+          <button class="vk-key vk-action text-danger" (click)="handleKeyPress('BACKSPACE', $event)">
+            ⌫
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

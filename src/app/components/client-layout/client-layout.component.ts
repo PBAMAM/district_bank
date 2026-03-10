@@ -10,11 +10,12 @@ import { User } from '../../models/account.model';
 })
 export class ClientLayoutComponent implements OnInit {
   currentUser: User | null = null;
+  isSidebarOpen = false;
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Check if user is authenticated and is client
@@ -39,5 +40,13 @@ export class ClientLayoutComponent implements OnInit {
       return (first + last).toUpperCase();
     }
     return 'U';
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  closeSidebar() {
+    this.isSidebarOpen = false;
   }
 }

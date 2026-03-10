@@ -1,4 +1,4 @@
-<aside class="sidebar">
+<aside class="sidebar" [class.open]="isOpen">
   <div class="sidebar-header">
     <div class="logo">
       <svg viewBox="0 0 150 30" width="160" height="40" class="logo-svg">
@@ -19,28 +19,28 @@
     <div class="nav-section">
       <p class="nav-section-title">MY BANKING</p>
 
-      <a routerLink="/client/dashboard" routerLinkActive="active" class="nav-item">
+      <a routerLink="/client/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <div class="nav-icon-wrapper">
           <span class="nav-icon">🏠</span>
         </div>
         <span class="nav-text">Dashboard</span>
       </a>
 
-      <a routerLink="/client/accounts" routerLinkActive="active" class="nav-item">
+      <a routerLink="/client/accounts" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <div class="nav-icon-wrapper">
           <span class="nav-icon">📊</span>
         </div>
         <span class="nav-text">Account Overview</span>
       </a>
 
-      <a routerLink="/client/transfer" routerLinkActive="active" class="nav-item">
+      <a routerLink="/client/transfer" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <div class="nav-icon-wrapper">
           <span class="nav-icon">💸</span>
         </div>
         <span class="nav-text">Transfer Money</span>
       </a>
 
-      <a routerLink="/client/transactions" routerLinkActive="active" class="nav-item">
+      <a routerLink="/client/transactions" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <div class="nav-icon-wrapper">
           <span class="nav-icon">📈</span>
         </div>
@@ -50,7 +50,7 @@
 
     <div class="nav-section mt-4">
       <p class="nav-section-title">SETTINGS</p>
-      <a href="javascript:void(0)" class="nav-item">
+      <a href="javascript:void(0)" class="nav-item" (click)="closeSidebar()">
         <div class="nav-icon-wrapper">
           <span class="nav-icon">⚙️</span>
         </div>

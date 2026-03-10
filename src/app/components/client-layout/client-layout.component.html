@@ -1,6 +1,13 @@
 <div class="client-layout">
   <div class="client-header">
     <div class="header-left">
+      <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
       <h2 class="page-title m-0">Dashboard</h2>
     </div>
 
@@ -22,7 +29,8 @@
   </div>
 
   <div class="dashboard-content">
-    <app-sidebar></app-sidebar>
+    <div class="sidebar-backdrop" *ngIf="isSidebarOpen" (click)="closeSidebar()"></div>
+    <app-sidebar [isOpen]="isSidebarOpen" (close)="closeSidebar()"></app-sidebar>
 
     <main class="main-content">
       <ng-content></ng-content>

@@ -676,6 +676,10 @@
   .secondary-cards-grid {
     grid-template-columns: 1fr;
   }
+
+  .planner-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {

@@ -521,7 +521,21 @@
   }
 }
 
+@media (max-width: 900px) {
+
+  .action-grid,
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
+
+  .action-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
   .balance-card {
     padding: 24px;
   }
@@ -548,5 +562,34 @@
 
   .account-balance-wrapper {
     align-items: flex-start;
+  }
+
+  .transaction-item {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .transaction-info {
+    flex: 1 1 100%;
+    order: 3;
+
+    .transaction-meta {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+
+  .transaction-icon {
+    order: 1;
+  }
+
+  .transaction-amount-wrapper {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .action-buttons {
+    grid-template-columns: 1fr;
   }
 }
