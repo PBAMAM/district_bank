@@ -1,172 +1,221 @@
-// Copied exactly from transfer.component.scss
-.transfer-container {
-    min-height: 100vh;
-    background: var(--bg-light, #f7f9fa);
-    display: flex;
-    flex-direction: column;
+// ============================================
+// WITHDRAWAL COMPONENT — PREMIUM LT THEME
+// ============================================
+$navy: #0d1f3c;
+$gold: #c9a84c;
+$gold-lt: #e8c97a;
+$accent: #1a7abf;
+$green: #10b981;
+$red: #ef4444;
+$orange: #f59e0b;
+$border: #e2e9f0;
+$card-bg: #ffffff;
+$bg: #f0f4f8;
+$text-main: #1a2744;
+$text-muted: #64748b;
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
 }
 
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(.93)
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0)
+    }
+
+    25% {
+        transform: translateX(-8px)
+    }
+
+    75% {
+        transform: translateX(8px)
+    }
+}
+
+@keyframes successPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba($green, .3)
+    }
+
+    50% {
+        box-shadow: 0 0 0 10px rgba($green, 0)
+    }
+}
+
+.transfer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+// ----- HEADER -----
 .transfer-header {
-    padding: 40px 40px 20px;
-    background: transparent;
-    border-bottom: 1px solid var(--border-color, #e6ebf1);
+    margin-bottom: 28px;
+    animation: fadeUp .4s ease both;
 
     .header-content {
-        max-width: 1200px;
-        margin: 0 auto;
         display: flex;
         align-items: center;
-        gap: 24px;
+        gap: 16px;
     }
 
     .header-icon {
-        font-size: 48px;
-        width: 80px;
-        height: 80px;
-        background: rgba(14, 135, 182, 0.1);
-        color: #0e87b6;
-        border-radius: 20px;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, rgba($orange, .2), rgba($orange, .1));
+        border: 1px solid rgba($orange, .3);
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 8px 24px rgba(14, 135, 182, 0.2);
+        font-size: 26px;
+        box-shadow: 0 6px 20px rgba($orange, .15);
+        flex-shrink: 0;
+        transition: transform .3s;
+
+        &:hover {
+            transform: scale(1.08) rotate(-5deg);
+        }
     }
 
-    .header-text {
-        flex: 1;
+    .header-text h1 {
+        font-size: 26px;
+        font-weight: 900;
+        color: $text-main;
+        margin: 0;
+        letter-spacing: -.5px;
+    }
 
-        h1 {
-            color: #1A202C;
-            font-size: 36px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            letter-spacing: -0.5px;
-        }
-
-        .header-subtitle {
-            color: #64748B;
-            font-size: 16px;
-            margin: 0;
-        }
+    .header-subtitle {
+        font-size: 13px;
+        color: $text-muted;
+        margin: 4px 0 0;
     }
 }
 
+// ----- CONTENT LAYOUT -----
 .transfer-content {
-    flex: 1;
-    display: flex;
-    gap: 32px;
-    padding: 32px 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+    align-items: start;
 
-.transfer-main {
-    flex: 1;
-    min-width: 0;
-}
-
-.transfer-card {
-    background-color: #ffffff;
-    border-radius: 32px;
-    padding: 56px;
-    width: 100%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-
-    &:hover {
-        box-shadow: 0 12px 30px rgba(14, 135, 182, 0.08);
+    @media(max-width:1024px) {
+        grid-template-columns: 1fr;
     }
+}
+
+// ----- MAIN CARD -----
+.transfer-card {
+    background: $card-bg;
+    border-radius: 24px;
+    border: 1px solid $border;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
+    overflow: hidden;
+    animation: scaleIn .4s ease both;
 
     .card-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 32px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid var(--border-color, #e6ebf1);
+        padding: 22px 28px;
+        border-bottom: 1px solid $border;
+        background: linear-gradient(90deg, rgba($navy, .03), transparent);
 
         h2 {
-            color: #1A202C;
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 17px;
+            font-weight: 800;
+            color: $text-main;
             margin: 0;
-            letter-spacing: -0.3px;
         }
 
         .info-badge {
-            background: rgba(253, 126, 20, 0.1);
-            color: #fd7e14;
-            padding: 6px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            background: rgba($orange, .1);
+            color: darken($orange, 20%);
+            border: 1px solid rgba($orange, .3);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(253, 126, 20, 0.3);
+            letter-spacing: .5px;
         }
     }
 }
 
-.info-icon {
-    color: #64748B;
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 6px;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-        color: #1A202C;
-        background-color: rgba(0, 0, 0, 0.05);
-        transform: scale(1.1);
-    }
+.transfer-main {
+    padding: 28px;
 }
 
+// Source account box
 .source-account {
-    background-color: #f7f9fa;
-    padding: 32px;
-    border-radius: 24px;
-    margin-bottom: 40px;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    transition: all 0.3s ease;
+    background: #f8fafc;
+    border: 1px solid $border;
+    border-radius: 18px;
+    padding: 20px 22px;
+    margin-bottom: 28px;
+    transition: all .3s;
 
     &:hover {
-        border-color: rgba(14, 135, 182, 0.2);
-        box-shadow: 0 4px 16px rgba(14, 135, 182, 0.05);
+        border-color: rgba($accent, .3);
+        box-shadow: 0 4px 16px rgba($accent, .07);
     }
 }
 
 .account-info {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 16px;
+    gap: 16px;
+    margin-bottom: 12px;
 }
 
 .account-icon {
-    width: 56px;
-    height: 56px;
-    background: #0e87b6;
-    color: #1A202C;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, $accent, darken($accent, 10%));
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 20px;
-    box-shadow: 0 4px 16px rgba(14, 135, 182, 0.2);
-    transition: transform 0.3s ease;
+    color: white;
+    box-shadow: 0 4px 14px rgba($accent, .3);
     flex-shrink: 0;
+    transition: transform .3s;
 
     .source-account:hover & {
-        transform: scale(1.1) rotate(5deg);
+        transform: rotate(5deg) scale(1.05);
     }
 }
 
@@ -176,18 +225,17 @@
 }
 
 .account-type {
-    color: #1A202C;
-    font-weight: 600;
-    margin-bottom: 6px;
-    font-size: 16px;
-    letter-spacing: 0.2px;
+    font-size: 15px;
+    font-weight: 700;
+    color: $text-main;
+    margin-bottom: 4px;
 }
 
 .account-iban {
-    color: #64748B;
-    font-size: 13px;
-    font-family: 'Courier New', monospace;
-    letter-spacing: 0.5px;
+    font-size: 12px;
+    color: $text-muted;
+    font-family: monospace;
+    letter-spacing: .5px;
 }
 
 .account-balance {
@@ -197,30 +245,38 @@
 }
 
 .balance-amount {
-    color: #1A202C;
-    font-weight: 700;
     font-size: 18px;
-    letter-spacing: -0.3px;
+    font-weight: 800;
+    color: $text-main;
+}
+
+.info-icon {
+    color: $text-muted;
+    cursor: pointer;
+    transition: color .2s;
+
+    &:hover {
+        color: $accent;
+    }
 }
 
 .change-account-link {
-    color: #dc3545;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: $red;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .2s;
 
     .arrow {
-        transition: transform 0.3s ease;
-        font-size: 16px;
+        transition: transform .2s;
     }
 
     &:hover {
-        color: #ff6b6b;
+        color: darken($red, 8%);
         gap: 12px;
 
         .arrow {
@@ -229,131 +285,111 @@
     }
 }
 
+// Form
 .transfer-form {
     margin-bottom: 20px;
 }
 
 .form-group {
-    margin-bottom: 28px;
-    animation: fadeInUp 0.5s ease-out;
-}
+    margin-bottom: 22px;
 
-.form-group label {
-    display: block;
-    color: #1A202C;
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
+    label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: .6px;
+        margin-bottom: 8px;
+    }
 }
 
 .form-control {
     width: 100%;
-    padding: 14px 16px;
-    border: 1px solid var(--border-color, #e6ebf1);
+    padding: 13px 16px;
+    border: 1.5px solid $border;
     border-radius: 12px;
-    background-color: #ffffff;
-    color: #1A202C;
+    background: white;
+    color: $text-main;
     font-size: 15px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all .25s;
     font-family: inherit;
+
+    &::placeholder {
+        color: #c0c9d8;
+    }
 
     &:focus {
         outline: none;
-        border-color: #0e87b6;
-        box-shadow: 0 0 0 4px rgba(14, 135, 182, 0.15);
-        background-color: #ffffff;
-        transform: translateY(-2px);
-    }
-
-    &::placeholder {
-        color: #94A3B8;
+        border-color: $accent;
+        box-shadow: 0 0 0 4px rgba($accent, .1);
+        transform: translateY(-1px);
     }
 
     &.error {
-        border-color: #dc3545;
-        box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.15);
-        animation: shake 0.4s ease-in-out;
-    }
-}
-
-@keyframes shake {
-
-    0%,
-    100% {
-        transform: translateX(0);
-    }
-
-    25% {
-        transform: translateX(-8px);
-    }
-
-    75% {
-        transform: translateX(8px);
+        border-color: $red;
+        box-shadow: 0 0 0 3px rgba($red, .1);
+        animation: shake .4s;
     }
 }
 
 select.form-control {
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231A202C' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 16px center;
+    background-position: right 14px center;
     padding-right: 40px;
 
     option {
-        background-color: #ffffff;
-        color: #1A202C;
-        padding: 10px;
+        background: white;
+        color: $text-main;
     }
 }
 
 .form-actions {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 32px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-top: 24px;
 }
 
 .transfer-btn {
     width: 100%;
-    padding: 16px 24px;
-    font-size: 16px;
-    font-weight: 700;
-    background: rgba(14, 135, 182, 0.1);
-    color: #0e87b6;
+    padding: 15px 24px;
+    font-size: 15px;
+    font-weight: 800;
+    background: linear-gradient(135deg, $navy, #1a3a6b);
+    color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 16px rgba(14, 135, 182, 0.2);
+    transition: all .3s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0 6px 20px rgba($navy, .25);
     position: relative;
     overflow: hidden;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    letter-spacing: .2px;
 
     &::before {
         content: '';
         position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s ease, height 0.6s ease;
+        inset: 0;
+        background: linear-gradient(135deg, $accent, $navy);
+        opacity: 0;
+        transition: opacity .3s;
+    }
+
+    span {
+        position: relative;
+        z-index: 1;
     }
 
     &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(220, 53, 69, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba($navy, .35);
 
         &::before {
-            width: 300px;
-            height: 300px;
+            opacity: 1;
         }
     }
 
@@ -362,108 +398,63 @@ select.form-control {
     }
 
     &:disabled {
-        opacity: 0.6;
+        opacity: .5;
         cursor: not-allowed;
-        transform: none;
     }
 }
 
+// Messages
 .error-message {
-    color: #ff6b6b;
-    text-align: center;
-    margin-top: 20px;
-    padding: 16px;
-    background-color: rgba(220, 53, 69, 0.1);
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
     border-radius: 12px;
-    border: 2px solid rgba(14, 135, 182, 0.2);
+    padding: 14px 18px;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 10px;
-    font-weight: 500;
-    animation: slideDown 0.4s ease-out;
+    font-size: 14px;
+    font-weight: 600;
+    animation: fadeUp .3s ease;
 }
 
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.success-message {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    animation: fadeUp .3s ease, successPulse 2s ease infinite;
 }
 
 .error-icon {
     font-size: 20px;
-    animation: pulse 1s ease-in-out infinite;
-}
-
-.success-message {
-    color: #48d597;
-    text-align: center;
-    margin-top: 20px;
-    padding: 16px;
-    background-color: rgba(40, 167, 69, 0.1);
-    border-radius: 12px;
-    border: 2px solid rgba(40, 167, 69, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-weight: 600;
-    animation: slideDown 0.4s ease-out, successPulse 2s ease-in-out infinite;
-}
-
-@keyframes successPulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
-    }
-
-    50% {
-        box-shadow: 0 0 0 8px rgba(40, 167, 69, 0);
-    }
 }
 
 .success-icon {
-    font-size: 24px;
-    font-weight: bold;
-    animation: checkmark 0.6s ease-out;
+    font-size: 22px;
 }
 
-@keyframes checkmark {
-    0% {
-        transform: scale(0);
-    }
-
-    50% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
+// ----- SIDEBAR -----
 .transfer-sidebar {
-    width: 320px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    flex-shrink: 0;
+    gap: 20px;
 }
 
 .info-card,
 .tips-card {
-    background-color: #ffffff;
-    border-radius: 32px;
-    padding: 40px;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    background: $card-bg;
+    border-radius: 20px;
+    padding: 22px 24px;
+    border: 1px solid $border;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+    animation: fadeUp .5s ease .1s both;
 }
 
 .info-card-header,
@@ -471,32 +462,26 @@ select.form-control {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid $border;
 
     .info-icon-large,
     .tips-icon {
-        font-size: 24px;
-        width: 40px;
-        height: 40px;
-        background: rgba(14, 135, 182, 0.1);
-        color: #0e87b6;
+        width: 38px;
+        height: 38px;
+        background: rgba($accent, .1);
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .tips-icon {
-        background: rgba(14, 135, 182, 0.1);
-        color: #0e87b6;
+        font-size: 20px;
     }
 
     h3 {
-        color: #1A202C;
-        font-size: 18px;
-        font-weight: 600;
+        font-size: 15px;
+        font-weight: 800;
+        color: $text-main;
         margin: 0;
     }
 }
@@ -504,24 +489,29 @@ select.form-control {
 .info-card-content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
 }
 
 .info-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #f4f7fb;
+
+    &:last-child {
+        border-bottom: none;
+    }
 
     .info-label {
-        color: #64748B;
-        font-size: 14px;
+        font-size: 13px;
+        color: $text-muted;
     }
 
     .info-value {
-        color: #1A202C;
-        font-weight: 600;
-        font-size: 14px;
+        font-size: 13px;
+        font-weight: 700;
+        color: $text-main;
     }
 }
 
@@ -531,148 +521,21 @@ select.form-control {
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 
     li {
-        color: #64748B;
-        font-size: 14px;
+        font-size: 13px;
+        color: $text-muted;
         line-height: 1.6;
-        padding-left: 24px;
+        padding-left: 22px;
         position: relative;
 
         &::before {
             content: '✓';
             position: absolute;
             left: 0;
-            color: #48d597;
-            font-weight: bold;
-        }
-    }
-}
-
-@media (max-width: 1024px) {
-    .transfer-content {
-        flex-direction: column;
-    }
-
-    .transfer-sidebar {
-        width: 100%;
-        flex-direction: row;
-
-        .info-card,
-        .tips-card {
-            flex: 1;
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    .transfer-header {
-        padding: 24px 20px 16px;
-
-        .header-content {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 16px;
-        }
-
-        .header-icon {
-            width: 60px;
-            height: 60px;
-            font-size: 36px;
-        }
-
-        .header-text h1 {
-            font-size: 28px;
-        }
-    }
-
-    .transfer-content {
-        padding: 20px 16px;
-        flex-direction: column;
-    }
-
-    .transfer-card {
-        padding: 32px 24px;
-        border-radius: 16px;
-    }
-
-    .transfer-sidebar {
-        flex-direction: column;
-    }
-
-    .source-account {
-        padding: 20px;
-    }
-
-    .account-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-
-    .account-balance {
-        align-self: flex-end;
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .form-group {
-        margin-bottom: 24px;
-    }
-
-    .form-control {
-        padding: 12px 14px;
-        font-size: 14px;
-    }
-
-    .info-card,
-    .tips-card {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .transfer-header {
-        padding: 20px 16px 12px;
-
-        .header-icon {
-            width: 50px;
-            height: 50px;
-            font-size: 28px;
-        }
-
-        .header-text h1 {
-            font-size: 24px;
-        }
-
-        .header-subtitle {
-            font-size: 14px;
-        }
-    }
-
-    .transfer-card {
-        padding: 24px 20px;
-
-        .card-header h2 {
-            font-size: 20px;
-        }
-    }
-
-    .account-icon {
-        width: 48px;
-        height: 48px;
-        font-size: 18px;
-    }
-
-    .balance-amount {
-        font-size: 16px;
-    }
-
-    .info-card-header,
-    .tips-header {
-        h3 {
-            font-size: 16px;
+            color: $green;
+            font-weight: 700;
         }
     }
 }

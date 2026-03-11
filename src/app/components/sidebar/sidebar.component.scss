@@ -1,197 +1,465 @@
-:root {
-  --sidebar-width: 280px;
-  --primary-blue: #0e87b6;
-  /* Lighter exact blue from HolaBank */
-  --bg-hover: #f7f9fa;
-  --border-color: #e6ebf1;
+// ============================================
+// LUXEMBOURG-TREASURE SIDEBAR — PREMIUM DARK
+// ============================================
+
+$sidebar-width: 280px;
+$gold: #c9a84c;
+$gold-light: #e8c97a;
+$deep-navy: #0a1628;
+$navy: #0d1f3c;
+$navy-hover: #132945;
+$accent: #1a7abf;
+$text-muted: #7a90b0;
+$text-primary: #e8edf5;
+$border: rgba(255, 255, 255, 0.06);
+
+:host {
+  display: block;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(0.85);
+  }
 }
 
 .sidebar {
-  width: var(--sidebar-width);
-  background-color: #ffffff;
-  border-right: 1px solid var(--border-color);
+  width: $sidebar-width;
+  background: linear-gradient(180deg, $deep-navy 0%, $navy 100%);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
+  border-right: 1px solid $border;
 
+  // Ambient glow on the left edge
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--primary-blue);
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, $gold 0%, $accent 50%, transparent 100%);
+    z-index: 1;
+  }
+
+  // Radial background glow effect
+  &::after {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -80px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba($accent, 0.12) 0%, transparent 70%);
+    pointer-events: none;
   }
 }
 
-// Sidebar Header
+// ----- Header / Logo -----
 .sidebar-header {
-  padding: 32px 24px;
-  background: #ffffff;
-}
+  padding: 28px 24px 20px;
+  position: relative;
+  border-bottom: 1px solid $border;
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  cursor: pointer;
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
 
-  .logo-img {
-    height: 36px;
+  .logo-icon-wrap {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, $gold 0%, darken($gold, 18%) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba($gold, 0.35);
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: scale(1.08) rotate(-3deg);
+      box-shadow: 0 8px 24px rgba($gold, 0.5);
+    }
+  }
+
+  .logo-svg-letter {
+    font-size: 20px;
+    font-weight: 900;
+    color: $deep-navy;
+    font-style: italic;
+  }
+
+  .logo-text-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: $text-primary;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+
+    span {
+      background: linear-gradient(90deg, $gold-light, $gold, $gold-light);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+  }
+
+  .logo-tagline {
+    font-size: 10px;
+    color: $text-muted;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
   }
 }
 
-.logo-text {
-  display: flex;
-  flex-direction: column;
-  color: var(--primary-blue);
+// ----- Balance Widget -----
+.sidebar-balance-widget {
+  margin: 16px 16px 8px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba($accent, 0.25), rgba($accent, 0.1));
+  border: 1px solid rgba($accent, 0.3);
+  border-radius: 16px;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba($accent, 0.35), rgba($accent, 0.15));
+    border-color: rgba($accent, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba($gold, 0.1), transparent 70%);
+  }
+
+  .balance-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $text-muted;
+    font-weight: 700;
+  }
+
+  .balance-amount {
+    font-size: 22px;
+    font-weight: 800;
+    color: $text-primary;
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .balance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #4caf8c;
+    background: rgba(76, 175, 140, 0.15);
+    border-radius: 40px;
+    padding: 2px 8px;
+  }
 }
 
-.bank-name {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  line-height: 1;
-  color: #004b6a;
-}
-
-.bank-location {
-  font-size: 11px;
-  opacity: 0.6;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #333;
-  margin-top: 4px;
-  letter-spacing: 1px;
-}
-
-// Navigation
+// ----- Navigation -----
 .sidebar-nav {
   flex: 1;
-  padding: 16px 0;
+  padding: 12px 0 16px;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
 }
 
 .nav-section {
-  padding: 0 16px;
-  margin-bottom: 32px;
+  padding: 8px 16px;
+  margin-bottom: 8px;
 }
 
 .nav-section-title {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  color: #9ba4b5;
-  letter-spacing: 1.2px;
-  padding: 0 16px;
-  margin-bottom: 12px;
+  color: $text-muted;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0 12px;
+  margin-bottom: 8px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 14px 20px;
-  color: #4a5568;
+  gap: 14px;
+  padding: 12px 16px;
+  color: $text-muted;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 12px;
-  margin-bottom: 6px;
+  border-radius: 14px;
+  margin-bottom: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Sliding fill effect on hover
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba($accent, 0.2), rgba($accent, 0.05));
+    border-radius: 14px;
+    transform: translateX(-105%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   &:hover {
-    background-color: var(--bg-hover);
-    color: var(--primary-blue);
-    transform: translateX(4px);
+    color: $text-primary;
+    transform: translateX(5px);
+
+    &::before {
+      transform: translateX(0);
+    }
 
     .nav-icon-wrapper {
-      color: var(--primary-blue);
+      background: rgba($accent, 0.3);
+      color: white;
       transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba($accent, 0.35);
+    }
+
+    .nav-text {
+      color: $text-primary;
+    }
+
+    .nav-arrow {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 
   &.active {
-    background: #f0f7fa;
-    color: var(--primary-blue);
-    font-weight: 700;
-    position: relative;
+    color: white;
+    background: linear-gradient(90deg, rgba($accent, 0.35), rgba($accent, 0.1));
+    border: 1px solid rgba($accent, 0.4);
 
     &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 10%;
-      height: 80%;
-      width: 4px;
-      background: var(--primary-blue);
-      border-radius: 0 4px 4px 0;
+      transform: translateX(0);
     }
 
     .nav-icon-wrapper {
-      color: var(--primary-blue);
+      background: $accent;
+      color: white;
+      box-shadow: 0 4px 14px rgba($accent, 0.5);
+    }
+
+    .nav-text {
+      color: white;
+      font-weight: 700;
+    }
+
+    // Active left accent bar
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 15%;
+      height: 70%;
+      width: 3px;
+      background: $gold;
+      border-radius: 0 3px 3px 0;
     }
   }
 }
 
 .nav-icon-wrapper {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
-  color: #a0aec0;
-}
-
-.nav-icon {
-  font-size: 20px;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 17px;
 }
 
 .nav-text {
   flex: 1;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
+  transition: color 0.2s;
 }
 
-.mt-4 {
-  margin-top: 32px;
+.nav-arrow {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.3s;
+  font-size: 14px;
+  color: $text-muted;
 }
 
-// Scrollbar Styling
-.sidebar-nav::-webkit-scrollbar {
-  width: 6px;
+// Optional notification dot
+.nav-dot {
+  width: 7px;
+  height: 7px;
+  background: $gold;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease infinite;
 }
 
-.sidebar-nav::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
+// ----- Divider -----
+.nav-divider {
+  height: 1px;
+  background: $border;
+  margin: 8px 24px 16px;
 }
 
-// Responsive Design
+// ----- Footer / User section -----
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid $border;
+  background: rgba(0, 0, 0, 0.15);
+
+  .user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid $border;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .user-avatar-sm {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, $gold, darken($gold, 12%));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    color: $deep-navy;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba($gold, 0.3);
+  }
+
+  .user-info-sm {
+    flex: 1;
+    min-width: 0;
+
+    .user-name-sm {
+      font-size: 13px;
+      font-weight: 700;
+      color: $text-primary;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-status {
+      font-size: 11px;
+      color: #4caf8c;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      &::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: #4caf8c;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .settings-icon {
+    color: $text-muted;
+    transition: color 0.2s, transform 0.3s;
+
+    &:hover {
+      color: $text-primary;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+// ===== RESPONSIVE =====
 @media (max-width: 1024px) {
   .sidebar {
-    width: 240px;
-  }
-
-  .sidebar-header {
-    padding: 24px 20px;
-  }
-
-  .bank-name {
-    font-size: 18px;
+    width: 250px;
   }
 }
 
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
-    left: -280px;
-    top: 60px;
-    height: calc(100vh - 60px);
+    left: -290px;
+    top: 0;
+    height: 100vh;
     z-index: 999;
-    transition: left 0.3s;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 8px 0 40px rgba(0, 0, 0, 0.4);
   }
 
   .sidebar.open {

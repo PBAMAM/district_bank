@@ -1,68 +1,58 @@
 <aside class="sidebar" [class.open]="isOpen">
+
+  <!-- ===== Header / Logo ===== -->
   <div class="sidebar-header">
     <div class="logo">
-      <svg viewBox="0 0 150 30" width="160" height="40" class="logo-svg">
-        <!-- Star Logo -->
-        <path fill="#007EB5" d="M12,2 L18,12 L8,18 Z" />
-        <circle fill="#F4B223" cx="22" cy="8" r="3" />
-        <circle fill="#E63027" cx="6" cy="12" r="2" />
-        <!-- Divider -->
-        <line x1="30" y1="5" x2="30" y2="25" stroke="#ccc" stroke-width="1" />
-        <!-- Text -->
-        <text x="38" y="21" font-family="Arial, sans-serif" font-weight="bold" font-style="italic" font-size="20"
-          fill="#1A202C">HolaBank</text>
-      </svg>
+      <div class="logo-icon-wrap">
+        <span class="logo-svg-letter">LT</span>
+      </div>
+      <div class="logo-text-group">
+        <span class="logo-name"><span>Luxembourg</span>-Treasure</span>
+        <span class="logo-tagline">Private Banking</span>
+      </div>
     </div>
   </div>
 
+  <!-- ===== Navigation ===== -->
   <nav class="sidebar-nav">
     <div class="nav-section">
-      <p class="nav-section-title">MY BANKING</p>
+      <p class="nav-section-title">My Banking</p>
 
       <a routerLink="/client/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <div class="nav-icon-wrapper">
-          <span class="nav-icon">🏠</span>
-        </div>
+        <div class="nav-icon-wrapper">🏠</div>
         <span class="nav-text">Dashboard</span>
+        <span class="nav-arrow">›</span>
       </a>
 
       <a routerLink="/client/accounts" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <div class="nav-icon-wrapper">
-          <span class="nav-icon">📊</span>
-        </div>
-        <span class="nav-text">Account Overview</span>
+        <div class="nav-icon-wrapper">📊</div>
+        <span class="nav-text">Accounts</span>
+        <span class="nav-arrow">›</span>
       </a>
 
-      <!-- <a routerLink="/client/transfer" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <div class="nav-icon-wrapper">
-          <span class="nav-icon">💸</span>
-        </div>
-        <span class="nav-text">Transfer Money</span>
-      </a> -->
-
       <a routerLink="/client/withdrawal" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <div class="nav-icon-wrapper">
-          <span class="nav-icon">🏧</span>
-        </div>
+        <div class="nav-icon-wrapper">🏧</div>
         <span class="nav-text">Withdraw</span>
+        <span class="nav-arrow">›</span>
       </a>
 
       <a routerLink="/client/transactions" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
-        <div class="nav-icon-wrapper">
-          <span class="nav-icon">📈</span>
-        </div>
+        <div class="nav-icon-wrapper">📈</div>
         <span class="nav-text">Transactions</span>
+        <span class="nav-arrow">›</span>
       </a>
     </div>
 
-    <div class="nav-section mt-4">
-      <p class="nav-section-title">SETTINGS</p>
+    <div class="nav-divider"></div>
+
+    <div class="nav-section">
+      <p class="nav-section-title">Settings</p>
       <a href="javascript:void(0)" class="nav-item" (click)="closeSidebar()">
-        <div class="nav-icon-wrapper">
-          <span class="nav-icon">⚙️</span>
-        </div>
+        <div class="nav-icon-wrapper">⚙️</div>
         <span class="nav-text">Preferences</span>
+        <span class="nav-arrow">›</span>
       </a>
     </div>
   </nav>
+
 </aside>

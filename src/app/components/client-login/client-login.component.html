@@ -1,463 +1,305 @@
-<div class="landing-page-container new-holabank-layout">
+<div class="lt-login-page">
 
-  <!-- Tiny Top Bar -->
-  <div class="top-meta-bar">
-    <div class="container container-xl d-flex justify-between align-center">
-      <div class="meta-links-left d-flex gap-4">
-        <a href="#" class="active fw-bold">Personal Banking</a>
-        <a href="#">Business Banking</a>
+  <!-- ==================== LEFT: BRAND PANEL ==================== -->
+  <div class="brand-panel">
+    <div class="brand-logo-wrap">
+      <div class="brand-icon">LT</div>
+      <div>
+        <div class="brand-name"><span>Luxembourg</span>-Treasure</div>
+        <div class="brand-tagline-tiny">Private Banking</div>
       </div>
-      <div class="meta-links-right d-flex gap-3 text-xs align-center">
-        <span class="stock-ticker">CABK Share 9.914 +0.44% 13:32</span>
-        <a href="#" class="lang-dropdown">EN ⌄</a>
+    </div>
+
+    <h1 class="brand-headline">
+      Where wealth<br>meets <em>precision</em>.
+    </h1>
+
+    <p class="brand-sub">
+      A private banking experience built for those who expect more.
+      Secure, digital, discreet — available 24/7.
+    </p>
+
+    <div class="brand-stats">
+      <div class="stat-item">
+        <div class="stat-val">€2.4B+</div>
+        <div class="stat-label">Assets Managed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">48K+</div>
+        <div class="stat-label">Clients Worldwide</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">99.9%</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+
+    <div class="brand-features">
+      <div class="feature-pill">
+        <span class="feat-icon">🔐</span>
+        <span class="feat-text">Bank-grade 256-bit encryption</span>
+      </div>
+      <div class="feature-pill">
+        <span class="feat-icon">⚡</span>
+        <span class="feat-text">Instant transfers across 40+ currencies</span>
+      </div>
+      <div class="feature-pill">
+        <span class="feat-icon">🌍</span>
+        <span class="feat-text">Regulated under Luxembourg law</span>
       </div>
     </div>
   </div>
 
-  <!-- Main Header -->
-  <header class="main-header bg-white border-bottom">
-    <div class="container container-xl d-flex justify-between align-center py-4">
-      <div class="logo-area d-flex align-center gap-3">
-        <!-- CaixaBank / HolaBank Logo -->
-        <svg viewBox="0 0 150 30" width="160" height="45" class="logo-svg">
-          <!-- Star Logo -->
-          <path fill="#007EB5" d="M12,2 L18,12 L8,18 Z" />
-          <circle fill="#F4B223" cx="22" cy="8" r="3" />
-          <circle fill="#E63027" cx="6" cy="12" r="2" />
-          <!-- Divider -->
-          <line x1="30" y1="5" x2="30" y2="25" stroke="#ccc" stroke-width="1" />
-          <!-- Text -->
-          <text x="38" y="21" font-family="Arial, sans-serif" font-weight="bold" font-style="italic" font-size="20"
-            fill="#1A202C">HolaBank</text>
-        </svg>
-      </div>
+  <!-- ==================== RIGHT: FORM PANEL ==================== -->
+  <div class="form-panel">
+    <div class="form-card">
 
-      <div class="actions-area d-flex align-center gap-4">
-        <button class="btn-yellow-pill d-flex align-center gap-2" (click)="showLoginForm = true; isLoginMode = false">
-          <span class="icon">👤+</span> <span class="d-none-mobile">Open account</span>
+      <!-- Mode Tabs -->
+      <div class="mode-tabs">
+        <button class="mode-tab" [class.active]="isLoginMode" (click)="isLoginMode = true; clearMessages()">
+          Sign In
         </button>
-
-        <!-- Mobile Login Button -->
-        <button class="btn-blue-pill mobile-only d-flex align-center gap-2"
-          (click)="showLoginForm = true; isLoginMode = true">
-          <span class="icon">🔒</span> Login
+        <button class="mode-tab" [class.active]="!isLoginMode" (click)="isLoginMode = false; clearMessages()">
+          Open Account
         </button>
-
-        <!-- Inline Login Form inside Header -->
-        <form [formGroup]="loginForm" (ngSubmit)="onLogin()"
-          class="inline-login-form desktop-only d-flex gap-2 align-start">
-          <div class="input-col" style="position: relative;">
-            <input type="email" formControlName="email" placeholder="Identifier" class="header-input"
-              [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-            <a href="#" (click)="toggleKeyboard('login-header', 'email', $event)"
-              class="header-link mt-1 d-block text-right">Virtual keyboard ⌨️</a>
-          </div>
-          <div class="input-col" style="position: relative;">
-            <input type="password" formControlName="password" placeholder="Password" class="header-input"
-              [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            <a href="#" (click)="toggleKeyboard('login-header', 'password', $event)"
-              class="header-link mt-1 d-block text-right">Virtual keyboard ⌨️</a>
-          </div>
-          <button type="submit" class="btn-blue-pill" [disabled]="loginForm.invalid || isLoading">
-            {{ isLoading ? '...' : 'Log in' }}
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Sub Navigation inside Header -->
-    <div class="sub-nav-wrapper">
-      <div class="container container-xl d-flex justify-center">
-        <nav class="d-flex align-center gap-5 py-3">
-          <a href="#" class="nav-link text-md color-dark opacity-80">Accounts and cards</a>
-          <a href="#" class="nav-link text-md color-dark opacity-80">Mortgages</a>
-          <a href="#" class="nav-link text-md color-dark opacity-80">Saving</a>
-          <a href="#" class="nav-link text-md color-dark opacity-80">Insurance and alarms</a>
-          <a href="#" class="nav-link text-md color-dark opacity-80">More services</a>
-          <div class="divider">|</div>
-          <a href="#" class="nav-link text-md color-dark opacity-80 d-flex align-center gap-2">
-            <span class="icon">🔍</span> Search
-          </a>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <!-- Floating Login Form (Appears when buttons are clicked) -->
-  <div class="full-screen-overlay" *ngIf="showLoginForm">
-    <div class="overlay-backdrop" (click)="showLoginForm = false"></div>
-    <div class="login-modal card shadow-elegant p-4">
-      <div class="d-flex justify-between align-center mb-3 border-bottom pb-2">
-        <h3 class="text-xl font-bold color-primary">{{ isLoginMode ? 'Access your account' : 'Become a customer' }}</h3>
-        <button class="btn-close" (click)="showLoginForm = false">✕</button>
       </div>
 
-      <div class="demo-info bg-light-blue p-2 rounded mb-3" *ngIf="isLoginMode">
-        <p class="mb-0 text-sm"><small>Demo: <strong>customer@bank.com</strong> / <strong>password123</strong></small>
-        </p>
+      <!-- Title -->
+      <div class="form-title-area">
+        <h1>{{ isLoginMode ? 'Welcome back' : 'Join Luxembourg-Treasure' }}</h1>
+        <p>{{ isLoginMode ? 'Access your private banking portal securely.' : 'Create your account in minutes.' }}</p>
       </div>
 
-      <!-- Login Form -->
+      <!-- Demo hint (login only) -->
+      <div class="demo-hint" *ngIf="isLoginMode">
+        <span>💡</span>
+        <div>Demo: <strong>customer@bank.com</strong> / <strong>password123</strong></div>
+      </div>
+
+      <!-- Error / Success -->
+      <div class="msg-error" *ngIf="errorMessage">
+        <span>⚠️</span> {{ errorMessage }}
+      </div>
+      <div class="msg-success" *ngIf="successMessage">
+        <span>✅</span> {{ successMessage }}
+      </div>
+
+      <!-- ===== LOGIN FORM ===== -->
       <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()">
-        <div class="form-group mb-3">
-          <div class="d-flex justify-between align-center mb-1">
-            <label class="form-label text-sm text-muted mb-0">Identifier or Email</label>
-            <a href="#" (click)="toggleKeyboard('login-modal', 'email', $event)"
-              class="text-xs color-primary underline">Virtual
-              keyboard ⌨️</a>
+
+        <div class="field-group">
+          <div class="field-inner">
+            <label class="field-label">
+              Email Address
+              <span class="vk-link" (click)="toggleKeyboard('login-modal', 'email', $event)">⌨️ Virtual keyboard</span>
+            </label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </span>
+              <input type="email" formControlName="email" class="field-input"
+                [class.error-field]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                placeholder="your@email.com" autocomplete="email">
+            </div>
           </div>
-          <input type="email" formControlName="email" class="form-control"
-            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
         </div>
 
-        <div class="form-group mb-4">
-          <div class="d-flex justify-between align-center mb-1">
-            <label class="form-label text-sm text-muted mb-0">Password</label>
-            <a href="#" (click)="toggleKeyboard('login-modal', 'password', $event)"
-              class="text-xs color-primary underline">Virtual
-              keyboard ⌨️</a>
+        <div class="field-group">
+          <div class="field-inner">
+            <label class="field-label">
+              Password
+              <span class="vk-link" (click)="toggleKeyboard('login-modal', 'password', $event)">⌨️ Virtual
+                keyboard</span>
+            </label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </span>
+              <input type="password" formControlName="password" class="field-input"
+                [class.error-field]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                placeholder="••••••••" autocomplete="current-password">
+            </div>
           </div>
-          <input type="password" formControlName="password" class="form-control"
-            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         </div>
 
-        <button type="submit" class="btn btn-primary w-100 holo-bg-primary text-md py-2 font-bold rounded-pill"
-          [disabled]="loginForm.invalid || isLoading">
-          {{ isLoading ? 'Entering...' : 'Log in' }}
+        <button type="submit" class="submit-btn" [disabled]="loginForm.invalid || isLoading">
+          <span class="btn-inner">
+            <span class="spinner-sm" *ngIf="isLoading"></span>
+            {{ isLoading ? 'Signing in…' : 'Sign In to Portal' }}
+          </span>
         </button>
-        <div *ngIf="errorMessage" class="error-text mt-2 text-danger text-center">{{ errorMessage }}</div>
-
-        <div class="mt-3 text-center">
-          <a href="javascript:void(0)" (click)="toggleMode()" class="color-primary text-sm underline">I want to become a
-            customer</a>
-        </div>
       </form>
 
-      <!-- Register Form -->
+      <!-- ===== REGISTER FORM ===== -->
       <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()">
-        <div class="d-flex gap-2 mb-2">
-          <input type="text" formControlName="firstName" class="form-control flex-1" placeholder="First Name">
-          <input type="text" formControlName="lastName" class="form-control flex-1" placeholder="Last Name">
-        </div>
-        <div class="d-flex justify-between align-center mb-1 mt-2">
-          <label class="form-label text-sm text-muted mb-0">Email Address</label>
-          <a href="#" (click)="toggleKeyboard('register-modal', 'email', $event)"
-            class="text-xs color-primary underline">Virtual
-            keyboard ⌨️</a>
-        </div>
-        <input type="email" formControlName="email" class="form-control mb-2" placeholder="Email Address">
-        <input type="tel" formControlName="phone" class="form-control mb-2" placeholder="Phone Number">
-        <input type="text" formControlName="address" class="form-control mb-2" placeholder="Address">
-        <div class="d-flex justify-between align-center mb-1">
-          <label class="form-label text-sm text-muted mb-0">Password</label>
-          <a href="#" (click)="toggleKeyboard('register-modal', 'password', $event)"
-            class="text-xs color-primary underline">Virtual
-            keyboard ⌨️</a>
-        </div>
-        <input type="password" formControlName="password" class="form-control mb-2" placeholder="Password">
-        <input type="password" formControlName="confirmPassword" class="form-control mb-3"
-          placeholder="Confirm Password">
 
-        <button type="submit" class="btn btn-primary w-100 holo-bg-primary text-md py-2 font-bold rounded-pill"
-          [disabled]="registerForm.invalid || isLoading">
-          {{ isLoading ? 'Creating...' : 'Register' }}
+        <div class="field-group two-col">
+          <div class="field-inner">
+            <label class="field-label">First Name</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </span>
+              <input type="text" formControlName="firstName" class="field-input"
+                [class.error-field]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+                placeholder="First name">
+            </div>
+          </div>
+          <div class="field-inner">
+            <label class="field-label">Last Name</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </span>
+              <input type="text" formControlName="lastName" class="field-input"
+                [class.error-field]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+                placeholder="Last name">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-inner">
+            <label class="field-label">
+              Email Address
+              <span class="vk-link" (click)="toggleKeyboard('register-modal', 'email', $event)">⌨️ Virtual
+                keyboard</span>
+            </label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </span>
+              <input type="email" formControlName="email" class="field-input"
+                [class.error-field]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                placeholder="your@email.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group two-col">
+          <div class="field-inner">
+            <label class="field-label">Phone</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.92 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.82 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </span>
+              <input type="tel" formControlName="phone" class="field-input" placeholder="+352 ...">
+            </div>
+          </div>
+          <div class="field-inner">
+            <label class="field-label">Address</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </span>
+              <input type="text" formControlName="address" class="field-input" placeholder="City, Country">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-inner">
+            <label class="field-label">
+              Password
+              <span class="vk-link" (click)="toggleKeyboard('register-modal', 'password', $event)">⌨️ Virtual
+                keyboard</span>
+            </label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </span>
+              <input type="password" formControlName="password" class="field-input"
+                [class.error-field]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                placeholder="Min. 6 characters">
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-inner">
+            <label class="field-label">Confirm Password</label>
+            <div class="field-input-wrap">
+              <span class="field-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+              </span>
+              <input type="password" formControlName="confirmPassword" class="field-input"
+                [class.error-field]="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']"
+                placeholder="Repeat password">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="registerForm.invalid || isLoading">
+          <span class="btn-inner">
+            <span class="spinner-sm" *ngIf="isLoading"></span>
+            {{ isLoading ? 'Creating account…' : 'Create My Account' }}
+          </span>
         </button>
-        <div *ngIf="errorMessage" class="error-text mt-2 text-danger text-center">{{ errorMessage }}</div>
-        <div *ngIf="successMessage" class="success-text mt-2 text-success text-center">{{ successMessage }}</div>
-
-        <div class="mt-3 text-center">
-          <a href="javascript:void(0)" (click)="toggleMode()" class="color-primary text-sm underline">I already have an
-            account</a>
-        </div>
       </form>
+
+      <!-- Footer link -->
+      <div class="toggle-link">
+        <span>{{ isLoginMode ? "Don't have an account?" : "Already a client?" }}</span>
+        <button (click)="toggleMode()">
+          {{ isLoginMode ? ' Open an account' : ' Sign in' }}
+        </button>
+      </div>
+
+      <div class="gold-divider"></div>
+
+      <!-- Trust badges -->
+      <div class="trust-strip">
+        <div class="trust-item">
+          <span class="trust-icon">🔒</span>
+          <span>SSL Secured</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🇱🇺</span>
+          <span>Luxembourg</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🏅</span>
+          <span>ISO Certified</span>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- Hero Section (New Layout) -->
-  <section class="hero-section"
-    style="background-image: url('assets/images/hero_lifestyle.png'); background-position: right 20%; background-size: cover;">
-    <div class="hero-content-left">
-      <h1 class="hero-title">Everything you require of a bank and more</h1>
-      <p class="hero-subtitle">A specific service for your needs in Spain if you spend part of your year here. 100%
-        digital onboarding.</p>
-      <button class="btn-yellow-pill mt-3" style="padding: 12px 32px; font-size: 16px;"
-        (click)="showLoginForm = true; isLoginMode = false">Open an account</button>
-    </div>
-  </section>
-
-  <!-- Quick Links ("Already a customer?") -->
-  <section class="quick-links-section py-5 text-center bg-white">
-    <div class="container">
-      <h3 class="font-bold text-lg mb-4 color-dark">Already a customer?</h3>
-      <div class="d-flex justify-center gap-3 flex-wrap">
-        <a href="#" class="quick-pill">
-          <span class="pill-icon text-primary-color">📂</span> <span class="pill-text">Open account</span>
-        </a>
-        <a href="#" class="quick-pill">
-          <span class="pill-icon text-primary-color">🏢</span> <span class="pill-text">Bring pension</span>
-        </a>
-        <a href="#" class="quick-pill">
-          <span class="pill-icon text-primary-color">✈️</span> <span class="pill-text">Arriving in Spain</span>
-        </a>
-        <a href="#" class="quick-pill">
-          <span class="pill-icon text-primary-color">🏠</span> <span class="pill-text">Mortgages</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Video Section -->
-  <section class="video-section py-5 bg-white">
-    <div class="container container-lg">
-      <h2 class="text-center text-2xl font-bold color-dark mb-5 text-capitalize">Welcome to HolaBank</h2>
-
-      <div class="video-flex bg-white shadow-elegant rounded-md overflow-hidden">
-        <div class="video-thumbnail"
-          style="background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=600');">
-          <div class="play-btn">▶</div>
-          <div class="video-duration">2:14</div>
-        </div>
-        <div class="video-text p-5 d-flex flex-column justify-center">
-          <p class="text-md color-dark font-bold mb-3 line-height-lg">
-            "We have been walking by your side for over a century, providing solutions for the people. Because we
-            believe in you, we believe in your projects."
-          </p>
-          <p class="text-muted text-sm line-height-lg mb-0">
-            A specific service that offers advantages customized to your needs if you spend time in Spain. With our
-            digital services you can easily operate with us wherever you are.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Products Tailored to you -->
-  <section class="products-section py-5 bg-white">
-    <div class="container container-lg">
-      <h2 class="text-center text-2xl font-bold color-dark mb-5">Products tailored to you</h2>
-
-      <div class="grid-2 gap-4">
-        <!-- Card 1 -->
-        <div class="product-card">
-          <div class="product-img"
-            style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=400');">
-          </div>
-          <div class="product-body text-center p-4">
-            <span class="product-tag">LENDING</span>
-            <h4 class="product-title font-bold mt-3 mb-2 color-dark">An insurance suite for our non-resident customers
-            </h4>
-            <p class="text-sm text-muted mb-3">Discover our protection plans designed for your peace of mind.</p>
-            <a href="#" class="product-link color-primary font-bold text-sm">Discover our MyBox Insurances →</a>
-          </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="product-card">
-          <div class="product-img"
-            style="background-image: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80&w=400');">
-          </div>
-          <div class="product-body text-center p-4">
-            <span class="product-tag">LOANS</span>
-            <h4 class="product-title font-bold mt-3 mb-2 color-dark">So that you can step up your pace of life</h4>
-            <p class="text-sm text-muted mb-3">Flexible financing for your projects and dreams in Spain.</p>
-            <a href="#" class="product-link color-primary font-bold text-sm">Finance your projects today →</a>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="product-card">
-          <div class="product-img"
-            style="background-image: url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=400');">
-          </div>
-          <div class="product-body text-center p-4">
-            <span class="product-tag">PREMIUM</span>
-            <h4 class="product-title font-bold mt-3 mb-2 color-dark">Are you going to buy a home in Spain?</h4>
-            <p class="text-sm text-muted mb-3">The best mortgages adapted to non-residents.</p>
-            <a href="#" class="product-link color-primary font-bold text-sm">Finance your new home →</a>
-          </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="product-card">
-          <div class="product-img"
-            style="background-image: url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=400');">
-          </div>
-          <div class="product-body text-center p-4">
-            <span class="product-tag">COVER</span>
-            <h4 class="product-title font-bold mt-3 mb-2 color-dark">Solutions to protect what matters most to you</h4>
-            <p class="text-sm text-muted mb-3">Comprehensive health & life coverage.</p>
-            <a href="#" class="product-link color-primary font-bold text-sm">See all insurance plans →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Advantages (Light Blue Wavy Area) -->
-  <section class="advantages-container py-5 mt-5 mb-5 relative">
-    <div class="advantages-blue-bg"></div>
-    <div class="container container-xl relative z-index-1">
-      <h2 class="text-center text-2xl font-bold color-dark mb-5 pt-4">Advantages of being an HolaBank customer</h2>
-
-      <div class="grid-3 gap-5 pb-4">
-        <div class="adv-feature text-center">
-          <div class="adv-icon shadow-elegant"><span class="icon">🌍</span></div>
-          <p class="font-bold text-sm mt-3 color-dark">Documents in multiple languages</p>
-        </div>
-        <div class="adv-feature text-center">
-          <div class="adv-icon shadow-elegant"><span class="icon">💻</span></div>
-          <p class="font-bold text-sm mt-3 color-dark">Digital banking, operating 24/7</p>
-        </div>
-        <div class="adv-feature text-center">
-          <div class="adv-icon shadow-elegant"><span class="icon">🎧</span></div>
-          <p class="font-bold text-sm mt-3 color-dark">A personal adviser to answer questions</p>
-        </div>
-        <div class="adv-feature text-center">
-          <div class="adv-icon shadow-elegant"><span class="icon">💳</span></div>
-          <p class="font-bold text-sm mt-3 color-dark">Exclusive cards and free transfers</p>
-        </div>
-        <div class="adv-feature text-center">
-          <div class="adv-icon shadow-elegant"><span class="icon">🏦</span></div>
-          <p class="font-bold text-sm mt-3 color-dark">More than 3,800 branches across Spain</p>
-        </div>
-        <div class="adv-feature text-center">
-          <div class="adv-icon shadow-elegant"><span class="icon">🎁</span></div>
-          <p class="font-bold text-sm mt-3 color-dark">Exclusive HolaBank Club benefits</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Always at your disposal -->
-  <section class="disposal-section py-5 bg-white text-center">
-    <div class="container container-lg">
-      <h2 class="text-2xl font-bold color-dark mb-5">Always at your disposal</h2>
-      <div class="grid-3 gap-4">
-        <div class="disp-card p-4">
-          <div class="disp-icon mb-3 text-4xl">📱</div>
-          <h4 class="font-bold text-md mb-2 color-dark">Digital Banking</h4>
-          <p class="text-sm text-muted">Manage your daily banking whenever and wherever you want.</p>
-          <a href="#" class="color-primary font-bold text-sm mt-2 d-inline-block">See more</a>
-        </div>
-        <div class="disp-card p-4">
-          <div class="disp-icon mb-3 text-4xl">👩‍💼</div>
-          <h4 class="font-bold text-md mb-2 color-dark">Personal adviser</h4>
-          <p class="text-sm text-muted">Find out everything that our advisers can do for you.</p>
-          <a href="#" class="color-primary font-bold text-sm mt-2 d-inline-block">Find out</a>
-        </div>
-        <div class="disp-card p-4">
-          <div class="disp-icon mb-3 text-4xl">📍</div>
-          <h4 class="font-bold text-md mb-2 color-dark">Offices and ATMs</h4>
-          <p class="text-sm text-muted">The largest network in Spain. A branch on every corner.</p>
-          <a href="#" class="color-primary font-bold text-sm mt-2 d-inline-block">Find office</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- You may also like -->
-  <section class="also-like-section py-5 bg-white">
-    <div class="container container-xl">
-      <h2 class="text-center text-2xl font-bold color-dark mb-5">You may also like</h2>
-      <div class="grid-3 gap-4">
-        <div class="article-card shadow-elegant rounded-md overflow-hidden relative">
-          <div class="article-img"
-            style="background-image: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=400');">
-          </div>
-          <div class="article-overlay p-4">
-            <h4 class="text-white font-bold text-md mb-2">Relocating to Spain with ease</h4>
-            <p class="text-white text-sm opacity-80 mb-0">Discover our Expat guide...</p>
-          </div>
-        </div>
-        <div class="article-card shadow-elegant rounded-md overflow-hidden relative">
-          <div class="article-img"
-            style="background-image: url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=400');">
-          </div>
-          <div class="article-overlay p-4">
-            <h4 class="text-white font-bold text-md mb-2">Investing in real estate</h4>
-            <p class="text-white text-sm opacity-80 mb-0">What you should know about the market...</p>
-          </div>
-        </div>
-        <div class="article-card shadow-elegant rounded-md overflow-hidden relative">
-          <div class="article-img"
-            style="background-image: url('https://images.unsplash.com/photo-1563986768494-4dee2763ff0f?auto=format&fit=crop&q=80&w=400');">
-          </div>
-          <div class="article-overlay p-4">
-            <h4 class="text-white font-bold text-md mb-2">Retirement lifestyle guide</h4>
-            <p class="text-white text-sm opacity-80 mb-0">Plan your golden years gracefully...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Dense Footer -->
-  <footer class="dense-footer bg-light-blue py-5 border-top position-relative">
-    <div class="footer-pattern"></div>
-    <div class="container container-xl relative z-index-1">
-
-      <div class="footer-text-block text-xs text-muted mb-4 pb-4 border-bottom">
-        <p class="mb-2">CaixaBank, S.A., with TIN A08663619 and registered office at calle Pintor Sorolla, 2-4 46002
-          Valencia (Spain). Registered in the Mercantile Registry of Valencia, volume 10370, sheet 1...</p>
-        <p class="mb-2">The financial products mentioned above may be subject to corresponding taxes in your country of
-          residence. Consult your tax adviser.</p>
-        <p class="mb-0">This marketing communication has been prepared by CaixaBank, S.A. based on public sources...</p>
-      </div>
-
-      <div class="footer-links-grid grid-4 text-sm font-bold color-dark mb-5">
-        <div class="link-column d-flex flex-column gap-3">
-          <a href="#">CaixaBank Group</a>
-          <a href="#">CaixaBank Research</a>
-          <a href="#">CaixaBank Foundation</a>
-        </div>
-        <div class="link-column d-flex flex-column gap-3">
-          <a href="#">Customer service</a>
-          <a href="#">Find ATMs</a>
-          <a href="#">Help & Contact</a>
-        </div>
-        <div class="link-column d-flex flex-column gap-3">
-          <a href="#">MIFID</a>
-          <a href="#">Legal notice</a>
-          <a href="#">Privacy policy</a>
-          <a href="#">Cookies policy</a>
-        </div>
-        <div class="link-column d-flex flex-column gap-3">
-          <a href="#">Security</a>
-          <a href="#">Accessibility</a>
-          <a href="#">Social networks</a>
-        </div>
-      </div>
-
-      <div class="footer-bottom d-flex justify-between align-center pt-4 border-top">
-        <div class="footer-social d-flex gap-3 text-lg color-primary">
-          <span>𝕏</span> <span>in</span> <span>f</span> <span>Ig</span> <span>YT</span>
-        </div>
-        <div class="footer-certifications d-flex gap-2">
-          <svg viewBox="0 0 150 30" width="100" height="20" class="logo-svg"
-            style="filter: grayscale(100%); opacity: 0.6;">
-            <!-- Star Logo -->
-            <path fill="#007EB5" d="M12,2 L18,12 L8,18 Z" />
-            <circle fill="#F4B223" cx="22" cy="8" r="3" />
-            <circle fill="#E63027" cx="6" cy="12" r="2" />
-            <!-- Divider -->
-            <line x1="30" y1="5" x2="30" y2="25" stroke="#ccc" stroke-width="1" />
-            <!-- Text -->
-            <text x="38" y="21" font-family="Arial, sans-serif" font-weight="bold" font-style="italic" font-size="20"
-              fill="#1A202C">HolaBank</text>
-          </svg>
-          <span class="text-xs text-muted mt-1">&copy; 2026 HolaBank</span>
-        </div>
-      </div>
-
-    </div>
-  </footer>
-
-  <!-- Virtual Keyboard Overlay -->
-  <div class="virtual-keyboard-overlay" *ngIf="showKeyboard">
-    <div class="vk-container shadow-elegant" (mousedown)="$event.preventDefault()">
-      <div class="vk-header d-flex justify-between align-center mb-3 border-bottom pb-2">
-        <span class="font-bold text-sm color-dark">Virtual Keyboard</span>
-        <button class="vk-close" (click)="closeKeyboard()">&times;</button>
+  <!-- ==================== VIRTUAL KEYBOARD ==================== -->
+  <div class="vk-overlay" *ngIf="showKeyboard">
+    <div class="vk-container" (mousedown)="$event.preventDefault()">
+      <div class="vk-header">
+        <span class="vk-title">Virtual Keyboard</span>
+        <button class="vk-close" (click)="closeKeyboard()">✕</button>
       </div>
 
       <div class="vk-body">
@@ -471,31 +313,21 @@
 
         <ng-container *ngIf="isSymbols">
           <div class="vk-row" *ngFor="let row of keyboardSymbols">
-            <button class="vk-key" *ngFor="let key of row" (click)="handleKeyPress(key, $event)">
-              {{ key }}
-            </button>
+            <button class="vk-key" *ngFor="let key of row" (click)="handleKeyPress(key, $event)">{{ key }}</button>
           </div>
         </ng-container>
 
-        <div class="vk-row vk-action-row mt-2">
-          <button class="vk-key vk-action" (click)="handleKeyPress('SHIFT', $event)"
-            [class.vk-active]="isShifted && !isSymbols">
-            Shift ⇧
-          </button>
-          <button class="vk-key vk-action" (click)="handleKeyPress('SYMBOLS', $event)" [class.vk-active]="isSymbols">
-            123 / !#?
-          </button>
-          <button class="vk-key vk-space" (click)="handleKeyPress('SPACE', $event)">
-            Space
-          </button>
-          <button class="vk-key vk-action" (click)="handleKeyPress('CLEAR', $event)">
-            Clear
-          </button>
-          <button class="vk-key vk-action text-danger" (click)="handleKeyPress('BACKSPACE', $event)">
-            ⌫
-          </button>
+        <div class="vk-row vk-action-row">
+          <button class="vk-key vk-action" [class.vk-active]="isShifted && !isSymbols"
+            (click)="handleKeyPress('SHIFT', $event)">⇧</button>
+          <button class="vk-key vk-action" [class.vk-active]="isSymbols"
+            (click)="handleKeyPress('SYMBOLS', $event)">123</button>
+          <button class="vk-key vk-space" (click)="handleKeyPress('SPACE', $event)">Space</button>
+          <button class="vk-key vk-action" (click)="handleKeyPress('CLEAR', $event)">Clear</button>
+          <button class="vk-key vk-action vk-danger" (click)="handleKeyPress('BACKSPACE', $event)">⌫</button>
         </div>
       </div>
     </div>
   </div>
+
 </div>
