@@ -20,6 +20,7 @@ import { ClientLoginComponent } from './components/client-login/client-login.com
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
 import { ClientLayoutComponent } from './components/client-layout/client-layout.component';
 import { WithdrawalComponent } from './components/withdrawal/withdrawal.component';
+import { ClientProfileComponent } from './components/client-profile/client-profile.component';
 // import { TestAdminComponent } from './components/test-admin/test-admin.component';
 import { AdminModule } from './admin/admin.module';
 import { FirebaseTestService } from './services/firebase-test.service';
@@ -40,7 +41,8 @@ import { environment } from '../environments/environment';
     ClientLoginComponent,
     ClientDashboardComponent,
     ClientLayoutComponent,
-    WithdrawalComponent
+    WithdrawalComponent,
+    ClientProfileComponent
   ],
   imports: [
     BrowserModule,

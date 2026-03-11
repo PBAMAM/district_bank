@@ -1,0 +1,144 @@
+<app-client-layout>
+    <div class="client-profile">
+
+        <!-- ===== PAGE HEADER ===== -->
+        <div class="profile-header" [@fadeInUp]>
+            <div class="header-icon">👤</div>
+            <div class="header-text">
+                <h1>Profile Settings</h1>
+                <p class="header-subtitle">Manage your personal information and preferences</p>
+            </div>
+        </div>
+
+        <!-- ===== IDENTITY CARD ===== -->
+        <div class="identity-card" [@scaleIn]>
+            <div class="identity-glow"></div>
+            <div class="avatar-ring">
+                <div class="avatar">{{ getInitials() }}</div>
+            </div>
+            <div class="identity-info">
+                <h2>{{ currentUser?.firstName }} {{ currentUser?.lastName }}</h2>
+                <p class="identity-email">{{ currentUser?.email }}</p>
+                <span class="role-badge">Premium Client</span>
+            </div>
+        </div>
+
+        <!-- ===== FORM CARD ===== -->
+        <div class="form-card" [@fadeInUp]>
+            <div class="form-card-header">
+                <div class="form-card-icon">📝</div>
+                <div>
+                    <h3>Personal Information</h3>
+                    <p>Update your details below</p>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="msg msg-success" *ngIf="successMessage" [@fadeIn]>
+                <span>✅</span> {{ successMessage }}
+            </div>
+            <div class="msg msg-error" *ngIf="errorMessage" [@fadeIn]>
+                <span>⚠️</span> {{ errorMessage }}
+            </div>
+
+            <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="profile-form">
+                <div class="form-row two-col">
+                    <div class="form-field">
+                        <label class="field-label">First Name</label>
+                        <div class="field-wrap">
+                            <span class="field-prefix-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </span>
+                            <input type="text" formControlName="firstName" class="field-input" placeholder="First name">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">Last Name</label>
+                        <div class="field-wrap">
+                            <span class="field-prefix-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </span>
+                            <input type="text" formControlName="lastName" class="field-input" placeholder="Last name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label class="field-label">Email Address</label>
+                        <div class="field-wrap locked">
+                            <span class="field-prefix-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                            </span>
+                            <input type="email" [value]="currentUser?.email || ''" class="field-input" readonly
+                                disabled>
+                            <span class="lock-icon">🔒</span>
+                        </div>
+                        <p class="field-hint">Email cannot be changed. Contact support if needed.</p>
+                    </div>
+                </div>
+
+                <div class="form-row two-col">
+                    <div class="form-field">
+                        <label class="field-label">Phone Number</label>
+                        <div class="field-wrap">
+                            <span class="field-prefix-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.92 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.82 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                                </svg>
+                            </span>
+                            <input type="tel" formControlName="phone" class="field-input" placeholder="+352 ...">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="field-label">Address</label>
+                        <div class="field-wrap">
+                            <span class="field-prefix-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                            </span>
+                            <input type="text" formControlName="address" class="field-input"
+                                placeholder="City, Country">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="save-btn" [disabled]="profileForm.invalid || isSaving">
+                        <span class="btn-inner">
+                            <span class="spinner-sm" *ngIf="isSaving"></span>
+                            <svg *ngIf="!isSaving" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                <polyline points="17 21 17 13 7 13 7 21" />
+                                <polyline points="7 3 7 8 15 8" />
+                            </svg>
+                            {{ isSaving ? 'Saving…' : 'Save Changes' }}
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+
+
+    </div>
+</app-client-layout>

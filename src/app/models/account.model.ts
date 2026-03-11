@@ -36,6 +36,8 @@ export interface User {
   accounts: string[];
   isActive: boolean;
   createdAt: Date;
+  phone?: string;
+  address?: string;
 }
 
 export interface LoginCredentials {

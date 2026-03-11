@@ -8,6 +8,7 @@ import { FinancialPlannerComponent } from './components/financial-planner/financ
 import { ClientLoginComponent } from './components/client-login/client-login.component';
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
 import { WithdrawalComponent } from './components/withdrawal/withdrawal.component';
+import { ClientProfileComponent } from './components/client-profile/client-profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/client', pathMatch: 'full' },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'client/withdrawal', component: WithdrawalComponent },
   { path: 'client/accounts', component: AccountOverviewComponent },
   { path: 'client/transactions', component: FinancialPlannerComponent },
+  { path: 'client/profile', component: ClientProfileComponent },
 
   // Legacy routes (for backward compatibility)
   { path: 'login', component: LoginComponent },
