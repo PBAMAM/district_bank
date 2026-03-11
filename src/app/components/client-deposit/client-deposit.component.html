@@ -1,0 +1,155 @@
+<app-client-layout>
+    <div class="deposit-page">
+
+        <!-- HEADER -->
+        <div class="dep-header" [@fadeInUp]>
+            <div class="dep-header-icon">💰</div>
+            <div>
+                <h1>Deposit Funds</h1>
+                <p class="dep-header-sub">Request a deposit into your account. Our team will process and confirm it.</p>
+            </div>
+        </div>
+
+        <!-- CONTENT GRID -->
+        <div class="dep-content">
+
+            <!-- LEFT: MAIN -->
+            <div class="dep-main">
+
+                <!-- Method selector -->
+                <div class="dep-methods-card" [@fadeInUp]>
+                    <h3 class="dep-card-title">Choose Deposit Method</h3>
+                    <div class="dep-methods-grid">
+                        <button class="dep-method-btn" *ngFor="let method of depositMethods"
+                            [class.active]="selectedMethod === method.id" (click)="selectMethod(method.id)">
+                            <span class="dep-method-icon">{{ method.icon }}</span>
+                            <span class="dep-method-label">{{ method.label }}</span>
+                            <span class="dep-method-desc">{{ method.desc }}</span>
+                            <span class="dep-method-check" *ngIf="selectedMethod === method.id">✓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Account preview -->
+                <div class="dep-account-card" *ngIf="selectedAccount" [@slideInRight]>
+                    <div class="dac-left">
+                        <div class="dac-icon">{{ selectedAccount.accountType.charAt(0) }}</div>
+                        <div class="dac-info">
+                            <span class="dac-name">{{ selectedAccount.accountType }}</span>
+                            <span class="dac-iban">{{ selectedAccount.iban }}</span>
+                        </div>
+                    </div>
+                    <div class="dac-right">
+                        <span class="dac-balance">{{ formatCurrency(selectedAccount.balance, selectedAccount.currency)
+                            }}</span>
+                        <span class="dac-label">Current Balance</span>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="dep-form-card" [@fadeInUp]>
+                    <div class="dep-form-header">
+                        <h2>Deposit Details</h2>
+                        <span class="dep-status-pill">⏳ Pending Confirmation</span>
+                    </div>
+
+                    <form [formGroup]="depositForm" (ngSubmit)="onSubmit()" class="dep-form">
+
+                        <!-- Amount -->
+                        <div class="dep-field">
+                            <label class="dep-label">Amount to Deposit</label>
+                            <div class="dep-input-wrap amount-wrap">
+                                <span class="dep-currency">€</span>
+                                <input type="number" formControlName="amount" class="dep-input amount-input"
+                                    placeholder="0.00" step="0.01" min="0.01"
+                                    [class.error]="depositForm.get('amount')?.invalid && depositForm.get('amount')?.touched">
+                            </div>
+                        </div>
+
+                        <!-- Target account -->
+                        <div class="dep-field">
+                            <label class="dep-label">To Account</label>
+                            <div class="dep-input-wrap">
+                                <span class="dep-icon-prefix">🏦</span>
+                                <select formControlName="toAccount" class="dep-input dep-select"
+                                    (change)="onAccountChange($any($event.target).value)">
+                                    <option *ngFor="let acc of accounts" [value]="acc.id">
+                                        {{ acc.accountType }} — {{ formatCurrency(acc.balance, acc.currency) }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Reference note -->
+                        <div class="dep-field">
+                            <label class="dep-label">Reference / Note
+                                <span class="dep-required">Required</span>
+                            </label>
+                            <div class="dep-input-wrap">
+                                <span class="dep-icon-prefix">📝</span>
+                                <input type="text" formControlName="description" class="dep-input"
+                                    placeholder="e.g. Wire transfer from BNP Paribas ref #123…"
+                                    [class.error]="depositForm.get('description')?.invalid && depositForm.get('description')?.touched">
+                            </div>
+                        </div>
+
+                        <!-- Messages -->
+                        <div class="dep-error" *ngIf="errorMessage" [@fadeIn]>⚠️ {{ errorMessage }}</div>
+                        <div class="dep-success" *ngIf="depositSuccess" [@fadeIn]>
+                            ✅ Deposit request submitted! Our team will review and credit your account shortly.
+                        </div>
+
+                        <button type="submit" class="dep-submit-btn" [disabled]="depositForm.invalid || isLoading">
+                            <span class="dep-btn-inner">
+                                <span class="dep-spinner" *ngIf="isLoading"></span>
+                                <span>{{ isLoading ? 'Submitting…' : 'Submit Deposit Request' }}</span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- RIGHT: SIDEBAR -->
+            <aside class="dep-sidebar">
+                <div class="dep-info-card">
+                    <div class="dep-info-header"><span>ℹ️</span>
+                        <h3>How Deposits Work</h3>
+                    </div>
+                    <div class="dep-steps">
+                        <div class="dep-step"><span class="dep-step-num">1</span><span>Choose a deposit method and fill
+                                in details</span></div>
+                        <div class="dep-step"><span class="dep-step-num">2</span><span>Submit your request — it goes to
+                                pending review</span></div>
+                        <div class="dep-step"><span class="dep-step-num">3</span><span>Our team verifies and credits
+                                your account</span></div>
+                    </div>
+                </div>
+
+                <div class="dep-info-card">
+                    <div class="dep-info-header"><span>⚡</span>
+                        <h3>Processing Times</h3>
+                    </div>
+                    <div class="dep-table">
+                        <div class="dep-row"><span>Bank Transfer</span><span class="dep-val">1–2 days</span></div>
+                        <div class="dep-row"><span>Cryptocurrency</span><span class="dep-val">1–24 hours</span></div>
+                        <div class="dep-row"><span>International Wire</span><span class="dep-val">2–5 days</span></div>
+                        <div class="dep-row"><span>Cash</span><span class="dep-val">Same day</span></div>
+                    </div>
+                </div>
+
+                <div class="dep-info-card tip-card">
+                    <div class="dep-info-header"><span>💡</span>
+                        <h3>Tips</h3>
+                    </div>
+                    <ul class="dep-tips">
+                        <li>Always include a clear payment reference</li>
+                        <li>Funds are credited once our team verifies receipt</li>
+                        <li>For crypto, always double-check wallet addresses</li>
+                        <li>Contact support to track your deposit status</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+    </div>
+</app-client-layout>

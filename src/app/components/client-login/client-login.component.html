@@ -70,12 +70,6 @@
         <p>{{ isLoginMode ? 'Access your private banking portal securely.' : 'Create your account in minutes.' }}</p>
       </div>
 
-      <!-- Demo hint (login only) -->
-      <div class="demo-hint" *ngIf="isLoginMode">
-        <span>💡</span>
-        <div>Demo: <strong>customer@bank.com</strong> / <strong>password123</strong></div>
-      </div>
-
       <!-- Error / Success -->
       <div class="msg-error" *ngIf="errorMessage">
         <span>⚠️</span> {{ errorMessage }}

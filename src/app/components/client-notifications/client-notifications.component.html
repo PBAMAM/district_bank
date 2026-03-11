@@ -1,0 +1,108 @@
+<app-client-layout>
+    <div class="notif-page">
+
+        <!-- HEADER -->
+        <div class="notif-header" [@fadeInUp]>
+            <div class="notif-header-icon">🔔</div>
+            <div>
+                <h1>Notifications</h1>
+                <p>Track the status of all your banking requests</p>
+            </div>
+            <div class="notif-badge" *ngIf="unreadCount > 0">
+                {{ unreadCount }} Pending
+            </div>
+        </div>
+
+        <!-- LOADING -->
+        <div class="notif-loading" *ngIf="isLoading" [@fadeIn]>
+            <div class="notif-spinner"></div>
+            <p>Loading notifications…</p>
+        </div>
+
+        <!-- EMPTY -->
+        <div class="notif-empty" *ngIf="!isLoading && transactions.length === 0" [@fadeIn]>
+            <div class="notif-empty-icon">📭</div>
+            <h3>No notifications yet</h3>
+            <p>Your transaction updates will appear here</p>
+        </div>
+
+        <div class="notif-content" *ngIf="!isLoading && transactions.length > 0">
+
+            <!-- PENDING -->
+            <div class="notif-section" *ngIf="pendingTransactions.length > 0">
+                <div class="notif-section-header">
+                    <span class="notif-section-dot pending"></span>
+                    <h2>Pending ({{ pendingTransactions.length }})</h2>
+                </div>
+                <div class="notif-list">
+                    <div class="notif-item" *ngFor="let tx of pendingTransactions; let i = index" [@slideRight]
+                        [style.animation-delay.ms]="i * 50">
+                        <div class="notif-item-icon pending">⏳</div>
+                        <div class="notif-item-body">
+                            <p class="notif-item-title">{{ tx.description || 'Transaction Pending' }}</p>
+                            <p class="notif-item-sub">{{ tx.type | titlecase }} — Awaiting admin review</p>
+                            <p class="notif-item-msg" *ngIf="tx.adminMessage">{{ tx.adminMessage }}</p>
+                            <p class="notif-item-date">{{ tx.createdAt | date:'medium' }}</p>
+                        </div>
+                        <div class="notif-item-amount">
+                            <span [class]="tx.amount > 0 ? 'pos' : 'neg'">
+                                {{ tx.amount > 0 ? '+' : '' }}{{ formatCurrency(tx.amount, tx.currency) }}
+                            </span>
+                            <span class="notif-currency">{{ tx.currency }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPLETED -->
+            <div class="notif-section" *ngIf="completedTransactions.length > 0">
+                <div class="notif-section-header">
+                    <span class="notif-section-dot completed"></span>
+                    <h2>Completed ({{ completedTransactions.length }})</h2>
+                </div>
+                <div class="notif-list">
+                    <div class="notif-item" *ngFor="let tx of completedTransactions; let i = index" [@slideRight]
+                        [style.animation-delay.ms]="i * 40">
+                        <div class="notif-item-icon completed">✅</div>
+                        <div class="notif-item-body">
+                            <p class="notif-item-title">{{ tx.description || 'Transaction Completed' }}</p>
+                            <p class="notif-item-sub">{{ tx.type | titlecase }} — Successfully processed</p>
+                            <p class="notif-item-date">{{ tx.createdAt | date:'medium' }}</p>
+                        </div>
+                        <div class="notif-item-amount">
+                            <span [class]="tx.amount > 0 ? 'pos' : 'neg'">
+                                {{ tx.amount > 0 ? '+' : '' }}{{ formatCurrency(tx.amount, tx.currency) }}
+                            </span>
+                            <span class="notif-currency">{{ tx.currency }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REJECTED -->
+            <div class="notif-section" *ngIf="rejectedTransactions.length > 0">
+                <div class="notif-section-header">
+                    <span class="notif-section-dot rejected"></span>
+                    <h2>Rejected / Failed ({{ rejectedTransactions.length }})</h2>
+                </div>
+                <div class="notif-list">
+                    <div class="notif-item" *ngFor="let tx of rejectedTransactions; let i = index" [@slideRight]
+                        [style.animation-delay.ms]="i * 40">
+                        <div class="notif-item-icon rejected">❌</div>
+                        <div class="notif-item-body">
+                            <p class="notif-item-title">{{ tx.description || 'Transaction Rejected' }}</p>
+                            <p class="notif-item-sub">{{ tx.type | titlecase }} — {{ tx.status | titlecase }}</p>
+                            <p class="notif-item-msg error" *ngIf="tx.adminMessage">{{ tx.adminMessage }}</p>
+                            <p class="notif-item-date">{{ tx.createdAt | date:'medium' }}</p>
+                        </div>
+                        <div class="notif-item-amount">
+                            <span class="neg">{{ formatCurrency(tx.amount, tx.currency) }}</span>
+                            <span class="notif-currency">{{ tx.currency }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</app-client-layout>

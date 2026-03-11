@@ -1,0 +1,600 @@
+// ============================================
+// CLIENT DEPOSIT — PREMIUM LT THEME
+// ============================================
+$navy: #0d1f3c;
+$gold: #c9a84c;
+$gold-lt: #e8c97a;
+$accent: #1a7abf;
+$green: #10b981;
+$red: #ef4444;
+$orange: #f59e0b;
+$border: #e2e9f0;
+$card-bg: #ffffff;
+$text-main: #1a2744;
+$text-muted: #64748b;
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-16px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0)
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center
+    }
+
+    100% {
+        background-position: 200% center
+    }
+}
+
+.deposit-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dep-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    animation: fadeUp .4s ease both;
+
+    .dep-header-icon {
+        width: 58px;
+        height: 58px;
+        background: linear-gradient(135deg, rgba($green, .18), rgba($green, .08));
+        border: 1px solid rgba($green, .3);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        box-shadow: 0 8px 24px rgba($green, .12);
+        flex-shrink: 0;
+        transition: transform .3s;
+
+        &:hover {
+            transform: scale(1.06) rotate(-4deg);
+        }
+    }
+
+    h1 {
+        font-size: 26px;
+        font-weight: 900;
+        color: $text-main;
+        margin: 0;
+        letter-spacing: -.5px;
+    }
+
+    .dep-header-sub {
+        font-size: 13px;
+        color: $text-muted;
+        margin: 5px 0 0;
+    }
+}
+
+.dep-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    align-items: start;
+
+    @media(max-width:1024px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Method selector
+.dep-methods-card {
+    background: $card-bg;
+    border-radius: 22px;
+    border: 1px solid $border;
+    padding: 22px 24px;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, .05);
+    margin-bottom: 18px;
+    animation: fadeUp .4s ease both;
+
+    .dep-card-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: $text-main;
+        margin: 0 0 16px;
+    }
+}
+
+.dep-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+
+    @media(max-width:600px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dep-method-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 18px;
+    border: 1.5px solid $border;
+    border-radius: 16px;
+    background: #f8fafc;
+    cursor: pointer;
+    text-align: left;
+    transition: all .25s;
+    position: relative;
+
+    &.active {
+        background: linear-gradient(135deg, rgba($accent, .06), rgba($navy, .03));
+        border-color: rgba($accent, .4);
+        box-shadow: 0 4px 16px rgba($accent, .1);
+    }
+
+    &:hover {
+        border-color: rgba($accent, .3);
+        transform: translateY(-2px);
+    }
+
+    .dep-method-icon {
+        font-size: 24px;
+        margin-bottom: 4px;
+    }
+
+    .dep-method-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: $text-main;
+    }
+
+    .dep-method-desc {
+        font-size: 11px;
+        color: $text-muted;
+        line-height: 1.4;
+    }
+
+    .dep-method-check {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: $accent;
+        color: white;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+    }
+}
+
+// Account card
+.dep-account-card {
+    background: linear-gradient(135deg, $navy, #1a3a6b);
+    border-radius: 20px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 28px rgba($navy, .25);
+    animation: slideRight .5s ease both;
+
+    .dac-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .dac-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, $gold, darken($gold, 12%));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 900;
+        color: $navy;
+        flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba($gold, .35);
+    }
+
+    .dac-name {
+        font-size: 15px;
+        font-weight: 800;
+        color: white;
+        display: block;
+    }
+
+    .dac-iban {
+        font-size: 11px;
+        color: rgba(255, 255, 255, .4);
+        font-family: monospace;
+        margin-top: 2px;
+        display: block;
+    }
+
+    .dac-right {
+        text-align: right;
+    }
+
+    .dac-balance {
+        font-size: 20px;
+        font-weight: 900;
+        display: block;
+        background: linear-gradient(90deg, $gold-lt, $gold);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmer 3s linear infinite;
+    }
+
+    .dac-label {
+        font-size: 11px;
+        color: rgba(255, 255, 255, .35);
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+}
+
+// Form card
+.dep-form-card {
+    background: $card-bg;
+    border-radius: 24px;
+    border: 1px solid $border;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
+    animation: fadeUp .5s ease .1s both;
+
+    .dep-form-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 20px 26px;
+        border-bottom: 1px solid $border;
+        background: linear-gradient(90deg, rgba($navy, .03), transparent);
+
+        h2 {
+            font-size: 17px;
+            font-weight: 800;
+            color: $text-main;
+            margin: 0;
+        }
+    }
+
+    .dep-status-pill {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: rgba($green, .1);
+        color: darken($green, 5%);
+        border: 1px solid rgba($green, .3);
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+}
+
+.dep-form {
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dep-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.dep-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .dep-required {
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 10px;
+        background: rgba($red, .08);
+        color: $red;
+        border: 1px solid rgba($red, .2);
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+}
+
+.dep-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dep-currency {
+    position: absolute;
+    left: 16px;
+    font-size: 17px;
+    font-weight: 800;
+    color: $text-main;
+    pointer-events: none;
+}
+
+.dep-icon-prefix {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.dep-input {
+    width: 100%;
+    padding: 13px 14px 13px 44px;
+    border: 1.5px solid $border;
+    border-radius: 14px;
+    background: #f8fafc;
+    color: $text-main;
+    font-size: 15px;
+    outline: none;
+    transition: all .25s;
+    font-family: inherit;
+
+    &::placeholder {
+        color: #c0c9d8;
+    }
+
+    &:focus {
+        border-color: $accent;
+        background: white;
+        box-shadow: 0 0 0 4px rgba($accent, .1);
+    }
+
+    &.error {
+        border-color: $red;
+        box-shadow: 0 0 0 3px rgba($red, .1);
+    }
+}
+
+.amount-input {
+    padding-left: 42px !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+}
+
+.dep-select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+
+    option {
+        background: white;
+        color: $text-main;
+    }
+}
+
+.dep-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.dep-success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.dep-submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, $navy, #1a3a6b);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all .3s;
+    box-shadow: 0 8px 24px rgba($navy, .28);
+
+    .dep-btn-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .dep-spinner {
+        width: 18px;
+        height: 18px;
+        border: 2.5px solid rgba(255, 255, 255, .3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin .7s linear infinite;
+    }
+
+    &:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 34px rgba($navy, .38);
+    }
+
+    &:disabled {
+        opacity: .45;
+        cursor: not-allowed;
+    }
+}
+
+// Sidebar
+.dep-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dep-info-card {
+    background: $card-bg;
+    border-radius: 20px;
+    border: 1px solid $border;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+    animation: fadeUp .5s ease .1s both;
+
+    .dep-info-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 20px;
+        border-bottom: 1px solid $border;
+        background: linear-gradient(90deg, rgba($navy, .03), transparent);
+
+        span {
+            font-size: 18px;
+        }
+
+        h3 {
+            font-size: 14px;
+            font-weight: 800;
+            color: $text-main;
+            margin: 0;
+        }
+    }
+}
+
+.dep-steps {
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dep-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    color: $text-muted;
+    line-height: 1.6;
+
+    .dep-step-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, $accent, darken($accent, 10%));
+        color: white;
+        font-size: 12px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 3px 8px rgba($accent, .25);
+    }
+}
+
+.dep-table {
+    padding: 6px 0;
+}
+
+.dep-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f4f7fb;
+    font-size: 13px;
+    color: $text-muted;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .dep-val {
+        font-weight: 700;
+        color: $text-main;
+    }
+}
+
+.dep-tips {
+    list-style: none;
+    padding: 14px 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    li {
+        font-size: 13px;
+        color: $text-muted;
+        line-height: 1.6;
+        padding-left: 22px;
+        position: relative;
+
+        &::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: $green;
+            font-weight: 700;
+        }
+    }
+}
