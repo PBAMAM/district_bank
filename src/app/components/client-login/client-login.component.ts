@@ -44,8 +44,105 @@ export class ClientLoginComponent implements OnInit {
   successMessage = '';
   showLoginForm = false;
 
+  // Nav state
+  modalOpen = false;
+  mobileMenuOpen = false;
+  navScrolled = false;
+  activeSection = 'hero';
+
+  // Particles
+  particles = Array.from({ length: 22 }, () => ({
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    d: Math.random() * 4,
+    dur: 3 + Math.random() * 4
+  }));
+
+  // Social proof avatars
+  proofAvatars = ['A', 'M', 'J', 'S', 'R'];
+
+  // Hero stats
+  heroStats = [
+    { val: '€2.4B+', label: 'Assets Managed' },
+    { val: '48K+', label: 'Clients Worldwide' },
+    { val: '99.9%', label: 'Platform Uptime' },
+    { val: '40+', label: 'Currencies' }
+  ];
+
+  // Trust strip
+  trustItems = [
+    { icon: '🔐', label: '256-bit Encryption' },
+    { icon: '🇱🇺', label: 'Luxembourg Regulated' },
+    { icon: '🏅', label: 'ISO 27001' },
+    { icon: '⚡', label: 'Instant Transfers' },
+    { icon: '🌍', label: '40+ Currencies' },
+    { icon: '🛡️', label: 'GDPR Compliant' }
+  ];
+
+  // Features
+  features = [
+    { icon: '🔐', title: 'Bank-Grade Security', desc: '256-bit AES encryption, real-time fraud detection, and full regulatory compliance.' },
+    { icon: '⚡', title: 'Instant Transfers', desc: 'Move funds across 40+ currencies in seconds with zero hidden fees.' },
+    { icon: '🌍', title: 'Global Access', desc: 'Manage your portfolio from anywhere, on any device, 24/7.' },
+    { icon: '📊', title: 'Smart Analytics', desc: 'Real-time dashboards, forecasts, and income/expenditure charts built in.' },
+    { icon: '🏦', title: 'Multi-Account', desc: 'Manage checking, savings, investments, and securities in one portal.' },
+    { icon: '💼', title: 'Private Advisory', desc: 'Dedicated relationship manager and private banking specialists.' }
+  ];
+
+  // Services
+  services = [
+    { icon: '💰', title: 'Deposits & Withdrawals', desc: 'Request deposits and withdrawals with full admin oversight and transparent status tracking.' },
+    { icon: '💸', title: 'International Transfers', desc: 'Send money globally via SWIFT/SEPA with competitive exchange rates.' },
+    { icon: '📈', title: 'Investment Accounts', desc: 'Grow your wealth with curated investment portfolios tailored to your goals.' },
+    { icon: '🏛️', title: 'Wealth Management', desc: 'Expert management of your estate, securities, and asset portfolio.' },
+    { icon: '🔒', title: 'Secured Loans', desc: 'Flexible lending solutions backed by your existing assets.' },
+    { icon: '🎯', title: 'Tax Optimization', desc: 'Strategic planning to maximize after-tax returns within Luxembourg frameworks.' }
+  ];
+
+  // Security badges
+  secBadges = [
+    { icon: '🔒', label: 'SSL / TLS 1.3' },
+    { icon: '🇱🇺', label: 'Luxembourg Regulated' },
+    { icon: '🏅', label: 'ISO 27001 Certified' },
+    { icon: '👁️', label: '24/7 Monitoring' },
+    { icon: '🛡️', label: 'GDPR Compliant' }
+  ];
+
+  showLoginModal(mode: 'sign-in' | 'register') {
+    this.isLoginMode = mode === 'sign-in';
+    this.clearMessages();
+    this.modalOpen = true;
+  }
+
+  closeModal() {
+    this.modalOpen = false;
+    this.clearMessages();
+  }
+
+  scrollTo(sectionId: string) {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      this.activeSection = sectionId;
+    }
+  }
+
+  private onScroll = () => {
+    const y = window.scrollY;
+    this.navScrolled = y > 40;
+    const sections = ['hero', 'features', 'services', 'security'];
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom > 100) { this.activeSection = id; break; }
+      }
+    }
+  };
+
   // Virtual Keyboard State
   showKeyboard = false;
+
   keyboardTarget: 'login-header' | 'login-modal' | 'register-modal' = 'login-header';
   keyboardControl: 'email' | 'password' = 'password';
   isShifted = false;

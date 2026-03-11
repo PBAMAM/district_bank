@@ -1,301 +1,378 @@
-<div class="lt-login-page">
+<div class="lp-root">
 
-  <!-- ==================== LEFT: BRAND PANEL ==================== -->
-  <div class="brand-panel">
-    <div class="brand-logo-wrap">
-      <div class="brand-icon">LT</div>
-      <div>
-        <div class="brand-name"><span>Luxembourg</span>-Treasure</div>
-        <div class="brand-tagline-tiny">Private Banking</div>
+  <!-- ============================= NAV ============================= -->
+  <nav class="lp-nav" [class.scrolled]="navScrolled">
+    <div class="lp-nav-inner">
+      <div class="lp-nav-logo">
+        <div class="lp-nav-icon">LT</div>
+        <div class="lp-nav-brand">
+          <span class="lp-brand-main"><span>Luxembourg</span>-Treasure</span>
+          <span class="lp-brand-sub">Private Banking</span>
+        </div>
+      </div>
+      <div class="lp-nav-links">
+        <button class="lp-nav-link" [class.active]="activeSection==='hero'" (click)="scrollTo('hero')">Home</button>
+        <button class="lp-nav-link" [class.active]="activeSection==='features'"
+          (click)="scrollTo('features')">Features</button>
+        <button class="lp-nav-link" [class.active]="activeSection==='services'"
+          (click)="scrollTo('services')">Services</button>
+        <button class="lp-nav-link" [class.active]="activeSection==='security'"
+          (click)="scrollTo('security')">Security</button>
+      </div>
+      <div class="lp-nav-actions">
+        <button class="lp-btn-outline" (click)="showLoginModal('sign-in')">Sign In</button>
+        <button class="lp-btn-gold" (click)="showLoginModal('register')">Open Account →</button>
+      </div>
+      <button class="lp-mobile-menu" (click)="mobileMenuOpen = !mobileMenuOpen" [class.open]="mobileMenuOpen">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="lp-mobile-nav" *ngIf="mobileMenuOpen">
+      <button class="lp-mob-link" (click)="scrollTo('hero');     mobileMenuOpen=false">Home</button>
+      <button class="lp-mob-link" (click)="scrollTo('features'); mobileMenuOpen=false">Features</button>
+      <button class="lp-mob-link" (click)="scrollTo('services'); mobileMenuOpen=false">Services</button>
+      <button class="lp-mob-link" (click)="scrollTo('security'); mobileMenuOpen=false">Security</button>
+      <div class="lp-mob-divider"></div>
+      <button class="lp-btn-outline full" (click)="showLoginModal('sign-in');  mobileMenuOpen=false">Sign In</button>
+      <button class="lp-btn-gold full" (click)="showLoginModal('register'); mobileMenuOpen=false">Open Account</button>
+    </div>
+  </nav>
+
+  <!-- ============================= HERO ============================= -->
+  <section class="lp-hero" id="hero">
+    <div class="hero-blob b1"></div>
+    <div class="hero-blob b2"></div>
+    <div class="hero-blob b3"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-particles">
+      <div class="hpart" *ngFor="let p of particles" [style.left.%]="p.x" [style.top.%]="p.y"
+        [style.animation-delay.s]="p.d" [style.animation-duration.s]="p.dur"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hb-dot"></span> 🏆 &nbsp;Luxembourg's Most Trusted Private Bank
+      </div>
+      <h1 class="hero-headline">Where wealth<br>meets <em>precision</em>.</h1>
+      <p class="hero-sub">
+        A private banking experience built for those who expect more.<br>
+        Secure, digital, discreet — available 24/7 from anywhere in the world.
+      </p>
+      <div class="hero-ctas">
+        <button class="cta-primary" (click)="showLoginModal('register')">
+          Open Your Account
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+        <button class="cta-secondary" (click)="showLoginModal('sign-in')">
+          <span class="cta-sec-icon">→</span> Client Login
+        </button>
+      </div>
+      <div class="hero-proof">
+        <div class="hp-avatars">
+          <div class="hp-av" *ngFor="let a of proofAvatars">{{ a }}</div>
+        </div>
+        <p>Trusted by <strong>48,000+</strong> private clients worldwide</p>
+      </div>
+      <div class="hero-stats">
+        <ng-container *ngFor="let s of heroStats; let last = last">
+          <div class="hero-stat">
+            <span class="hs-val">{{ s.val }}</span>
+            <span class="hs-label">{{ s.label }}</span>
+          </div>
+          <div class="hs-divider" *ngIf="!last"></div>
+        </ng-container>
       </div>
     </div>
 
-    <h1 class="brand-headline">
-      Where wealth<br>meets <em>precision</em>.
-    </h1>
-
-    <p class="brand-sub">
-      A private banking experience built for those who expect more.
-      Secure, digital, discreet — available 24/7.
-    </p>
-
-    <div class="brand-stats">
-      <div class="stat-item">
-        <div class="stat-val">€2.4B+</div>
-        <div class="stat-label">Assets Managed</div>
+    <div class="hero-visual">
+      <div class="hv-glow"></div>
+      <div class="hv-card main-card">
+        <div class="hvc-header">
+          <div class="hvc-header-left">
+            <div class="hvc-avatar">A</div>
+            <div>
+              <p class="hvc-name">Alexander M.</p>
+              <p class="hvc-type">Premium Client</p>
+            </div>
+          </div>
+          <div class="hvc-chip">🏆 Gold Tier</div>
+        </div>
+        <div class="hvc-label">Total Portfolio</div>
+        <div class="hvc-balance">€ 284,920.00</div>
+        <div class="hvc-change"><span class="hvc-up">▲ +4.2%</span> this month</div>
+        <div class="hvc-bar-row">
+          <div class="hvc-bar-item">
+            <span class="hvc-bar-label">Savings</span>
+            <div class="hvc-bar">
+              <div class="hvc-bar-fill" style="width:68%"></div>
+            </div>
+          </div>
+          <div class="hvc-bar-item">
+            <span class="hvc-bar-label">Investments</span>
+            <div class="hvc-bar">
+              <div class="hvc-bar-fill i" style="width:45%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="hvc-iban">LU12 3456 7890 1234 5678</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-val">48K+</div>
-        <div class="stat-label">Clients Worldwide</div>
+      <div class="hv-card mini-card c1">
+        <div class="mc-icon-wrap sent">💸</div>
+        <div>
+          <p class="mc-title">Wire Sent</p>
+          <p class="mc-val neg">−€15,000</p>
+          <p class="mc-time">2 min ago</p>
+        </div>
       </div>
-      <div class="stat-item">
-        <div class="stat-val">99.9%</div>
-        <div class="stat-label">Uptime</div>
+      <div class="hv-card mini-card c2">
+        <div class="mc-icon-wrap recv">✅</div>
+        <div>
+          <p class="mc-title">Deposit Confirmed</p>
+          <p class="mc-val pos">+€50,000</p>
+          <p class="mc-time">Today, 09:14</p>
+        </div>
+      </div>
+      <div class="hv-card mini-card c3">
+        <div class="mc-icon-wrap sec">🔒</div>
+        <div>
+          <p class="mc-title">Security Score</p>
+          <p class="mc-val gold">Excellent ✓</p>
+          <p class="mc-time">Updated now</p>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="brand-features">
-      <div class="feature-pill">
-        <span class="feat-icon">🔐</span>
-        <span class="feat-text">Bank-grade 256-bit encryption</span>
+  <!-- Trust strip -->
+  <div class="lp-trust-strip">
+    <div class="lp-trust-inner">
+      <div class="trust-item" *ngFor="let t of trustItems">
+        <span>{{ t.icon }}</span><span>{{ t.label }}</span>
       </div>
-      <div class="feature-pill">
-        <span class="feat-icon">⚡</span>
-        <span class="feat-text">Instant transfers across 40+ currencies</span>
-      </div>
-      <div class="feature-pill">
-        <span class="feat-icon">🌍</span>
-        <span class="feat-text">Regulated under Luxembourg law</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== RIGHT: FORM PANEL ==================== -->
-  <div class="form-panel">
-    <div class="form-card">
-
-      <!-- Mode Tabs -->
-      <div class="mode-tabs">
-        <button class="mode-tab" [class.active]="isLoginMode" (click)="isLoginMode = true; clearMessages()">
-          Sign In
-        </button>
-        <button class="mode-tab" [class.active]="!isLoginMode" (click)="isLoginMode = false; clearMessages()">
-          Open Account
-        </button>
-      </div>
-
-      <!-- Title -->
-      <div class="form-title-area">
-        <h1>{{ isLoginMode ? 'Welcome back' : 'Join Luxembourg-Treasure' }}</h1>
-        <p>{{ isLoginMode ? 'Access your private banking portal securely.' : 'Create your account in minutes.' }}</p>
-      </div>
-
-      <!-- Error / Success -->
-      <div class="msg-error" *ngIf="errorMessage">
-        <span>⚠️</span> {{ errorMessage }}
-      </div>
-      <div class="msg-success" *ngIf="successMessage">
-        <span>✅</span> {{ successMessage }}
-      </div>
-
-      <!-- ===== LOGIN FORM ===== -->
-      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()">
-
-        <div class="field-group">
-          <div class="field-inner">
-            <label class="field-label">
-              Email Address
-              <span class="vk-link" (click)="toggleKeyboard('login-modal', 'email', $event)">⌨️ Virtual keyboard</span>
-            </label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-              </span>
-              <input type="email" formControlName="email" class="field-input"
-                [class.error-field]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-                placeholder="your@email.com" autocomplete="email">
-            </div>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <div class="field-inner">
-            <label class="field-label">
-              Password
-              <span class="vk-link" (click)="toggleKeyboard('login-modal', 'password', $event)">⌨️ Virtual
-                keyboard</span>
-            </label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-              </span>
-              <input type="password" formControlName="password" class="field-input"
-                [class.error-field]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-                placeholder="••••••••" autocomplete="current-password">
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" class="submit-btn" [disabled]="loginForm.invalid || isLoading">
-          <span class="btn-inner">
-            <span class="spinner-sm" *ngIf="isLoading"></span>
-            {{ isLoading ? 'Signing in…' : 'Sign In to Portal' }}
-          </span>
-        </button>
-      </form>
-
-      <!-- ===== REGISTER FORM ===== -->
-      <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()">
-
-        <div class="field-group two-col">
-          <div class="field-inner">
-            <label class="field-label">First Name</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-              </span>
-              <input type="text" formControlName="firstName" class="field-input"
-                [class.error-field]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
-                placeholder="First name">
-            </div>
-          </div>
-          <div class="field-inner">
-            <label class="field-label">Last Name</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-              </span>
-              <input type="text" formControlName="lastName" class="field-input"
-                [class.error-field]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
-                placeholder="Last name">
-            </div>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <div class="field-inner">
-            <label class="field-label">
-              Email Address
-              <span class="vk-link" (click)="toggleKeyboard('register-modal', 'email', $event)">⌨️ Virtual
-                keyboard</span>
-            </label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-              </span>
-              <input type="email" formControlName="email" class="field-input"
-                [class.error-field]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-                placeholder="your@email.com">
-            </div>
-          </div>
-        </div>
-
-        <div class="field-group two-col">
-          <div class="field-inner">
-            <label class="field-label">Phone</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path
-                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.92 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.82 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                </svg>
-              </span>
-              <input type="tel" formControlName="phone" class="field-input" placeholder="+352 ...">
-            </div>
-          </div>
-          <div class="field-inner">
-            <label class="field-label">Address</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-              </span>
-              <input type="text" formControlName="address" class="field-input" placeholder="City, Country">
-            </div>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <div class="field-inner">
-            <label class="field-label">
-              Password
-              <span class="vk-link" (click)="toggleKeyboard('register-modal', 'password', $event)">⌨️ Virtual
-                keyboard</span>
-            </label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-              </span>
-              <input type="password" formControlName="password" class="field-input"
-                [class.error-field]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-                placeholder="Min. 6 characters">
-            </div>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <div class="field-inner">
-            <label class="field-label">Confirm Password</label>
-            <div class="field-input-wrap">
-              <span class="field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
-              </span>
-              <input type="password" formControlName="confirmPassword" class="field-input"
-                [class.error-field]="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']"
-                placeholder="Repeat password">
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" class="submit-btn" [disabled]="registerForm.invalid || isLoading">
-          <span class="btn-inner">
-            <span class="spinner-sm" *ngIf="isLoading"></span>
-            {{ isLoading ? 'Creating account…' : 'Create My Account' }}
-          </span>
-        </button>
-      </form>
-
-      <!-- Footer link -->
-      <div class="toggle-link">
-        <span>{{ isLoginMode ? "Don't have an account?" : "Already a client?" }}</span>
-        <button (click)="toggleMode()">
-          {{ isLoginMode ? ' Open an account' : ' Sign in' }}
-        </button>
-      </div>
-
-      <div class="gold-divider"></div>
-
-      <!-- Trust badges -->
-      <div class="trust-strip">
-        <div class="trust-item">
-          <span class="trust-icon">🔒</span>
-          <span>SSL Secured</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-icon">🇱🇺</span>
-          <span>Luxembourg</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-icon">🏅</span>
-          <span>ISO Certified</span>
-        </div>
-      </div>
-
     </div>
   </div>
 
-  <!-- ==================== VIRTUAL KEYBOARD ==================== -->
+  <!-- ============================= FEATURES ============================= -->
+  <section class="lp-features" id="features">
+    <div class="lp-section-inner">
+      <div class="lp-section-label">Built for Private Banking</div>
+      <h2 class="lp-section-title">Everything you need.<br><span class="title-gold">Nothing you don't.</span></h2>
+      <p class="lp-section-sub">Designed from the ground up for high-net-worth individuals who demand the very best.</p>
+      <div class="features-grid">
+        <div class="feat-card" *ngFor="let f of features">
+          <div class="fc-icon-wrap"><span class="fc-icon">{{ f.icon }}</span></div>
+          <h3>{{ f.title }}</h3>
+          <p>{{ f.desc }}</p>
+          <div class="fc-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SERVICES ============================= -->
+  <section class="lp-services" id="services">
+    <div class="lp-section-inner">
+      <div class="lp-section-label">Our Services</div>
+      <h2 class="lp-section-title">Banking designed<br><span class="title-gold">for private wealth.</span></h2>
+      <div class="services-grid">
+        <div class="svc-card" *ngFor="let s of services; let i = index">
+          <div class="svc-card-top">
+            <div class="svc-num">0{{ i + 1 }}</div>
+            <div class="svc-icon">{{ s.icon }}</div>
+          </div>
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.desc }}</p>
+          <div class="svc-cta" (click)="showLoginModal('register')">Get started →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SECURITY ============================= -->
+  <section class="lp-security" id="security">
+    <div class="lp-section-inner lp-security-inner">
+      <div class="security-text">
+        <div class="lp-section-label light">Security First</div>
+        <h2 class="lp-section-title light">Your assets are<br>always protected.</h2>
+        <p class="sec-desc">We employ the highest level of security standards — 256-bit AES encryption, real-time fraud
+          detection, biometric authentication, and full Luxembourg regulatory compliance.</p>
+        <div class="sec-badges">
+          <div class="sec-badge" *ngFor="let b of secBadges">
+            <span class="sb-icon">{{ b.icon }}</span><span>{{ b.label }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="security-visual">
+        <div class="sv-orbit o1">
+          <div class="sv-orb-dot d1"></div>
+        </div>
+        <div class="sv-orbit o2">
+          <div class="sv-orb-dot d2"></div>
+        </div>
+        <div class="sv-orbit o3">
+          <div class="sv-orb-dot d3"></div>
+        </div>
+        <div class="sv-center">🔐</div>
+        <div class="sv-pill p1">256-bit AES</div>
+        <div class="sv-pill p2">EU Regulated</div>
+        <div class="sv-pill p3">ISO 27001</div>
+        <div class="sv-pill p4">Biometric Auth</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= FOOTER CTA ============================= -->
+  <section class="lp-footer-cta">
+    <div class="lp-footer-cta-inner">
+      <div class="lfc-glow"></div>
+      <div class="lp-section-label light-gold">Join Luxembourg-Treasure</div>
+      <h2>Ready to take control<br>of your wealth?</h2>
+      <p>Join 48,000+ private clients who trust Luxembourg-Treasure.</p>
+      <div class="hero-ctas">
+        <button class="cta-primary lg" (click)="showLoginModal('register')">
+          Open Your Account Free
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+        <button class="cta-secondary" (click)="showLoginModal('sign-in')">
+          <span class="cta-sec-icon">→</span> Already a client
+        </button>
+      </div>
+      <p class="lfc-note">No fees · No commitments · Cancel anytime</p>
+    </div>
+  </section>
+
+  <!-- ============================= FOOTER ============================= -->
+  <footer class="lp-footer">
+    <div class="lp-footer-inner">
+      <div class="lp-footer-logo">
+        <div class="lp-nav-icon sm">LT</div>
+        <div>
+          <p class="lp-footer-brand">Luxembourg-Treasure</p>
+          <p class="lp-footer-tagline">Private Banking</p>
+        </div>
+      </div>
+      <div class="lp-footer-links">
+        <button (click)="scrollTo('features')">Features</button>
+        <button (click)="scrollTo('services')">Services</button>
+        <button (click)="scrollTo('security')">Security</button>
+        <button (click)="showLoginModal('sign-in')">Client Login</button>
+      </div>
+      <p class="lp-footer-copy">© 2025 Luxembourg-Treasure S.A. · Regulated under Luxembourg Financial Law (CSSF). All
+        rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ============================= MODAL ============================= -->
+  <div class="lp-modal-overlay" *ngIf="modalOpen" (click)="closeModal()">
+    <div class="lp-modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeModal()">✕</button>
+      <div class="modal-logo">
+        <div class="modal-logo-icon">LT</div>
+        <div class="modal-logo-text"><span>Luxembourg-Treasure</span><span>Private Banking</span></div>
+      </div>
+      <div class="modal-tabs">
+        <button class="modal-tab" [class.active]="isLoginMode" (click)="isLoginMode = true;  clearMessages()">Sign
+          In</button>
+        <button class="modal-tab" [class.active]="!isLoginMode" (click)="isLoginMode = false; clearMessages()">Open
+          Account</button>
+      </div>
+      <div class="modal-title-area">
+        <h2>{{ isLoginMode ? 'Welcome back' : 'Create your account' }}</h2>
+        <p>{{ isLoginMode ? 'Access your private banking portal securely.' : 'Open your account in minutes. No fees.' }}
+        </p>
+      </div>
+      <div class="msg-error" *ngIf="errorMessage"><span>⚠️</span> {{ errorMessage }}</div>
+      <div class="msg-success" *ngIf="successMessage"><span>✅</span> {{ successMessage }}</div>
+
+      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="modal-form">
+        <div class="mf-group">
+          <label>Email <span class="vk-link" (click)="toggleKeyboard('login-modal','email',$event)">⌨️</span></label>
+          <div class="mf-wrap"><span class="mf-icon">📧</span>
+            <input type="email" formControlName="email" class="mf-input" placeholder="your@email.com"
+              autocomplete="email"
+              [class.error-field]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          </div>
+        </div>
+        <div class="mf-group">
+          <label>Password <span class="vk-link"
+              (click)="toggleKeyboard('login-modal','password',$event)">⌨️</span></label>
+          <div class="mf-wrap"><span class="mf-icon">🔒</span>
+            <input type="password" formControlName="password" class="mf-input" placeholder="••••••••"
+              autocomplete="current-password"
+              [class.error-field]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          </div>
+        </div>
+        <button type="submit" class="modal-submit-btn" [disabled]="loginForm.invalid || isLoading">
+          <span class="spinner-sm" *ngIf="isLoading"></span>
+          {{ isLoading ? 'Signing in…' : 'Sign In to Portal' }}
+        </button>
+      </form>
+
+      <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="modal-form">
+        <div class="mf-row">
+          <div class="mf-group">
+            <label>First Name</label>
+            <div class="mf-wrap"><span class="mf-icon">👤</span>
+              <input type="text" formControlName="firstName" class="mf-input" placeholder="First name"
+                [class.error-field]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+            </div>
+          </div>
+          <div class="mf-group">
+            <label>Last Name</label>
+            <div class="mf-wrap"><span class="mf-icon">👤</span>
+              <input type="text" formControlName="lastName" class="mf-input" placeholder="Last name"
+                [class.error-field]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+            </div>
+          </div>
+        </div>
+        <div class="mf-group">
+          <label>Email <span class="vk-link" (click)="toggleKeyboard('register-modal','email',$event)">⌨️</span></label>
+          <div class="mf-wrap"><span class="mf-icon">📧</span>
+            <input type="email" formControlName="email" class="mf-input" placeholder="your@email.com"
+              [class.error-field]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          </div>
+        </div>
+        <div class="mf-group">
+          <label>Password <span class="vk-link"
+              (click)="toggleKeyboard('register-modal','password',$event)">⌨️</span></label>
+          <div class="mf-wrap"><span class="mf-icon">🔒</span>
+            <input type="password" formControlName="password" class="mf-input" placeholder="Min. 6 characters"
+              [class.error-field]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          </div>
+        </div>
+        <div class="mf-group">
+          <label>Confirm Password</label>
+          <div class="mf-wrap"><span class="mf-icon">🔑</span>
+            <input type="password" formControlName="confirmPassword" class="mf-input" placeholder="Repeat password"
+              [class.error-field]="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']">
+          </div>
+        </div>
+        <button type="submit" class="modal-submit-btn" [disabled]="registerForm.invalid || isLoading">
+          <span class="spinner-sm" *ngIf="isLoading"></span>
+          {{ isLoading ? 'Creating account…' : 'Create My Account' }}
+        </button>
+      </form>
+
+      <p class="modal-toggle">
+        {{ isLoginMode ? "Don't have an account?" : "Already a client?" }}
+        <button (click)="toggleMode()">{{ isLoginMode ? 'Open one →' : 'Sign in →' }}</button>
+      </p>
+      <div class="modal-trust"><span>🔒 SSL</span><span>·</span><span>🇱🇺 Luxembourg</span><span>·</span><span>🏅
+          ISO</span></div>
+    </div>
+  </div>
+
+  <!-- VIRTUAL KEYBOARD -->
   <div class="vk-overlay" *ngIf="showKeyboard">
     <div class="vk-container" (mousedown)="$event.preventDefault()">
       <div class="vk-header">
-        <span class="vk-title">Virtual Keyboard</span>
+        <span class="vk-title">🎹 Virtual Keyboard</span>
         <button class="vk-close" (click)="closeKeyboard()">✕</button>
       </div>
-
       <div class="vk-body">
         <ng-container *ngIf="!isSymbols">
           <div class="vk-row" *ngFor="let row of keyboardLetters">
@@ -304,21 +381,19 @@
             </button>
           </div>
         </ng-container>
-
         <ng-container *ngIf="isSymbols">
           <div class="vk-row" *ngFor="let row of keyboardSymbols">
             <button class="vk-key" *ngFor="let key of row" (click)="handleKeyPress(key, $event)">{{ key }}</button>
           </div>
         </ng-container>
-
         <div class="vk-row vk-action-row">
           <button class="vk-key vk-action" [class.vk-active]="isShifted && !isSymbols"
-            (click)="handleKeyPress('SHIFT', $event)">⇧</button>
+            (click)="handleKeyPress('SHIFT',$event)">⇧</button>
           <button class="vk-key vk-action" [class.vk-active]="isSymbols"
-            (click)="handleKeyPress('SYMBOLS', $event)">123</button>
-          <button class="vk-key vk-space" (click)="handleKeyPress('SPACE', $event)">Space</button>
-          <button class="vk-key vk-action" (click)="handleKeyPress('CLEAR', $event)">Clear</button>
-          <button class="vk-key vk-action vk-danger" (click)="handleKeyPress('BACKSPACE', $event)">⌫</button>
+            (click)="handleKeyPress('SYMBOLS',$event)">123</button>
+          <button class="vk-key vk-space" (click)="handleKeyPress('SPACE',$event)">Space</button>
+          <button class="vk-key vk-action" (click)="handleKeyPress('CLEAR',$event)">Clear</button>
+          <button class="vk-key vk-action vk-danger" (click)="handleKeyPress('BACKSPACE',$event)">⌫</button>
         </div>
       </div>
     </div>
