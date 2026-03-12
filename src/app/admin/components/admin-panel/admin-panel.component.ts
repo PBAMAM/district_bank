@@ -26,6 +26,10 @@ export class AdminPanelComponent implements OnInit {
   selectedFromAccount: Account | null = null;
   selectedToAccount: Account | null = null;
 
+  // Warning State
+  warningModalOpen = false;
+  warningForm: FormGroup;
+
   // UI State
   activeTab = 'users';
   isLoading = false;
@@ -68,6 +72,12 @@ export class AdminPanelComponent implements OnInit {
       toAccountId: ['', [Validators.required]],
       amount: [0, [Validators.required, Validators.min(0.01)]],
       description: ['', [Validators.required]]
+    });
+
+    this.warningForm = this.fb.group({
+      userId: ['', Validators.required],
+      showWarning: [false],
+      customWarningMessage: ['']
     });
   }
 
@@ -485,5 +495,46 @@ export class AdminPanelComponent implements OnInit {
       currency: 'EUR',
       ownerId: this.users.length > 0 ? this.users[0].id : ''
     });
+  }
+
+  // Warning Management
+  openWarningModal(user: User) {
+    this.selectedUser = user;
+    this.warningForm.patchValue({
+      userId: user.id,
+      showWarning: user.showWarning || false,
+      customWarningMessage: user.customWarningMessage || ''
+    });
+    this.warningModalOpen = true;
+  }
+
+  closeWarningModal() {
+    this.warningModalOpen = false;
+    this.selectedUser = null;
+    this.warningForm.reset();
+  }
+
+  async saveWarning() {
+    if (this.warningForm.invalid || !this.selectedUser) return;
+
+    this.isLoading = true;
+    this.clearMessages();
+
+    try {
+      const { userId, showWarning, customWarningMessage } = this.warningForm.value;
+      await this.firebaseService.updateUserWarning(userId, showWarning, customWarningMessage);
+
+      // Update local state
+      this.selectedUser.showWarning = showWarning;
+      this.selectedUser.customWarningMessage = customWarningMessage;
+
+      this.successMessage = 'User warning updated successfully';
+      this.closeWarningModal();
+    } catch (error) {
+      this.errorMessage = 'Failed to update warning';
+      console.error(error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 }

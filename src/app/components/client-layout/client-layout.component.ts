@@ -11,6 +11,7 @@ import { User } from '../../models/account.model';
 export class ClientLayoutComponent implements OnInit {
   currentUser: User | null = null;
   isSidebarOpen = false;
+  isWarningModalOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -48,5 +49,11 @@ export class ClientLayoutComponent implements OnInit {
 
   closeSidebar() {
     this.isSidebarOpen = false;
+  }
+
+  toggleWarningModal() {
+    if (this.currentUser?.showWarning) {
+      this.isWarningModalOpen = !this.isWarningModalOpen;
+    }
   }
 }

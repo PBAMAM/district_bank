@@ -16,6 +16,12 @@
     </div>
 
     <div class="header-right">
+      <!-- Warning Button (Only visible if showWarning is true) -->
+      <button class="warning-action-btn" *ngIf="currentUser?.showWarning" (click)="toggleWarningModal()">
+        <span class="warning-icon">⚠️</span>
+        <span class="warning-text">WARNING</span>
+      </button>
+
       <!-- Bell icon -->
       <button class="header-action-btn" title="Notifications">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -56,5 +62,25 @@
     <main class="main-content">
       <ng-content></ng-content>
     </main>
+  </div>
+
+  <!-- Warning Modal Overaly -->
+  <div class="warning-modal-overlay" *ngIf="isWarningModalOpen" (click)="toggleWarningModal()">
+    <div class="warning-modal-content" (click)="$event.stopPropagation()">
+      <div class="warning-modal-header">
+        <div class="warning-title-group">
+          <span class="warning-icon-large">⚠️</span>
+          <h2>Important Warning</h2>
+        </div>
+        <button class="close-btn" (click)="toggleWarningModal()">×</button>
+      </div>
+      <div class="warning-modal-body">
+        <p class="custom-warning-text">{{ currentUser?.customWarningMessage || 'Please contact administrator for more
+          details.' }}</p>
+      </div>
+      <div class="warning-modal-footer">
+        <button class="btn btn-acknowledge" (click)="toggleWarningModal()">I understand</button>
+      </div>
+    </div>
   </div>
 </div>

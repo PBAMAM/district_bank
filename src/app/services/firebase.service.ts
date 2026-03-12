@@ -158,6 +158,19 @@ export class FirebaseService {
     }
   }
 
+  async updateUserWarning(userId: string, showWarning: boolean, customWarningMessage: string): Promise<void> {
+    try {
+      const userRef = doc(this.db, 'users', userId);
+      await updateDoc(userRef, {
+        showWarning,
+        customWarningMessage
+      });
+    } catch (error) {
+      console.error('Error updating user warning:', error);
+      throw error;
+    }
+  }
+
   // Account methods
   async getAccounts(userId: string): Promise<Account[]> {
     const accountsRef = collection(this.db, 'accounts');

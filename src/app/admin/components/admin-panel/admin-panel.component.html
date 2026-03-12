@@ -175,8 +175,10 @@
               <th>Email</th>
               <th>Role</th>
               <th>Accounts</th>
+              <th>Warning</th>
               <th>Status</th>
               <th>Created</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -210,12 +212,24 @@
                 </div>
               </td>
               <td>
+                <span class="status-badge" [class.active]="user.showWarning"
+                  [style.background]="user.showWarning ? '#fee2e2' : '#f1f5f9'"
+                  [style.color]="user.showWarning ? '#991b1b' : '#64748b'">
+                  {{ user.showWarning ? 'Enabled' : 'Disabled' }}
+                </span>
+              </td>
+              <td>
                 <span class="status-badge" [class.active]="user.isActive">
                   {{ user.isActive ? 'Active' : 'Inactive' }}
                 </span>
               </td>
               <td>
                 <div class="date-cell">{{ user.createdAt | date:'short' }}</div>
+              </td>
+              <td>
+                <button class="btn btn-secondary btn-sm" (click)="openWarningModal(user)">
+                  Warnings
+                </button>
               </td>
             </tr>
             <tr *ngIf="users.length === 0" class="empty-row">
@@ -562,6 +576,39 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- Warning Modal -->
+  <div class="modal-overlay" *ngIf="warningModalOpen" (click)="closeWarningModal()">
+    <div class="modal-content admin-form" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Manage Warning for {{ selectedUser?.firstName }} {{ selectedUser?.lastName }}</h2>
+        <button class="close-btn" (click)="closeWarningModal()">×</button>
+      </div>
+
+      <form [formGroup]="warningForm" (submit)="saveWarning()">
+        <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+          <input type="checkbox" id="showWarning" formControlName="showWarning" style="width: 20px; height: 20px;">
+          <label for="showWarning" style="margin: 0; font-weight: bold; color: #dc3545;">Enable Dashboard Warning
+            Popup</label>
+        </div>
+
+        <div class="form-group" *ngIf="warningForm.get('showWarning')?.value">
+          <label for="customWarningMessage">Custom Warning Message</label>
+          <textarea id="customWarningMessage" formControlName="customWarningMessage" class="form-control" rows="5"
+            placeholder="Enter the message to display to the user..."></textarea>
+          <small style="color: #64748b; margin-top: 5px; display: block;">This message will be shown in a popup when the
+            user clicks the warning button.</small>
+        </div>
+
+        <div class="form-actions" style="justify-content: flex-end; margin-top: 30px;">
+          <button type="button" class="btn btn-secondary" (click)="closeWarningModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+            {{ isLoading ? 'Saving...' : 'Save Warning Settings' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
