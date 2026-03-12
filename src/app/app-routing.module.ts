@@ -9,6 +9,7 @@ import { ClientLoginComponent } from './components/client-login/client-login.com
 import { ClientDashboardComponent } from './components/client-dashboard/client-dashboard.component';
 import { WithdrawalComponent } from './components/withdrawal/withdrawal.component';
 import { ClientProfileComponent } from './components/client-profile/client-profile.component';
+import { ClientKycComponent } from './components/client-kyc/client-kyc.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/client', pathMatch: 'full' },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'client/accounts', component: AccountOverviewComponent },
   { path: 'client/transactions', component: FinancialPlannerComponent },
   { path: 'client/profile', component: ClientProfileComponent },
+  { path: 'client/kyc', component: ClientKycComponent },
 
   // Legacy routes (for backward compatibility)
   { path: 'login', component: LoginComponent },

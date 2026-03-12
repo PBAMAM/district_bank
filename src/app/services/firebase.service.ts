@@ -3,7 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, User as FirebaseUser, onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, getDocs, getDoc, addDoc, updateDoc, setDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore';
-import { Account, Transaction, User, LoginCredentials } from '../models/account.model';
+import { Account, Transaction, User, LoginCredentials, KycDocument } from '../models/account.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -315,6 +315,45 @@ export class FirebaseService {
         data['amount'] = typeof data['amount'] === 'number' ? data['amount'] : parseFloat(data['amount']) || 0;
       }
       return { id: doc.id, ...data } as Transaction;
+    });
+  }
+
+  // KYC Methods
+  async submitKyc(kycData: Omit<KycDocument, 'id' | 'status' | 'submittedAt'>): Promise<string> {
+    const docRef = await addDoc(collection(this.db, 'kyc_documents'), {
+      ...kycData,
+      status: 'pending',
+      submittedAt: new Date()
+    });
+    return docRef.id;
+  }
+
+  async getUserKyc(userId: string): Promise<KycDocument | null> {
+    const kycRef = collection(this.db, 'kyc_documents');
+    const q = query(kycRef, where('userId', '==', userId), orderBy('submittedAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docData = querySnapshot.docs[0];
+      return { id: docData.id, ...docData.data() } as KycDocument;
+    }
+    return null;
+  }
+
+  async getAllKycDocuments(): Promise<KycDocument[]> {
+    const kycRef = collection(this.db, 'kyc_documents');
+    const q = query(kycRef, orderBy('submittedAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as KycDocument));
+  }
+
+  async updateKycStatus(kycId: string, status: 'approved' | 'rejected', adminId: string, rejectionReason?: string): Promise<void> {
+    const kycRef = doc(this.db, 'kyc_documents', kycId);
+    await updateDoc(kycRef, {
+      status,
+      reviewedAt: new Date(),
+      reviewedBy: adminId,
+      ...(rejectionReason ? { rejectionReason } : {})
     });
   }
 }

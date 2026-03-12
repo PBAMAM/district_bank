@@ -38,9 +38,26 @@ export interface User {
   createdAt: Date;
   phone?: string;
   address?: string;
+  showWarning?: boolean;
+  customWarningMessage?: string;
 }
 
 export interface LoginCredentials {
   email: string;
   password: string;
+}
+
+export interface KycDocument {
+  id: string;
+  userId: string;
+  userName: string;
+  documentType: string;
+  documentNumber: string;
+  documentFrontUrl?: string;
+  documentBackUrl?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  submittedAt: Date;
+  reviewedAt?: Date;
+  reviewedBy?: string;
+  rejectionReason?: string;
 }

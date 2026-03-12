@@ -178,8 +178,8 @@ export class ClientLoginComponent implements OnInit {
       confirmPassword: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
-      address: ['', [Validators.required]]
+      phone: [''],
+      address: ['']
     }, { validators: this.passwordMatchValidator });
   }
 

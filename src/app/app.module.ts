@@ -27,6 +27,7 @@ import { FirebaseTestService } from './services/firebase-test.service';
 import { FirebaseDebugService } from './services/firebase-debug.service';
 
 import { environment } from '../environments/environment';
+import { ClientKycComponent } from './components/client-kyc/client-kyc.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { environment } from '../environments/environment';
     ClientDashboardComponent,
     ClientLayoutComponent,
     WithdrawalComponent,
-    ClientProfileComponent
+    ClientProfileComponent,
+    ClientKycComponent
   ],
   imports: [
     BrowserModule,

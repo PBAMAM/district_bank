@@ -6,6 +6,7 @@ import { AdminLoginComponent } from './components/admin-login/admin-login.compon
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { AdminSetupComponent } from './components/admin-setup/admin-setup.component';
+import { AdminKycComponent } from './components/admin-kyc/admin-kyc.component';
 
 const adminRoutes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -14,7 +15,8 @@ const adminRoutes: Routes = [
   { path: 'dashboard', component: AdminDashboardComponent },
   { path: 'users', component: AdminPanelComponent },
   { path: 'accounts', component: AdminPanelComponent },
-  { path: 'transactions', component: AdminPanelComponent }
+  { path: 'transactions', component: AdminPanelComponent },
+  { path: 'kyc', component: AdminKycComponent }
 ];
 
 @NgModule({

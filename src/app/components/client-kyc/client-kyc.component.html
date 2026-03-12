@@ -1,0 +1,119 @@
+<app-client-layout>
+    <div class="client-kyc" [@fadeInUp]>
+        <div class="header">
+            <div class="header-icon">🛡️</div>
+            <div class="header-text">
+                <h1>Identity Verification</h1>
+                <p class="header-subtitle">Submit your KYC documents to secure your account</p>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading your verification status...</p>
+        </div>
+
+        <div *ngIf="!loading">
+            <!-- Status Banner -->
+            <div class="status-banner" *ngIf="existingKyc" [ngClass]="existingKyc.status">
+                <div class="icon">
+                    <span *ngIf="existingKyc.status === 'pending'">⏳</span>
+                    <span *ngIf="existingKyc.status === 'approved'">✅</span>
+                    <span *ngIf="existingKyc.status === 'rejected'">❌</span>
+                </div>
+                <div class="message">
+                    <h3>Verification {{ existingKyc.status | titlecase }}</h3>
+                    <p *ngIf="existingKyc.status === 'pending'">Your documents are currently under review. This usually
+                        takes 1-2 business days.</p>
+                    <p *ngIf="existingKyc.status === 'approved'">Your identity has been verified successfully. Thank you
+                        for securing your account.</p>
+                    <p *ngIf="existingKyc.status === 'rejected'">Your verification request was rejected. {{
+                        existingKyc.rejectionReason }}</p>
+                </div>
+            </div>
+
+            <!-- Form Card - Only show if not approved and not pending -->
+            <div class="form-card" *ngIf="!existingKyc || existingKyc.status === 'rejected'">
+                <div class="form-card-header">
+                    <div class="form-card-icon">📄</div>
+                    <div>
+                        <h3>Document Details</h3>
+                        <p>Please provide a valid government-issued ID</p>
+                    </div>
+                </div>
+
+                <div class="msg msg-success" *ngIf="successMessage">
+                    <span>✅</span> {{ successMessage }}
+                </div>
+                <div class="msg msg-error" *ngIf="errorMessage">
+                    <span>⚠️</span> {{ errorMessage }}
+                </div>
+
+                <form [formGroup]="kycForm" (ngSubmit)="onSubmit()" class="kyc-form">
+                    <div class="form-row two-col">
+                        <div class="form-field">
+                            <label class="field-label">Document Type</label>
+                            <div class="field-wrap">
+                                <select formControlName="documentType" class="field-input select">
+                                    <option value="" disabled>Select Document Type</option>
+                                    <option value="passport">Passport</option>
+                                    <option value="id_card">National ID Card</option>
+                                    <option value="driving_license">Driving License</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label">Document Number</label>
+                            <div class="field-wrap">
+                                <input type="text" formControlName="documentNumber" class="field-input"
+                                    placeholder="Enter doc number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mock Upload Fields -->
+                    <div class="form-row two-col">
+                        <div class="form-field">
+                            <label class="field-label">Front of Document</label>
+                            <div class="field-wrap upload-box">
+                                <input type="file" (change)="onFileSelect($event, 'front')" accept="image/*"
+                                    class="file-input">
+                                <div class="upload-placeholder" *ngIf="!frontFile">
+                                    <span class="upload-icon">⬆️</span>
+                                    <span>Click to upload Front</span>
+                                </div>
+                                <div class="upload-selected" *ngIf="frontFile">
+                                    <span>{{ frontFile.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label">Back of Document (Optional)</label>
+                            <div class="field-wrap upload-box">
+                                <input type="file" (change)="onFileSelect($event, 'back')" accept="image/*"
+                                    class="file-input">
+                                <div class="upload-placeholder" *ngIf="!backFile">
+                                    <span class="upload-icon">⬆️</span>
+                                    <span>Click to upload Back</span>
+                                </div>
+                                <div class="upload-selected" *ngIf="backFile">
+                                    <span>{{ backFile.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn" [disabled]="kycForm.invalid || isSubmitting">
+                            <span class="btn-inner">
+                                <span class="spinner-sm" *ngIf="isSubmitting"></span>
+                                {{ isSubmitting ? 'Submitting...' : 'Submit Documents' }}
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</app-client-layout>

@@ -8,6 +8,7 @@ import { AdminLoginComponent } from './components/admin-login/admin-login.compon
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { AdminSetupComponent } from './components/admin-setup/admin-setup.component';
+import { AdminKycComponent } from './components/admin-kyc/admin-kyc.component';
 
 // Admin Routing
 import { AdminRoutingModule } from './admin-routing.module';
@@ -22,7 +23,8 @@ import { AccountCreationService } from '../services/account-creation.service';
     AdminLoginComponent,
     AdminDashboardComponent,
     AdminPanelComponent,
-    AdminSetupComponent
+    AdminSetupComponent,
+    AdminKycComponent
   ],
   imports: [
     CommonModule,

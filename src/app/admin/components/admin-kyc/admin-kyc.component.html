@@ -1,0 +1,38 @@
+<div class="admin-kyc-container">
+    <div class="header">
+        <h2>KYC Document Reviews</h2>
+        <button (click)="loadKycDocuments()" class="refresh-btn">Refresh</button>
+    </div>
+
+    <div *ngIf="loading" class="loading">Loading documents...</div>
+
+    <div *ngIf="!loading && kycDocuments.length === 0" class="empty-state">
+        No KYC documents to review.
+    </div>
+
+    <div class="kyc-list" *ngIf="!loading && kycDocuments.length > 0">
+        <div class="kyc-card" *ngFor="let doc of kycDocuments">
+            <div class="kyc-header">
+                <span class="user-name">{{ doc.userName }}</span>
+                <span class="status-badge" [ngClass]="doc.status">{{ doc.status | titlecase }}</span>
+            </div>
+            <div class="kyc-details">
+                <p><strong>User ID:</strong> {{ doc.userId }}</p>
+                <p><strong>Document Type:</strong> {{ doc.documentType }}</p>
+                <p><strong>Document Number:</strong> {{ doc.documentNumber }}</p>
+                <p><strong>Submitted:</strong> {{ doc.submittedAt | date:'medium' }}</p>
+                <div *ngIf="doc.reviewedAt" class="review-details">
+                    <p><strong>Reviewed By:</strong> {{ doc.reviewedBy }}</p>
+                    <p><strong>Reviewed At:</strong> {{ doc.reviewedAt | date:'medium' }}</p>
+                    <p *ngIf="doc.rejectionReason" class="rejection-reason"><strong>Reason:</strong> {{
+                        doc.rejectionReason }}</p>
+                </div>
+            </div>
+
+            <div class="kyc-actions" *ngIf="doc.status === 'pending'">
+                <button (click)="updateStatus(doc.id, 'approved')" class="btn-approve">Approve</button>
+                <button (click)="updateStatus(doc.id, 'rejected')" class="btn-reject">Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
