@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { QuillModule } from 'ngx-quill';
 
 // Admin Components
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
@@ -31,7 +32,8 @@ import { AccountCreationService } from '../services/account-creation.service';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    QuillModule
   ],
   providers: [
     AuthService,

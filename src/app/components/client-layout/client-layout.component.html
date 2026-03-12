@@ -75,8 +75,8 @@
         <button class="close-btn" (click)="toggleWarningModal()">×</button>
       </div>
       <div class="warning-modal-body">
-        <p class="custom-warning-text">{{ currentUser?.customWarningMessage || 'Please contact administrator for more
-          details.' }}</p>
+        <div class="custom-warning-text"
+          [innerHTML]="currentUser?.customWarningMessage || 'Please contact administrator for more details.'"></div>
       </div>
       <div class="warning-modal-footer">
         <button class="btn btn-acknowledge" (click)="toggleWarningModal()">I understand</button>

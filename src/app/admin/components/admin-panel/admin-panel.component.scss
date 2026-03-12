@@ -669,8 +669,8 @@ select.form-control {
   background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  width: 100%;
-  max-width: 600px;
+  width: 95vw;
+  max-width: 800px;
   padding: 30px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
@@ -708,5 +708,24 @@ select.form-control {
   textarea.form-control {
     min-height: 120px;
     resize: vertical;
+  }
+
+  // Quill Editor styling wrapper
+  .ql-toolbar {
+    background: #444;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px 10px 0 0;
+
+    .ql-stroke {
+      stroke: #e0e0e0;
+    }
+
+    .ql-fill {
+      fill: #e0e0e0;
+    }
+
+    .ql-picker {
+      color: #e0e0e0;
+    }
   }
 }

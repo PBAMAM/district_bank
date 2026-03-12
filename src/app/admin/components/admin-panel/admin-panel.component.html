@@ -596,8 +596,10 @@
 
         <div class="form-group" *ngIf="warningForm.get('showWarning')?.value">
           <label for="customWarningMessage">Custom Warning Message</label>
-          <textarea id="customWarningMessage" formControlName="customWarningMessage" class="form-control" rows="5"
-            placeholder="Enter the message to display to the user..."></textarea>
+          <quill-editor formControlName="customWarningMessage"
+            [styles]="{height: '200px', backgroundColor: '#333', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', borderTop: 'none', borderRadius: '0 0 10px 10px'}"
+            placeholder="Enter the rich text message to display to the user...">
+          </quill-editor>
           <small style="color: #64748b; margin-top: 5px; display: block;">This message will be shown in a popup when the
             user clicks the warning button.</small>
         </div>
